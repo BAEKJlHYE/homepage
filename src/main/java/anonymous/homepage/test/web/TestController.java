@@ -19,4 +19,9 @@ public class TestController {
     public List<TestVO> selectTestList() {
         return testService.selectTestList();
     }
+
+    @GetMapping("/api/test")
+    public String apiTest() {
+        return "Hello, World!";
+    }
 }
