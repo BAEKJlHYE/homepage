@@ -4,34 +4,41 @@ import anonymous.homepage.board.service.BoardService;
 import anonymous.homepage.board.vo.BoardVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/selectBoardList.do")
-    public List<BoardVO> selectBoardList() {
-        return boardService.selectBoardList();
+    public String selectBoardList(Model model) {
+        model.addAttribute("boardList", boardService.selectBoardList());
+        return "board/boardList";
     }
 
     @GetMapping("/selectBoard.do")
-    public BoardVO selectBoard() {
+    public String selectBoard(Model model) {
         BoardVO boardVO = new BoardVO();
         boardVO.setBoardId(1);
-        BoardVO result = boardService.selectBoard(boardVO);
+        model.addAttribute("board", boardService.selectBoard(boardVO));
 
-        return result;
+        return "board/board";
+    }
+
+    @GetMapping("/registerBoard.do")
+    public String registerBoard() {
+        return "board/boardRegister";
     }
 
     @GetMapping("/selectBoardCount.do")
+    @ResponseBody
     public String selectBoardCount() {
         int count = boardService.selectBoardCount();
         log.info("count: {}", count);
@@ -40,6 +47,7 @@ public class BoardController {
     }
 
     @GetMapping("/insertBoard.do")
+    @ResponseBody
     public String insertBoard() {
         BoardVO boardVO = new BoardVO();
         boardVO.setTitle("title2");
@@ -52,6 +60,7 @@ public class BoardController {
     }
 
     @GetMapping("/updateBoard.do")
+    @ResponseBody
     public String updateBoard() {
         BoardVO boardVO = new BoardVO();
         boardVO.setBoardId(3);
@@ -65,6 +74,7 @@ public class BoardController {
     }
 
     @GetMapping("/deleteBoard.do")
+    @ResponseBody
     public String deleteBoard() {
         BoardVO boardVO = new BoardVO();
         boardVO.setBoardId(3);
@@ -74,6 +84,7 @@ public class BoardController {
     }
 
     @GetMapping("/updateBoardViewCount.do")
+    @ResponseBody
     public String updateBoardViewCount() {
         BoardVO boardVO = new BoardVO();
         boardVO.setBoardId(3);
@@ -84,6 +95,7 @@ public class BoardController {
     }
 
     @GetMapping("/updateBoardSuggestionCount.do")
+    @ResponseBody
     public String updateBoardSuggestionCount() {
         BoardVO boardVO = new BoardVO();
         boardVO.setBoardId(3);
