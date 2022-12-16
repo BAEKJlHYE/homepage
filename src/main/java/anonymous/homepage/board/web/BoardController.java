@@ -19,6 +19,7 @@ public class BoardController {
 
     @GetMapping("/selectBoardList.do")
     public String selectBoardList(Model model) {
+        // push test
         model.addAttribute("boardList", boardService.selectBoardList());
         return "board/boardList";
     }
