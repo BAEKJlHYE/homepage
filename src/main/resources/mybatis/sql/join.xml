@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="anonymous.homepage.test.dao.TestMapper">
+
+<!--    public int insertMemberInfo(JoinVO joinVO);-->
+
+<!--    public List<JoinVO> getIdValidAjax(JoinVO joinVO);-->
+
+<!--    public List<JoinVO> getPWValidAjax(JoinVO joinVO);-->
+
+<!--    public List<JoinVO> getNameValidAjax(JoinVO joinVO);-->
+
+<!--    public List<JoinVO> getNickValidAjax(JoinVO joinVO);-->
+
+<!--    public List<JoinVO> getEmailValidAjax(JoinVO joinVO);-->
+
+    <insert id="insertMemberInfo" parameterType="anonymous.homepage.board.vo.JoinVO">
+
+    INSERT INTO MEMBER_DB(
+        USERID,
+        PASSWD,
+        USERNM,
+        NICK,
+        EMAIL,
+        MRECAGR,
+        IPUBAGR
+    )
+    VALUES (
+        #{USERID},
+        #{PASSWD}.
+        #{USERNM}.
+        #{NICK}.
+        #{EMAIL}.
+        #{MRECAGR}.
+        #{IPUBAGR}
+    )
+    </insert>
+
+    <select id="getIdValidAjax" resultType="anonymous.homepage.board.vo.JoinVO">
+        SELECT USERID
+        FROM MEMBER_DB
+        WHERE USERID=#{USERID}
+    </select>
+
+    <select id="getPWValidAjax" resultType="anonymous.homepage.board.vo.JoinVO">
+        SELECT PASSWD
+        FROM MEMBER_DB
+        WHERE PASSWD=#{PASSWD}
+    </select>
+
+    <select id="getNameValidAjax" resultType="anonymous.homepage.board.vo.JoinVO">
+        SELECT USERNM
+        FROM MEMBER_DB
+        WHERE USERNM=#{USERNM}
+    </select>
+
+    <select id="getNickValidAjax" resultType="anonymous.homepage.board.vo.JoinVO">
+        SELECT NICK
+        FROM MEMBER_DB
+        WHERE NICK=#{NICK}
+    </select>
+
+    <select id="getEmailValidAjax" resultType="anonymous.homepage.board.vo.JoinVO">
+        SELECT EMAIL
+        FROM MEMBER_DB
+        WHERE EMAIL=#{EMAIL}
+    </select>
+
+
+
+
+</mapper>
