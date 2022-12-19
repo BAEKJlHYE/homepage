@@ -20,27 +20,28 @@
 
     function all_check(obj){
 
-        const check1=document.getElementById('check1');
-        const check2=document.getElementById('check2');
-
-        $("#check1").attr("checked", obj.checked);
-        $("#check2").attr("checked", obj.checked);
+        $("#check1").prop("checked", obj.checked);
+        $("#check2").prop("checked", obj.checked);
 
     }
 
     function is_checked(){
-        const check1=document.getElementById('check1').checked;
-        const check2=document.getElementById('check2').checked;
+        const check1=document.getElementById('check1');
+        const check2=document.getElementById('check2');
 
-        if((check1&&check2)==false){
-            alert("모든 항목에 동의 해주세요);
-            if(!check1){
+        if(!(check1.checked&&check2.checked)){
+            alert("모든 항목에 동의 해주세요");
+            if(!check1.checked){
                 $("#check1").focus();
+                return false;
             }
-            if(!check2){
+            else{
                 $("#check2").focus();
+                return false;
             }
         }
+
+        location.href="/join/signUp.do";
     }
 
 
