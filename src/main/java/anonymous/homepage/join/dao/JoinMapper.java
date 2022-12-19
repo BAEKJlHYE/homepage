@@ -1,6 +1,5 @@
 package anonymous.homepage.join.dao;
 
-import anonymous.homepage.board.vo.BoardVO;
 import anonymous.homepage.join.vo.JoinVO;
 import org.apache.ibatis.annotations.Mapper;
 

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>signUp</h1>
+    <span>사이트 이용정보 입력</span><br>
+    <input type="text" id="USERID" placeholder="아이디" onchange="idValidAjax"/><br>
+    <input type="password" id="PASSWD1" placeholder="비밀번호" onchange=""/><br>
+    <input type="password" id="PASSWD2" placeholder="비밀번호 확인" onchange=""/><br>
+
+    <span>개인정보 입력</span><br>
+    <input type="text" id="USERNM" placeholder="이름" onchange="nameValidAjax(this)"/><br>
+    <input type="text" id="NICK" placeholder="닉네임" onchange=""/><br>
+    <input type="email" id="EMAIL" placeholder="E-mail" onchange=""/><br>
+
+    <span>기타 개인설정</span><br>
+    <input type="checkbox" id="MRECAGR" /> 메일 수신동의 <br>
+    <input type="checkbox" id="IPUBAGR" /> 정보 공개동의 <br>
+    <button type="button">취소</button>
+    <button type="submit">회원가입</button>
+
+
+
+</body>
+</html>
+<script>
+    function clicked(){
+        alert("클릭됨!");
+    }
+
+    function idValidAjax(){
+        if($("#USERID").val()==""){
+            alert("아이디를 입력해주세요");
+            $("#USERID").focus();
+        }
+    }
+
+    function nameValidAjax(obj){
+        if($("#USERNM").val()==""){
+<!--            obj.style.backgroundColor="yellow";-->
+            alert("ㅁㅇㄴㄻㄴㄹ");
+            $("#USERNM").focus();
+        }
+    }
+
+</script>

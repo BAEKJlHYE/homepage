@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+  <h1>joinTerm</h1>
+  <input type="checkbox" id="check0" onchange="all_check(this)"/> 전체 체크하기
+      <input type="checkbox" id="check1" /> 체크1
+      <input type="checkbox" id="check2" /> 체크2
+      <button type="button" onclick="is_checked()">회원가입</button>
+</body>
+</html>
+<script>
+    function checked(){
+        alert("Asdfas");
+    }
+
+    function all_check(obj){
+
+        const check1=document.getElementById('check1');
+        const check2=document.getElementById('check2');
+
+        $("#check1").attr("checked", obj.checked);
+        $("#check2").attr("checked", obj.checked);
+
+    }
+
+    function is_checked(){
+        const check1=document.getElementById('check1').checked;
+        const check2=document.getElementById('check2').checked;
+
+        if((check1&&check2)==false){
+            alert("모든 항목에 동의 해주세요);
+            if(!check1){
+                $("#check1").focus();
+            }
+            if(!check2){
+                $("#check2").focus();
+            }
+        }
+    }
+
+
+</script>

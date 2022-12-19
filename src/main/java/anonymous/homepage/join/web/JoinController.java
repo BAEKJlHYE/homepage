@@ -22,31 +22,31 @@ import java.util.Map;
 public class JoinController {
     private final JoinService joinService;
 
-    @RequestMapping("/joinTerm")
+    @RequestMapping("/joinTerm.do")
     public ModelAndView joinTerm(){
 
         ModelAndView mav=new ModelAndView();
-        mav.setViewName("joinTerm");
+        mav.setViewName("join/joinTerm");
         return mav;
     }
 
-    @RequestMapping("/signUp")
+    @RequestMapping("/signUp.do")
     public ModelAndView signup(){
         ModelAndView mav=new ModelAndView();
-        mav.setViewName("signUp");
+        mav.setViewName("join/signUp");
         return mav;
     }
 
-    @RequestMapping("/insertMemberInfo")
+    @RequestMapping("/insertMemberInfo.do")
     public ModelAndView signUpCheck(){
 
         ModelAndView mav=new ModelAndView();
 //        joinService.insertMemberInfo();
-        mav.setViewName("insertMemberInfo");
+        mav.setViewName("join/insertMemberInfo");
         return mav;
     }
 
-    @RequestMapping("/idValidAjax")
+    @RequestMapping("/idValidAjax.do")
     @ResponseBody
     public Object idValidAjax(){
 
@@ -55,7 +55,7 @@ public class JoinController {
         return list;
     }
 
-    @RequestMapping("/pwValidAjax")
+    @RequestMapping("/pwValidAjax.do")
     @ResponseBody
     public Object pwValidAjax(JoinVO joinVO) {
 
@@ -63,7 +63,7 @@ public class JoinController {
         return list;
     }
 
-    @RequestMapping("/nameValidAjax")
+    @RequestMapping("/nameValidAjax.do")
     @ResponseBody
     public Object nameValidAjax(JoinVO joinVO){
 
@@ -71,7 +71,7 @@ public class JoinController {
         return list;
     }
 
-    @RequestMapping("/nickValidAjax")
+    @RequestMapping("/nickValidAjax.do")
     @ResponseBody
     public Object nickValidAjax(JoinVO joinVO){
 
@@ -79,7 +79,7 @@ public class JoinController {
         return list;
     }
 
-    @RequestMapping("/emailValidAjax")
+    @RequestMapping("/emailValidAjax.do")
     @ResponseBody
     public Object emailValidAjax(JoinVO joinVO){
 
