@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
 <h1>signUp</h1>
     <span>사이트 이용정보 입력</span><br>
-    <input type="text" id="USERID" placeholder="아이디" onchange="idValidAjax"/><br>
-    <input type="password" id="PASSWD1" placeholder="비밀번호" onchange=""/><br>
-    <input type="password" id="PASSWD2" placeholder="비밀번호 확인" onchange=""/><br>
+    <input type="text" id="USERID" placeholder="아이디" oninput="idValidChck()"/><span id="idValid" style="color:red">✔</span><br>
+    <span id="idValidResult"></span><br>
+    <input type="password" id="PASSWD1" placeholder="비밀번호" oninput="pwValidChck()"/><span id="pwValid" style="color:red">✔</span><br>
+    <span id="pwValidResult"></span><br>
+    <input type="password" id="PASSWD2" placeholder="비밀번호 확인" oninput="pw2ValidChck()"/><span id="pwValid2" style="color:red">✔</span><br>
+    <span id="pwValid2Result"></span><br>
 
     <span>개인정보 입력</span><br>
-    <input type="text" id="USERNM" placeholder="이름" onchange="nameValidAjax(this)"/><br>
-    <input type="text" id="NICK" placeholder="닉네임" onchange=""/><br>
-    <input type="email" id="EMAIL" placeholder="E-mail" onchange=""/><br>
+    <input type="text" id="USERNM" placeholder="이름" oninput="nameValidChck()"/><br>
+    <input type="text" id="NICK" placeholder="닉네임" oninput="nickValidChck()"/><span id="nickValid" style="color:red">✔</span><br>
+    <span id="nickValidResult"></span><br>
+    <input type="email" id="EMAIL" placeholder="E-mail" oninput="emailValidChck()"/><span id="emailValid" style="color:red">✔</span><br>
+    <span id="emailValidResult"></span><br>
 
     <span>기타 개인설정</span><br>
     <input type="checkbox" id="MRECAGR" /> 메일 수신동의 <br>
@@ -27,23 +33,192 @@
 </body>
 </html>
 <script>
-    function clicked(){
-        alert("클릭됨!");
+    alert("Start");
+
+    function idValidChck(){
+         const id = $("#USERID").val();
+         const idRegex= /^[A-Za-z0-9_]{3,}$/;
+
+         if(id==""){
+            $("#idValidResult").text("");
+            document.getElementById("idValid").style.color="red";
+            return false;
+         }
+         if(!id.match(idRegex)){
+            $("#idValidResult").text("영문자,숫자,_만 입력가능, 최소 3자이상 입력하세요.");
+              document.getElementById("idValid").style.color="red";
+              return false;
+         }
+
+<!--       else{-->
+
+<!--            params={-->
+<!--                USERID:$("#USERID").val()-->
+<!--            };-->
+
+<!--            url:"/join/idValidAjax.do";-->
+<!--            $.ajax({-->
+<!--                url:url,-->
+<!--                type:"post",-->
+<!--                data:params-->
+<!--                }).done(function(data){-->
+<!--                    if(data!=null){-->
+
+<!--                       $("#idValidResult").text("중복된 아이디입니다");-->
+<!--                       document.getElementById("idValid").style.color="red";-->
+<!--                       return false;-->
+
+<!--                    }-->
+<!--                    else{-->
+
+<!--                       $("#idValidResult").text("");-->
+<!--                       document.getElementById("idValid").style.color="green";-->
+<!--                       return true;-->
+<!--                    }-->
+
+
+<!--                }).fail(data,textStatus,errorThrown){-->
+<!--                    alert("서버 연결에 실패하였습니다. 다시 시도해주세요.");-->
+<!--                    return;-->
+<!--                });-->
+<!--        }-->
     }
 
-    function idValidAjax(){
-        if($("#USERID").val()==""){
-            alert("아이디를 입력해주세요");
-            $("#USERID").focus();
+    function pwValidChck(){
+         var pw = $("#PASSWD1").val();
+         var num = pw.search(/[0-9]/g);
+         var eng = pw.search(/[a-z]/ig);
+         var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+        if(pw==""){
+              $("#pwValidResult").text("");
+              document.getElementById("pwValid").style.color="red";
+              return false;
         }
+
+         if(pw.length < 3 || pw.length > 20){
+
+              $("#pwValidResult").text("비밀번호는 3자리 이상 20자리 이하로 입력해주세요.");
+              document.getElementById("pwValid").style.color="red";
+              return false;
+
+         }
+         else if(pw.search(/\s/) != -1){
+              $("#pwValidResult").text("비밀번호는 공백 없이 입력해주세요.");
+              document.getElementById("pwValid").style.color="red";
+              return false;
+
+         }
+         else if(num < 0 || eng < 0 || spe < 0 ){
+              $("#pwValidResult").text("비밀번호는 영문,숫자, 특수문자를 혼합하여 입력해주세요.");
+              document.getElementById("pwValid").style.color="red";
+              return false;
+
+         }
+         else {
+             $("#pwValidResult").text("");
+            document.getElementById("pwValid").style.color="green";
+            console.log("통과");
+            return true;
+         }
     }
 
-    function nameValidAjax(obj){
-        if($("#USERNM").val()==""){
-<!--            obj.style.backgroundColor="yellow";-->
-            alert("ㅁㅇㄴㄻㄴㄹ");
-            $("#USERNM").focus();
+    function pw2ValidChck(){
+       const pw1=$("#PASSWD1").val();
+       const pw2=$("#PASSWD2").val();
+       if(!pwValidChck()){
+            document.getElementById("pwValid2").style.color="red";
+            return false;
+       }
+
+        if(pw2==""){
+              $("#pwValid2Result").text("");
+              document.getElementById("pwValid2").style.color="red";
+              return false;
         }
+
+       if(pw1==pw2){
+            $("#pwValid2Result").text("비밀번호가 일치합니다");
+            document.getElementById("pwValid2").style.color="green";
+       }
+       else{
+             $("#pwValid2Result").text("비밀번호가 일치하지 않습니다");
+             document.getElementById("pwValid2").style.color="red";
+       }
+
+    }
+
+    function nickValidChck(){
+        const nick=$("#NICK").val();
+        const nickRegex=/^$/;
+
+        if(nick==""){
+            $("#nickValidResult").text("");
+            document.getElementById("nickValid").style.color="red";
+            return false;
+        }
+
+        if(nick.match(nickRegex)){
+            $("#nickValidResult").text("공백없이 한글,영문,숫자만 입력가능 (한글2자,영문4자 이상)");
+            document.getElementById("nickValid").style.color="red";
+            return false;
+
+        }
+
+<!--        url="/join/nickValidAjax.do";-->
+<!--        $.ajax({-->
+<!--            url:url,-->
+<!--            type:"post",-->
+<!--            data:params-->
+<!--            }).done(function(data){-->
+<!--                if(data!=null)-->
+<!--                   $("#nickValidResult").text("중복된 닉네임입니다.");-->
+<!--                   document.getElementById("nickValid").style.color="red";-->
+<!--                   return false;-->
+
+<!--                }-->
+<!--                else{-->
+
+<!--                   $("#nickValidResult").text("사용할 수 있는 닉네임입니다.");-->
+<!--                   document.getElementById("nickValid").style.color="green";-->
+<!--                   return true;-->
+<!--                }-->
+
+
+
+<!--            }).fail(data,textStatus,errorThrown){-->
+<!--                alert("서버 연결에 실패하였습니다. 다시 시도해주세요.");-->
+<!--                return;-->
+<!--            });-->
+
+    }
+
+    function emailValidChck(){
+
+        const email=$("#EMAIL").val();
+        const emailRegex=/^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+        if(email==""){
+           $("#emailValidResult").text("");
+           document.getElementById("emailValid").style.color="red";
+           return false;
+        }
+
+        if(!email.match(emailRegex)){
+           $("#emailValidResult").text("이메일 양식에 맞게 입력해주세요.");
+           document.getElementById("emailValid").style.color="red";
+           return false;
+        }
+
+        else {
+           $("#emailValidResult").text("");
+           document.getElementById("emailValid").style.color="green";
+           return true;
+
+        }
+
+
+
     }
 
 </script>

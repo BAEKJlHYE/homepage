@@ -15,6 +15,6 @@ public class JoinVO {
     private int MRECAGR;
     
     //정보 공개 동의
-    private int anInt;
+    private int IPUBAGR;
 
 }
