@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <title>우편번호</title>
+
+    <!-- 다음 우편번호 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        /* 우편번호 찾기 버튼 클릭 */
+        function findPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 검색 결과 항목 클릭 시 실행
+                    var addr = '';
+                    var extraAddr = '';
+
+                    // 사용자가 선택한 주소 타입
+                    if (data.userSelectedType === 'R') {    // 도로명 주소 선택
+                        addr = data.roadAddress;
+                    } else {                                // 지번 주소 선택
+                        addr = data.jibunAddress;
+                    }
+
+                    // 도로명 주소 선택 시 참고항목 조합
+                    if(data.userSelectedType === 'R'){
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        document.getElementById("extraAddress").value = extraAddr;
+
+                    } else {
+                        document.getElementById("extraAddress").value = '';
+                    }
+
+                    document.getElementById('postcode').value = data.zonecode;
+                    document.getElementById("address").value = addr;
+                    document.getElementById("detailAddress").focus();
+                }
+            }).open();
+        }
+    </script>
+</head>
+<body>
+    <div class="container" style="max-width: 600px">
+        <input type="text" id="postcode" class="form-control" value="" placeholder="우편번호">
+        <button type="button" class="btn btn-primary" onclick="findPostcode()">우편번호 찾기</button>
+        <input type="text" id="address" class="form-control" value="" placeholder="주소">
+        <input type="text" id="extraAddress" class="form-control" value="" placeholder="참고항목">
+        <input type="text" id="detailAddress" class="form-control" value="" placeholder="상세주소">
+    </div>
+</body>
+</html>

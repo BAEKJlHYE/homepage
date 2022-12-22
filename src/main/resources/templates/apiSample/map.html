@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <title>지도</title>
+
+    <!-- kakao map -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ee367a39de93ecc033ae4f75ff07ff69"></script>
+
+    <script>
+        /* 전역변수 */
+        var map;    // 지도 객체
+
+        /* 페이지 로드 */
+        document.addEventListener("DOMContentLoaded", function(){
+            // 지도 생성
+            createMap();
+
+            // 지도 클릭
+            kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+                clickMap(mouseEvent);
+            });
+        });
+
+        /* 지도 생성 */
+        function createMap() {
+            // 지도
+            var mapElement = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(36.27753601333786, 126.91295174563078)
+                , level: 3
+            }
+
+            map = new kakao.maps.Map(mapElement, options);
+
+            // 마커
+            var marker = new kakao.maps.Marker({
+                position: map.getCenter()
+            })
+            marker.setMap(map);
+        }
+
+        /* 지도 클릭 */
+        function clickMap(mouseEvent) {
+            console.log("위도 : " + mouseEvent.latLng.getLat());
+            console.log("경도 : " + mouseEvent.latLng.getLng());
+        }
+    </script>
+</head>
+<body>
+    <div class="container" style="max-width: 600px">
+        <div id="map" style="width: 800px; height: 600px;"></div>
+    </div>
+</body>
+</html>
