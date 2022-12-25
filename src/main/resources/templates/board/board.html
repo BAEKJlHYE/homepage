@@ -4,38 +4,85 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
     <title>게시글 상세</title>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            var resultMessage = document.getElementById('resultMessage').value;
+            if(resultMessage != null && resultMessage != '' && resultMessage != undefined)
+                alert(resultMessage);
+        });
+
+        function updateBoard() {
+            var boardPageInfoForm = document.getElementById('boardPageInfo');
+            boardPageInfoForm.action = '/board/modifyBoard.do';
+            boardPageInfoForm.submit();
+        }
+
+        function deleteBoard() {
+            var boardPageInfoForm = document.getElementById('boardPageInfo');
+            boardPageInfoForm.method = 'post';
+            boardPageInfoForm.action = '/board/deleteBoard.do';
+            boardPageInfoForm.submit();
+        }
+
+        function moveToBoardList() {
+            document.getElementById('resultMessage').remove();
+            document.getElementById('boardId').remove();
+            document.getElementById('boardPageInfo').submit();
+        }
+    </script>
 </head>
 <body>
     <div class="container" style="max-width: 600px">
-        <div class="py-5 text-center">
-            <h2>게시글 상세</h2>
-        </div>
+        <form id="boardPageInfo" action="/board/selectBoardList.do" method="get">
+            <input type="hidden" id="boardId" name="boardId" th:value="${boardInfo.boardId}">
+            <input type="hidden" id="resultMessage" name="resultMessage" th:value="${boardInfo.resultMessage}">
+            <input type="hidden" id="recordUnit" name="recordUnit" th:value="${boardInfo.recordUnit}">
+            <input type="hidden" id="nowPage" name="nowPage" th:value="${boardInfo.nowPage}">
+            <input type="hidden" id="pageUnit" name="pageUnit" th:value="${boardInfo.pageUnit}">
+            <input type="hidden" id="searchSe" name="searchSe" th:value="${boardInfo.searchSe}">
+            <input type="hidden" id="searchKeyword" name="searchKeyword" th:value="${boardInfo.searchKeyword}">
 
-        <div>
-            <label for="boardId">글번호</label>
-            <input type="text" id="boardId" name="boardId" class="form-control" value="1" th:value="${board.boardId}" readonly>
-        </div>
-        <div>
-            <label for="title">제목</label>
-            <input type="text" id="title" name="title" class="form-control" value="제목" th:value="${board.title}" readonly>
-        </div>
-        <div>
-            <label for="content">내용</label>
-            <input type="text" id="content" name="content" class="form-control" value="내용" th:value="${board.content}" readonly>
-        </div>
-        <hr class="my-4">
-        <div class="row">
-            <div class="col">
-                <button type="button" class="w-100 btn btn-primary btn-lg">
-                    글 수정
-                </button>
+            <div class="py-5 text-center">
+                <h2>게시글 상세</h2>
             </div>
-            <div class="col">
-                <button type="button" class="w-100 btn btn-secondary btn-lg">
-                    글 목록
-                </button>
+
+            <div>
+                <span style="margin-right: 10px;">글번호</span>
+                <span th:text="${board.boardId}"></span>
             </div>
-        </div>
+            <div>
+                <span style="margin-right: 10px;">제목</span>
+                <span th:text="${board.title}"></span>
+            </div>
+            <div>
+                <span style="margin-right: 10px;">내용</span>
+                <span th:text="${board.content}"></span>
+            </div>
+            <div>
+                <span style="margin-right: 10px;">작성일</span>
+                <span th:text="${board.displayRegistDt}"></span>
+            </div>
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="w-100 btn btn-primary btn-lg" onclick="updateBoard()">
+                        글 수정
+                    </button>
+                </div>
+                <div class="col">
+                    <button type="button" class="w-100 btn btn-primary btn-lg" onclick="deleteBoard()">
+                        글 삭제
+                    </button>
+                </div>
+                <div class="col">
+                    <button type="button" class="w-100 btn btn-secondary btn-lg" onclick="moveToBoardList()">
+                        글 목록
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </body>
 </html>

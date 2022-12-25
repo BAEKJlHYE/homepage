@@ -13,7 +13,7 @@ public class CdServiceImpl implements CdService {
     private final CdMapper cdMapper;
 
     @Override
-    public List<CdVO> selectCdList(CdVO param) {
-        return cdMapper.selectCdList(param);
+    public List<CdVO> selectCdList(String groupCd) {
+        return cdMapper.selectCdList(groupCd);
     }
 }

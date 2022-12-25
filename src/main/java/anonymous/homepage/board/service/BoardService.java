@@ -5,7 +5,7 @@ import anonymous.homepage.board.vo.BoardVO;
 import java.util.List;
 
 public interface BoardService {
-    public List<BoardVO> selectBoardList();
+    public List<BoardVO> selectBoardList(BoardVO boardVO);
     public BoardVO selectBoard(BoardVO boardVO);
     public int selectBoardCount();
     public int insertBoard(BoardVO boardVO);

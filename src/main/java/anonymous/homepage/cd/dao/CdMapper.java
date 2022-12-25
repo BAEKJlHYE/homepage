@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface CdMapper {
-    public List<CdVO> selectCdList(CdVO param);
+    public List<CdVO> selectCdList(String groupCd);
 }

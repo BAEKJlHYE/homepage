@@ -12,8 +12,8 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
     private final BoardMapper boardMapper;
 
-    public List<BoardVO> selectBoardList() {
-        return boardMapper.selectBoardList();
+    public List<BoardVO> selectBoardList(BoardVO boardVO) {
+        return boardMapper.selectBoardList(boardVO);
     }
 
     public BoardVO selectBoard(BoardVO boardVO) {

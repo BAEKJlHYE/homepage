@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface BoardMapper {
-    public List<BoardVO> selectBoardList();
+    public List<BoardVO> selectBoardList(BoardVO boardVO);
     public BoardVO selectBoard(BoardVO boardVO);
     public int selectBoardCount();
     public int insertBoard(BoardVO boardVO);

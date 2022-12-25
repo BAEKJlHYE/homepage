@@ -5,13 +5,14 @@
 
 <mapper namespace="anonymous.homepage.cd.dao.CdMapper">
     <!-- 코드 목록 조회 -->
-    <select id="selectCdList" parameterType="anonymous.homepage.cd.vo.CdVO" resultType="anonymous.homepage.cd.vo.CdVO">
+    <select id="selectCdList" parameterType="String" resultType="anonymous.homepage.cd.vo.CdVO">
         SELECT CD
              , CD_NM
              , GROUP_CD
              , USE_YN
-          FROM CD
-         WHERE GROUP_CD = #{groupCd}
-           AND USE_YN = 'Y'
+        FROM CD
+        WHERE GROUP_CD = #{groupCd}
+          AND USE_YN = 'Y'
+        ORDER BY CD
     </select>
 </mapper>

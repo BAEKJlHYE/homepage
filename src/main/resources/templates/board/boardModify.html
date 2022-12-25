@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
-    <title>게시글 등록</title>
+    <title>게시글 수정</title>
 
     <script type="text/javascript" src="../js/util.js"></script>
 
     <script>
-        function moveToBoardList() {
+        function moveToBoard() {
             document.getElementById('boardPageInfo').submit();
         }
 
-        function registerBoard() {
+        function modifyBoard() {
             if(!validateForm())
                 return;
 
             var boardForm = document.getElementById('boardPageInfo');
             boardForm.method = 'post';
-            boardForm.action = '/board/insertBoard.do';
+            boardForm.action = '/board/updateBoard.do';
             boardForm.submit();
         }
 
@@ -41,7 +41,8 @@
 </head>
 <body>
     <div class="container" style="max-width: 600px">
-        <form id="boardPageInfo" action="/board/selectBoardList.do" method="get">
+        <form id="boardPageInfo" action="/board/selectBoard.do" method="get">
+            <input type="hidden" id="boardId" name="boardId" th:value="${boardInfo.boardId}">
             <input type="hidden" id="recordUnit" name="recordUnit" th:value="${boardInfo.recordUnit}">
             <input type="hidden" id="nowPage" name="nowPage" th:value="${boardInfo.nowPage}">
             <input type="hidden" id="pageUnit" name="pageUnit" th:value="${boardInfo.pageUnit}">
@@ -49,7 +50,7 @@
             <input type="hidden" id="searchKeyword" name="searchKeyword" th:value="${boardInfo.searchKeyword}">
 
             <div class="py-5 text-center">
-                <h2>게시글 등록</h2>
+                <h2>게시글 수정</h2>
             </div>
             <h4 class="mb-3">게시글 입력</h4>
 
@@ -60,23 +61,23 @@
             </div>
             <div>
                 <label for="title">제목</label>
-                <input type="text" id="title" name="title" class="form-control" placeholder="제목을 입력하세요.">
+                <input type="text" id="title" name="title" class="form-control" placeholder="제목을 입력하세요." th:value="${board.title}">
             </div>
             <div>
                 <label for="content">내용</label>
-                <input type="text" id="content" name="content" class="form-control">
+                <input type="text" id="content" name="content" class="form-control" th:value="${board.content}">
             </div>
             <hr class="my-4">
             <div class="row">
                 <div class="col">
                     <button type="button" class="w-100 btn btn-primary btn-lg"
-                            onclick="registerBoard()">
-                        글 등록
+                            onclick="modifyBoard()">
+                        글 수정
                     </button>
                 </div>
                 <div class="col">
                     <button type="button" class="w-100 btn btn-secondary btn-lg"
-                            onclick="moveToBoardList()">
+                            onclick="moveToBoard()">
                         취소
                     </button>
                 </div>

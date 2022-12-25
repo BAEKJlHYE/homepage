@@ -4,34 +4,107 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
     <title>게시글 목록</title>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            var resultMessage = document.getElementById('resultMessage').value;
+            if(resultMessage != null && resultMessage != '' && resultMessage != undefined)
+                alert(resultMessage);
+        });
+
+        function moveToRegisterBoard() {
+            document.getElementById('boardId').remove();
+            document.getElementById('resultMessage').remove();
+
+            document.getElementById('boardPageInfo').action = '/board/registerBoard.do';
+            document.getElementById('boardPageInfo').submit();
+        }
+
+        function moveBoard(boardId) {
+            document.getElementById('boardId').value = boardId;
+            document.getElementById('resultMessage').remove();
+
+            document.getElementById('boardPageInfo').action = '/board/selectBoard.do';
+            document.getElementById('boardPageInfo').submit();
+        }
+
+        function movePage(pageNumber) {
+            document.getElementById('boardId').remove();
+            document.getElementById('resultMessage').remove();
+            document.getElementById('nowPage').value = pageNumber;
+
+            document.getElementById('boardPageInfo').submit();
+        }
+    </script>
 </head>
 <body>
     <div class="container" style="max-width: 600px">
-        <div class="py-5 text-center">
-            <h2>게시글 목록</h2>
-        </div>
-        <div class="row">
-            <div class="col">
-                <button class="btn btn-primary float-end" type="button">글 쓰기</button>
+        <form id="boardPageInfo" action="/board/selectBoardList.do" method="get">
+            <input type="hidden" id="boardId" name="boardId" value="">
+            <input type="hidden" id="resultMessage" name="resultMessage" th:value="${boardInfo.resultMessage}">
+            <input type="hidden" id="recordUnit" name="recordUnit" th:value="${boardInfo.recordUnit}">
+            <input type="hidden" id="nowPage" name="nowPage" th:value="${boardInfo.nowPage}">
+            <input type="hidden" id="pageUnit" name="pageUnit" th:value="${boardInfo.pageUnit}">
+            <input type="hidden" id="searchSe" name="searchSe" th:value="${boardInfo.searchSe}">
+            <input type="hidden" id="searchKeyword" name="searchKeyword" th:value="${boardInfo.searchKeyword}">
+
+            <div class="py-5 text-center">
+                <h2>게시글 목록</h2>
             </div>
-        </div>
-        <hr class="my-4">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>제목</th>
-                    <th>작성일자</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="board : ${boardList}">
-                    <td><a th:text="${board.boardId}">글번호</a></td>
-                    <td><a th:text="${board.title}">제목</a></td>
-                    <td><a th:text="${board.registDt}">작성일자</a></td>
-                </tr>
-            </tbody>
-        </table>
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-primary float-end" type="button"
+                            onclick="moveToRegisterBoard()">
+                        글 쓰기
+                    </button>
+                </div>
+            </div>
+            <hr class="my-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>글 번호</th>
+                        <th>제목</th>
+                        <th>조회수</th>
+                        <th>작성일자</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="board : ${boardList}">
+                        <td><span th:text="${board.boardId}" href="#"></span></td>
+                        <td><a th:text="${board.title}" href="#" th:onclick="|moveBoard(${board.boardId})|"></a></td>
+                        <td><span th:text="${board.viewCount}"></span></td>
+                        <td><span th:text="${board.displayRegistDt}"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li th:if="${boardInfo.prevAllPageExist}" class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous" th:onclick="|movePage(${boardInfo.firstPage - 1})|">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li th:if="${boardInfo.prevPageExist}" class="page-item">
+                        <a class="page-link" href="#" th:onclick="|movePage(${boardInfo.nowPage - 1})|">Previous</a>
+                    </li>
+                    <li th:each="i: ${#numbers.sequence(boardInfo.firstPage, boardInfo.lastPage)}"
+                        th:classappend="${boardInfo.nowPage == i} ? 'active' : ''"
+                        class="page-item"
+                        th:onclick="|movePage(${i})|">
+                        <a class="page-link" href="#" th:text="${i}">1</a>
+                    </li>
+                    <li th:if="${boardInfo.nextPageExist}" class="page-item" th:onclick="|movePage(${boardInfo.nowPage + 1})|">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                    <li th:if="${boardInfo.nextAllPageExist}" class="page-item" th:onclick="|movePage(${boardInfo.lastPage + 1})|">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </form>
     </div>
 </body>
 </html>
