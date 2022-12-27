@@ -4,8 +4,11 @@ import anonymous.homepage.file.vo.AtchDocVO;
 import anonymous.homepage.file.vo.AtchFileVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface FileMapper {
+    public List<AtchFileVO> selectAtchFileList(String atchDocId);
     public int insertAtchDoc(AtchDocVO atchDocVO);
 
     public int insertAtchFile(AtchFileVO atchFileVO);

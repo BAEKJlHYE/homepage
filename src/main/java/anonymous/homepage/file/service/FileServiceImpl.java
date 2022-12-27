@@ -7,10 +7,17 @@ import anonymous.homepage.vo.BaseVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
     private final FileMapper fileMapper;
+
+    @Override
+    public List<AtchFileVO> selectAtchFileList(String atchDocId) {
+        return fileMapper.selectAtchFileList(atchDocId);
+    }
 
     @Override
     public void saveFiles(BaseVO baseVO) {
