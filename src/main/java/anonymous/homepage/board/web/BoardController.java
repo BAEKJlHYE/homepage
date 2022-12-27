@@ -3,12 +3,18 @@ package anonymous.homepage.board.web;
 import anonymous.homepage.board.service.BoardService;
 import anonymous.homepage.board.vo.BoardVO;
 import anonymous.homepage.cd.service.CdService;
+import anonymous.homepage.file.FileStore;
+import anonymous.homepage.file.service.FileService;
+import anonymous.homepage.file.vo.AtchFileVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -17,6 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class BoardController {
     private final BoardService boardService;
     private final CdService cdService;
+    private final FileStore fileStore;
+    private final FileService fileService;
 
     // 공지사항 목록 화면 이동
     @GetMapping("/selectBoardList.do")
@@ -99,5 +107,23 @@ public class BoardController {
         redirect.addFlashAttribute("boardVO", boardVO);
 
         return "redirect:/board/selectBoardList.do";
+    }
+
+    // 파일 업로드 테스트
+    @GetMapping("/fileUploadTest.do")
+    public String fileUpload() throws IOException {
+        return "board/fileUpload";
+    }
+
+    // 파일 업로드 테스트
+    @PostMapping("/fileUploadTest.do")
+    @ResponseBody
+    public String fileUploadTest(@ModelAttribute BoardVO boardVO) throws IOException {
+        List<AtchFileVO> atchFiles = fileStore.saveFiles(boardVO.getUploadFiles());
+        boardVO.setAtchFiles(atchFiles);
+        fileService.saveFiles(boardVO);
+        // ex. 게시글 첨부문서ID 세팅 후 게시글 insert
+
+        return "okay";
     }
 }

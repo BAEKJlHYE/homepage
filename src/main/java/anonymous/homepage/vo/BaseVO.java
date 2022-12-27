@@ -1,12 +1,17 @@
 package anonymous.homepage.vo;
 
+import anonymous.homepage.file.vo.AtchDocVO;
+import anonymous.homepage.file.vo.AtchFileVO;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
 public class BaseVO {
-    // 사용자 정보
-    String userId = "admin";    // 사용자 ID (로그인 시 저장하는 것으로 수정 필요)
-    boolean isPermitted;        // 권한 존재 여부
+    /* 사용자 정보 */
+    private String userId = "admin";    // 사용자 ID (로그인 시 저장하는 것으로 수정 필요)
+    private boolean isPermitted;        // 권한 존재 여부
 
     public boolean getIsPermitted() {
         if(this.userId == "admin")
@@ -17,27 +22,32 @@ public class BaseVO {
         return this.isPermitted;
     }
 
-    // 처리 결과
-    String resultMessage;
+    /* 처리 결과 */
+    private String resultMessage;
 
-    // 검색
-    String searchSe;            // 검색 구분
-    String searchKeyword;       // 검색어
+    /* 검색 */
+    private String searchSe;            // 검색 구분
+    private String searchKeyword;       // 검색어
 
-    // 페이징
-    int recordCount;            // 게시글 개수
-    int recordUnit;             // 한 페이지 당 게시할 게시글 개수
-    int firstRecordNumber;      // 시작 rownum
-    int lastRecordNumber;       // 종료 rownum
-    int nowPage;                // 현재 페이지
-    int pageUnit;               // 페이지에 게시할 페이지 개수
-    int pageCount;              // 총 페이지 개수
-    int firstPage;              // 현재 페이지의 첫 번째 페이지
-    int lastPage;               // 현재 페이지의 마지막 페이지
-    boolean prevAllPageExist;   // '<<' 표시 여부
-    boolean nextAllPageExist;   // '>>' 표시 여부
-    boolean prevPageExist;      // '<' 표시 여부
-    boolean nextPageExist;      // '>' 표시 여부
+    /* 첨부파일 */
+    private List<MultipartFile> uploadFiles;
+    private AtchDocVO atchDoc;
+    private List<AtchFileVO> atchFiles;
+
+    /* 페이징 */
+    private int recordCount;            // 게시글 개수
+    private int recordUnit;             // 한 페이지 당 게시할 게시글 개수
+    private int firstRecordNumber;      // 시작 rownum
+    private int lastRecordNumber;       // 종료 rownum
+    private int nowPage;                // 현재 페이지
+    private int pageUnit;               // 페이지에 게시할 페이지 개수
+    private int pageCount;              // 총 페이지 개수
+    private int firstPage;              // 현재 페이지의 첫 번째 페이지
+    private int lastPage;               // 현재 페이지의 마지막 페이지
+    private boolean prevAllPageExist;   // '<<' 표시 여부
+    private boolean nextAllPageExist;   // '>>' 표시 여부
+    private boolean prevPageExist;      // '<' 표시 여부
+    private boolean nextPageExist;      // '>' 표시 여부
 
     public int getFirstRecordNumber() {
         this.firstRecordNumber = this.recordUnit * (this.nowPage - 1) + 1;
