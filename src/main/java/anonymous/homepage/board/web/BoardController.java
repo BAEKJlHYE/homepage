@@ -8,15 +8,12 @@ import anonymous.homepage.file.service.FileService;
 import anonymous.homepage.file.vo.AtchFileVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 @Slf4j
@@ -133,14 +130,7 @@ public class BoardController {
     // 파일 이미지 조회 테스트
     @GetMapping("/fileView.do")
     public String fileView(Model model) {
-        model.addAttribute("atchFiles", fileService.selectAtchFileList("D0000001"));
+        model.addAttribute("atchFiles", fileService.selectAtchFileList("D0000004"));
         return "board/fileView";
-    }
-
-    // 파일 이미지 조회 테스트
-    @GetMapping("/fileView/{fileName}")
-    @ResponseBody
-    public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(fileName));
     }
 }

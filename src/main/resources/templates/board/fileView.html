@@ -8,9 +8,12 @@
         <div class="py-5 text-center">
             <h2>첨부파일 이미지 조회</h2>
         </div>
-<!--        첨부파일: <a th:if="${item.attachFile}" th:href="|/attach/${item.id}|" th:text="${item.getAttachFile().getUploadFileName()}"/>-->
-<!--        <br/>-->
-        <img th:each="atchFile : ${atchFiles}" th:src="|/board/fileView/${atchFile.fileNm}|" width="300" height="300"/>
+        <p>첨부파일</p>
+        <p th:each="atchFile : ${atchFiles}">
+            <a th:href="|/file/download/${atchFile.atchFileId}|" th:text="${atchFile.orginlFileNm}"></a>
+        </p>
+        <br/>
+        <img th:each="atchFile : ${atchFiles}" th:src="|/file/image/${atchFile.atchFileId}|" width="300" height="300"/>
     </div>
 </body>
 </html>

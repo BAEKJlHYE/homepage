@@ -20,6 +20,11 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public AtchFileVO selectAtchFile(String atchFileId) {
+        return fileMapper.selectAtchFile(atchFileId);
+    }
+
+    @Override
     public void saveFiles(BaseVO baseVO) {
         if(baseVO.getAtchFiles() == null || baseVO.getAtchFiles().size() == 0) {
             return;

@@ -15,6 +15,17 @@
         WHERE ATCH_DOC_ID = #{atchDocId}
     </select>
 
+    <!-- 첨부파일 조회 -->
+    <select id="selectAtchFile" parameterType="String" resultType="anonymous.homepage.file.vo.AtchFileVO">
+        SELECT ATCH_FILE_ID
+             , ATCH_DOC_ID
+             , FILE_NM
+             , ORGINL_FILE_NM
+             , FILE_SIZE
+        FROM ATCH_FILE
+        WHERE ATCH_FILE_ID = #{atchFileId}
+    </select>
+
     <!-- 첨부문서 등록 -->
     <insert id="insertAtchDoc" parameterType="anonymous.homepage.file.vo.AtchDocVO">
         <selectKey resultType="String" keyProperty="atchDocId" order="BEFORE">

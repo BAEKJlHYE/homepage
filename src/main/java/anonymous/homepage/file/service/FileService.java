@@ -7,5 +7,8 @@ import java.util.List;
 
 public interface FileService {
     public List<AtchFileVO> selectAtchFileList(String atchDocId);
+
+    public AtchFileVO selectAtchFile(String atchFileId);
+
     public void saveFiles(BaseVO baseVO);
 }

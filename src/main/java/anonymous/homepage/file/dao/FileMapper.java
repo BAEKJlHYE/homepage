@@ -9,6 +9,9 @@ import java.util.List;
 @Mapper
 public interface FileMapper {
     public List<AtchFileVO> selectAtchFileList(String atchDocId);
+
+    public AtchFileVO selectAtchFile(String atchFileId);
+
     public int insertAtchDoc(AtchDocVO atchDocVO);
 
     public int insertAtchFile(AtchFileVO atchFileVO);

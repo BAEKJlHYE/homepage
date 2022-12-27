@@ -1,17 +1,23 @@
 package anonymous.homepage.file.web;
 
 import anonymous.homepage.file.FileStore;
+import anonymous.homepage.file.service.FileService;
+import anonymous.homepage.file.vo.AtchFileVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.UriUtils;
 
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Controller
@@ -19,11 +25,24 @@ import java.net.MalformedURLException;
 @RequestMapping("/file")
 public class FileController {
     private final FileStore fileStore;
+    private final FileService fileService;
 
-    // 파일 이미지 조회 테스트
-    @GetMapping("/fileView/{fileName}")
+    @GetMapping("/download/{atchFileId}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String atchFileId) throws MalformedURLException {
+        AtchFileVO atchFileVO = fileService.selectAtchFile(atchFileId);
+
+        UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(atchFileVO.getFileNm()));
+        String encodedOriginalFileName = UriUtils.encode(atchFileVO.getOrginlFileNm(), StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodedOriginalFileName + "\"";
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
+    }
+
+    @GetMapping("/image/{atchFileId}")
     @ResponseBody
-    public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(fileName));
+    public Resource downloadImage(@PathVariable String atchFileId) throws MalformedURLException {
+        AtchFileVO atchFileVO = fileService.selectAtchFile(atchFileId);
+        return new UrlResource("file:" + fileStore.getFullPath(atchFileVO.getFileNm()));
     }
 }
