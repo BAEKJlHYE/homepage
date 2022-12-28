@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="anonymous.homepage.buld.dao.BuldMapper">
+    <!-- 건물 목록 조회 -->
+    <select id="selectBuldList" resultType="anonymous.homepage.buld.vo.BuldVO">
+        SELECT BULD_NO
+             , BULD_NM
+             , ZIPCD
+             , ADDR
+             , DETAIL_ADDR
+             , DELNG_TY_SE_CD
+             , (SELECT CD_NM FROM CD WHERE CD = DELNG_TY_SE_CD) AS DELNG_TY_SE_NM
+             , GTN
+             , PRICE
+             , CNTRCT_STTUS_SE_CD
+             , (SELECT CD_NM FROM CD WHERE CD = CNTRCT_STTUS_SE_CD) AS CNTRCT_STTUS_SE_NM
+             , RL_FLOOR
+             , TOT_FLOOR
+             , DVR_AR
+             , DVR_RL_AEA
+             , SUPLY_AR
+             , SUPLY_RL_AEA
+             , COMPET_YEAR
+             , NVL(MVN_DE, '협의 후 가능') AS MVN_DE
+             , SALE_SE_CD
+             , (SELECT CD_NM FROM CD WHERE CD = SALE_SE_CD) AS SALE_SE_NM
+             , TELNO
+             , RECOMEND_SALE_YN
+             , EMRGNCY_SALE_YN
+             , REGIST_ID
+             , REGIST_DT
+             , UPDATE_ID
+             , UPDATE_DT
+             , ATCH_DOC_ID
+        FROM BULD
+    </select>
+</mapper>
