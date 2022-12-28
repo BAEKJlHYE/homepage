@@ -133,4 +133,10 @@ public class BoardController {
         model.addAttribute("atchFiles", fileService.selectAtchFileList("D0000004"));
         return "board/fileView";
     }
+
+    // js test
+    @GetMapping("/jsTest.do")
+    public String goToJsTest() {
+        return "board/jsTest";
+    }
 }
