@@ -84,7 +84,7 @@ public class BaseVO {
 
         this.lastPage = (share + 1) * this.pageUnit;
         if(getPageCount() < lastPage)
-            this.lastPage = getPageCount();
+            this.lastPage = getPageCount() == 0 ? 1 : getPageCount();
 
         return this.lastPage;
     }
@@ -117,7 +117,7 @@ public class BaseVO {
     }
 
     public boolean getNextPageExist() {
-        if(this.nowPage == getPageCount())
+        if(this.nowPage == getPageCount() || getPageCount() == 0)
             this.nextPageExist = false;
         else
             this.nextPageExist = true;
