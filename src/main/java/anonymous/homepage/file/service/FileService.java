@@ -11,4 +11,8 @@ public interface FileService {
     public AtchFileVO selectAtchFile(String atchFileId);
 
     public void saveFiles(BaseVO baseVO);
+
+    public void deleteAtchDoc(String atchDocId);
+
+    public void deleteAtchFile(String atchFileId);
 }

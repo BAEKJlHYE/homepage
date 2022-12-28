@@ -1,5 +1,6 @@
 package anonymous.homepage.file.service;
 
+import anonymous.homepage.file.FileStore;
 import anonymous.homepage.file.dao.FileMapper;
 import anonymous.homepage.file.vo.AtchDocVO;
 import anonymous.homepage.file.vo.AtchFileVO;
@@ -12,6 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
+    private final FileStore fileStore;
     private final FileMapper fileMapper;
 
     @Override
@@ -46,5 +48,23 @@ public class FileServiceImpl implements FileService {
             atchFileVO.setAtchDocId(atchDocVO.getAtchDocId());
             fileMapper.insertAtchFile(atchFileVO);
         }
+    }
+
+    @Override
+    public void deleteAtchDoc(String atchDocId) {
+        List<AtchFileVO> atchFiles = fileMapper.selectAtchFileList(atchDocId);
+        for(AtchFileVO atchFile : atchFiles) {
+            fileStore.deleteFile(atchFile.getFileNm());
+            fileMapper.deleteAtchFile(atchFile.getAtchFileId());
+        }
+
+        fileMapper.deleteAtchDoc(atchDocId);
+    }
+
+    @Override
+    public void deleteAtchFile(String atchFileId) {
+        AtchFileVO atchFile = fileMapper.selectAtchFile(atchFileId);
+        fileStore.deleteFile(atchFile.getFileNm());
+        fileMapper.deleteAtchFile(atchFileId);
     }
 }

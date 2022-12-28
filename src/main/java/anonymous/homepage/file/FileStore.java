@@ -17,9 +17,16 @@ public class FileStore {
     private String directory;
 
     public String getFullPath(String fileName) {
-        // 폴더 없을 경우 만드는 걸로 수정
-        // 폴더 경로에 날짜 추가
+        createFolder();
         return directory + fileName;
+    }
+
+    public void createFolder() {
+        File folder = new File(directory);
+
+        if(!folder.exists()) {
+            folder.mkdir();
+        }
     }
 
     public List<AtchFileVO> saveFiles(List<MultipartFile> multipartFiles) throws IOException {
@@ -48,6 +55,13 @@ public class FileStore {
         atchFile.setOrginlFileNm(originalFileName);
         atchFile.setFileSize(multipartFile.getSize());
         return atchFile;
+    }
+
+    public void deleteFile(String fileName) {
+        File file = new File(getFullPath(fileName));
+        if(file.exists()) {
+            file.delete();
+        }
     }
 
     private String createFileNameForSaving(String originalFileName) {

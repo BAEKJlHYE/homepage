@@ -79,4 +79,16 @@
             , SYSDATE
               )
     </insert>
+
+    <!-- 첨부문서 삭제 -->
+    <delete id="deleteAtchDoc" parameterType="String">
+        DELETE FROM ATCH_DOC
+        WHERE ATCH_DOC_ID = #{atchDocId}
+    </delete>
+
+    <!-- 첨부파일 삭제 -->
+    <delete id="deleteAtchFile" parameterType="String">
+        DELETE FROM ATCH_FILE
+        WHERE ATCH_FILE_ID = #{atchFileId}
+    </delete>
 </mapper>

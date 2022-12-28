@@ -10,10 +10,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriUtils;
 
 import java.net.MalformedURLException;
@@ -41,8 +38,22 @@ public class FileController {
 
     @GetMapping("/image/{atchFileId}")
     @ResponseBody
-    public Resource downloadImage(@PathVariable String atchFileId) throws MalformedURLException {
+    public Resource viewImage(@PathVariable String atchFileId) throws MalformedURLException {
         AtchFileVO atchFileVO = fileService.selectAtchFile(atchFileId);
         return new UrlResource("file:" + fileStore.getFullPath(atchFileVO.getFileNm()));
+    }
+
+    @PostMapping("/deleteAtchDoc/{atchDocId}")
+    @ResponseBody
+    public String deleteAtchDoc(@PathVariable String atchDocId) {
+        fileService.deleteAtchDoc(atchDocId);
+        return "okay";
+    }
+
+    @PostMapping("/deleteAtchFile/{atchFileId}")
+    @ResponseBody
+    public String deleteAtchFile(@PathVariable String atchFileId) {
+        fileService.deleteAtchFile(atchFileId);
+        return "okay";
     }
 }
