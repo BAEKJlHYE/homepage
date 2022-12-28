@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>게시글 목록</title>
+
+    <script type="text/javascript" src="../js/util.js"></script>
+    <script>
+        function checkPriceUnit() {
+            debugger;
+            var price = document.getElementById('price').value;
+            var formattedPrice = priceWonUnitFormatter(price);
+            document.getElementById('formattedPrice').innerText = formattedPrice;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="price" value="0">
+        <button type="button" onclick="checkPriceUnit()">금액 단위 확인</button>
+        <p id="formattedPrice"></p>
+    </div>
+</body>
+</html>
