@@ -6,21 +6,11 @@
 
     <script type="text/javascript" src="../js/util.js"></script>
     <script>
-        function checkFile(object) {
-            var fileElement = document.getElementById('uploadFiles');
-            var files = fileElement.files;
-            var maximumFileSize = 1024;
+        function checkFile() {
+            if(!validateFileCount('selectedFiles', 'uploadFiles', 3))
+                return;
 
-            for(var i=files.length ; i>0 ; i--) {
-                var file = files[i - 1];
-                if(!isSavableSize(file.size, maximumFileSize)) {
-                    alert("파일 용량 초과");
-                }
-
-                if(!isSavableImageExtension(file.name)) {
-                    alert("확장자 안 됨");
-                }
-            }
+            saveFileForUpload('selectedFiles', 'uploadFiles', 10 * 1024, 'image');
         }
     </script>
 
@@ -34,7 +24,8 @@
         </div>
 
         <h4 class="mb-3">파일 추가</h4>
-            <input type="file" multiple="multiple" id="uploadFiles" name="uploadFiles" onchange="checkFile()">
+            <input type="file" multiple="multiple" id="selectedFiles" onchange="checkFile()">
+            <input type="file" multiple="multiple" id="uploadFiles" name="uploadFiles" style="display: none;">
             <p style="height: 10px;"></p>
             <input type="submit"/>
         </form>

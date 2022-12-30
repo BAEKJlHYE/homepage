@@ -1,5 +1,6 @@
 /* etc */
 
+// 빈 값 확인
 function isEmpty(value) {
     if ((typeof value === "undefined") || (value === null) || (value === ""))
         return true;
@@ -7,22 +8,26 @@ function isEmpty(value) {
         return false;
 }
 
+// 값 복사
 function copyToClipboard(value) {
     window.navigator.clipboard.writeText(value);
 }
 
 /* string */
 
+// 문자열 추가 (왼쪽)
 function lpad(value, length, text) {
     return value.padStart(length, text);
 }
 
+// 문자열 추가 (오른쪽)
 function rpad(value, length, text) {
     return value.padEnd(length, text);
 }
 
 /* number */
 
+// 숫자 여부 확인
 function isNumber(value) {
     if(isNaN(value))
         return false;
@@ -30,6 +35,7 @@ function isNumber(value) {
         return true;
 }
 
+// 홀수 확인
 function isOdd(value) {
     if(!isNumber(value))
         return false;
@@ -42,6 +48,7 @@ function isOdd(value) {
         return false;
 }
 
+// 짝수 확인
 function isEven(value) {
     if(!isNumber(value))
         return false;
@@ -54,6 +61,7 @@ function isEven(value) {
         return false;
 }
 
+// 세 자리마다 ',' 추가
 function addComma(value) {
     if(!isNumber(value))
         return value;
@@ -73,6 +81,7 @@ function addComma(value) {
 
 /* formatter */
 
+// '$' 표시 추가
 function priceDollarFormatter(value) {
     if(!isNumber(value))
         return value;
@@ -80,6 +89,7 @@ function priceDollarFormatter(value) {
     return "$" + addComma(value);
 }
 
+// '원' 표시 추가
 function priceWonFormatter(value) {
     if(!isNumber(value))
         return value;
@@ -87,6 +97,7 @@ function priceWonFormatter(value) {
     return addComma(value) + "원";
 }
 
+// 네 자리마다 돈 단위 추가
 function priceWonUnitFormatter(value) {
     if(!isNumber(value))
         return value;
@@ -117,6 +128,7 @@ function priceWonUnitFormatter(value) {
     return resultStr + "원";
 }
 
+// 네 자리마다 돈 단위 추가 (축소 버전)
 function priceWonShortenFormatter(value) {
     if(!isNumber(value))
         return value;
@@ -134,6 +146,7 @@ function priceWonShortenFormatter(value) {
     return addComma(priceStr) + priceUnits[repeatCount] + '원';
 }
 
+// 바이트 단위 변환
 function byteFormatter(value) {
     if(!isNumber(value))
         return value;
@@ -151,6 +164,7 @@ function byteFormatter(value) {
 
 /* file */
 
+// 파일 용량 제한
 function isSavableSize(fileSize, maximum) {
     if(fileSize > maximum)
         return false;
@@ -158,6 +172,7 @@ function isSavableSize(fileSize, maximum) {
         return true;
 }
 
+// 파일 확장자 제한
 function isSavableExtension(fileName) {
     var extension = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length).toLowerCase();
     var savableExtensions = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'hwp', 'doc', 'docx', 'pdf', 'xls', 'xlsx', 'pptx', 'txt'];
@@ -168,6 +183,7 @@ function isSavableExtension(fileName) {
         return false;
 }
 
+// 이미지 파일 확장자 제한
 function isSavableImageExtension(fileName) {
     var extension = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length).toLowerCase();
     var savableExtensions = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
@@ -176,6 +192,70 @@ function isSavableImageExtension(fileName) {
         return true;
     else
         return false;
+}
+
+// 파일 개수 확인
+function validateFileCount(elementIdForSelectFile, elementIdForUploadFile, maximumCount) {
+    var selectedFileCount = document.getElementById(elementIdForSelectFile).files.length;
+    var savedFileCount = document.getElementById(elementIdForUploadFile).files.length;
+
+    if(selectedFileCount == 0) {
+        return false;
+    }
+
+    if(savedFileCount == maximumCount) {
+        // TODO: modal 창으로 변경
+        alert("첨부파일을 모두 선택하였습니다.");
+        return false;
+    }
+
+    if(selectedFileCount > maximumCount) {
+        // TODO: modal 창으로 변경
+        alert("첨부파일을 " + maximumCount + "개 이하로 선택해주시기 바랍니다.");
+        return false;
+    }
+
+    if(selectedFileCount + savedFileCount > maximumCount) {
+        // TODO: modal 창으로 변경
+        alert("첨부파일을 " + (maximumCount - savedFileCount)  + "개 이하로 선택해주시기 바랍니다.");
+        return false;
+    }
+
+    return true;
+}
+
+// 업로드를 위한 파일 저장
+function saveFileForUpload(elementIdForSelectFile, elementIdForUploadFile, maximumFileSize, fileType) {
+    var selectedFiles = document.getElementById(elementIdForSelectFile).files;
+    var uploadFiles = document.getElementById(elementIdForUploadFile).files;
+    var selectedFileArray = Array.from(selectedFiles);
+    var uploadFilesArray = Array.from(uploadFiles);
+
+    for(var i=selectedFileArray.length ; i>0 ; i--) {
+        var file = selectedFileArray[i - 1];
+        var savableSize = isSavableSize(file.size, maximumFileSize);
+        var savableImageExtension = true;
+
+        if(isEmpty(fileType) || fileType == 'all') {
+            savableImageExtension = isSavableExtension(file.name);
+        } else if(fileType == 'image') {
+            savableImageExtension = isSavableImageExtension(file.name);
+        }
+
+        if(!savableSize || !savableImageExtension)
+            selectedFileArray.splice(i - 1, 1);
+    }
+
+    selectedFileArray.forEach(file => { uploadFilesArray.push(file) });
+
+    var dataTransfer = new DataTransfer();
+    uploadFilesArray.forEach(file => { dataTransfer.items.add(file) });
+
+    document.getElementById(elementIdForUploadFile).files = dataTransfer.files;
+
+    // TODO: modal 창으로 변경
+    // 용량, 확장자가 제한되는 파일이 한 개라도 있을 때 alert
+    alert("");
 }
 
 
