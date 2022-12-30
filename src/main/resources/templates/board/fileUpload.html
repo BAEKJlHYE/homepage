@@ -3,6 +3,27 @@
 <head>
     <meta charset="utf-8">
     <title>파일 업로드</title>
+
+    <script type="text/javascript" src="../js/util.js"></script>
+    <script>
+        function checkFile(object) {
+            var fileElement = document.getElementById('uploadFiles');
+            var files = fileElement.files;
+            var maximumFileSize = 1024;
+
+            for(var i=files.length ; i>0 ; i--) {
+                var file = files[i - 1];
+                if(!isSavableSize(file.size, maximumFileSize)) {
+                    alert("파일 용량 초과");
+                }
+
+                if(!isSavableImageExtension(file.name)) {
+                    alert("확장자 안 됨");
+                }
+            }
+        }
+    </script>
+
 </head>
 <body>
     <div class="container">
@@ -12,13 +33,9 @@
             <h2>파일 업로드</h2>
         </div>
 
-        <h4 class="mb-3">상품 입력</h4>
-            <ul>
-                <li>
-                    파일
-                    <input type="file" multiple="multiple" name="uploadFiles">
-                </li>
-            </ul>
+        <h4 class="mb-3">파일 추가</h4>
+            <input type="file" multiple="multiple" id="uploadFiles" name="uploadFiles" onchange="checkFile()">
+            <p style="height: 10px;"></p>
             <input type="submit"/>
         </form>
     </div>

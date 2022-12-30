@@ -11,6 +11,16 @@ function copyToClipboard(value) {
     window.navigator.clipboard.writeText(value);
 }
 
+/* string */
+
+function lpad(value, length, text) {
+    return value.padStart(length, text);
+}
+
+function rpad(value, length, text) {
+    return value.padEnd(length, text);
+}
+
 /* number */
 
 function isNumber(value) {
@@ -124,6 +134,50 @@ function priceWonShortenFormatter(value) {
     return addComma(priceStr) + priceUnits[repeatCount] + '원';
 }
 
+function byteFormatter(value) {
+    if(!isNumber(value))
+        return value;
+
+    value = Number(value);
+    var units = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+
+    if(value == 0) {
+        return 0 + units[0];
+    }
+
+    var index = Math.floor(Math.log(value) / Math.log(1024));
+    return (value / Math.pow(1024, index)).toFixed(0) + units[index];
+}
+
+/* file */
+
+function isSavableSize(fileSize, maximum) {
+    if(fileSize > maximum)
+        return false;
+    else
+        return true;
+}
+
+function isSavableExtension(fileName) {
+    var extension = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length).toLowerCase();
+    var savableExtensions = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'hwp', 'doc', 'docx', 'pdf', 'xls', 'xlsx', 'pptx', 'txt'];
+
+    if(savableExtensions.indexOf(extension) > -1)
+        return true;
+    else
+        return false;
+}
+
+function isSavableImageExtension(fileName) {
+    var extension = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length).toLowerCase();
+    var savableExtensions = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
+
+    if(savableExtensions.indexOf(extension) > -1)
+        return true;
+    else
+        return false;
+}
+
 
 
 // alert
@@ -133,7 +187,6 @@ function priceWonShortenFormatter(value) {
 // uncheckAll
 // openPopup
 // closePopup
-// number - calculate byte to KB, MB, GB
 // 주민번호 formatter
 // 전화번호 formatter
 // 시간 formatter
@@ -141,7 +194,6 @@ function priceWonShortenFormatter(value) {
 // 메일주소 유효성 검사
 // 종성 확인
 // 은/는 을/를 이/가 와/과
-// lpad, rpad
 // addMinute
 // addHour
 // addDate
@@ -154,4 +206,3 @@ function priceWonShortenFormatter(value) {
 // from to 날짜 계산
 // 요일 계산
 // 월의 마지막 날짜 반환
-// 파일 확장자 확인
