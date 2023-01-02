@@ -26,6 +26,9 @@ dependencies {
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc10-production:19.16.0.0'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//스프링시큐리티 관련
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 }
 
 tasks.named('test') {
