@@ -38,7 +38,7 @@ public class BoardController {
         // 데이터 전달
         model.addAttribute("boardInfo", boardVO);
         model.addAttribute("boardList", boardService.selectBoardList(boardVO));
-        return "board/boardList_pub";
+        return "board/boardList";
     }
 
     // 공지사항 상세 화면 이동
@@ -51,7 +51,7 @@ public class BoardController {
         model.addAttribute("boardInfo", boardVO);
         model.addAttribute("board", boardService.selectBoard(boardVO));
 
-        return "board/board_pub";
+        return "board/board";
     }
 
     // 공지사항 등록 화면 이동
@@ -61,7 +61,7 @@ public class BoardController {
         model.addAttribute("boardInfo", boardVO);
         model.addAttribute("headers", cdService.selectCdList("A04"));
 
-        return "board/boardRegister_pub";
+        return "board/boardRegister";
     }
 
     // 공지사항 수정 화면 이동
