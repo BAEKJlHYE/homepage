@@ -46,10 +46,11 @@ public class BoardController {
     public String selectBoard(@ModelAttribute BoardVO boardVO, Model model) {
         // 조회수 증가
         boardService.updateBoardViewCount(boardVO);
+        BoardVO board = boardService.selectBoard(boardVO);
 
         // 데이터 전달
         model.addAttribute("boardInfo", boardVO);
-        model.addAttribute("board", boardService.selectBoard(boardVO));
+        model.addAttribute("board", board);
 
         return "board/board";
     }

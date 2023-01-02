@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>신현재 부동산</title>
@@ -156,7 +156,7 @@
                                 </div>
                             </div>
                             <div class="line_cont">
-                                <p th:text="${board.content}"></p>
+                                <div th:text="${board.content}" style="white-space: pre-wrap;"></div>
                             </div>
                             <div class="line_btn cb">
                                 <div class="fr">
