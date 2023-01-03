@@ -14,13 +14,7 @@ public class LoginServiceImpl implements LoginService {
     private final LoginMapper LoginMapper;
 
     public LoginVO selectUserByUsername(LoginVO loginVO) {
-
-        LoginVO returnLoginVO = LoginMapper.selectUserAccount(loginVO);
-        if (returnLoginVO == null) {
-            return null;
-        }
-
-        return returnLoginVO;
+        return LoginMapper.selectUser(loginVO);
     }
 
 }

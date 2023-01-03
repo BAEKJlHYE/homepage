@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface LoginMapper {
-    LoginVO selectUserAccount(LoginVO loginVO);
+    LoginVO selectUser(LoginVO loginVO);
 }
