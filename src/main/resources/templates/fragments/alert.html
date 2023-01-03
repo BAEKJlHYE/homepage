@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div class="alert" id="alertBox" th:fragment="alertBox">
+        <div class="alert_cont" id="alertContent" style="white-space: pre-wrap">
+        </div>
+        <div class="alert_btn">
+            <a href="#" id="alertCancelButton" class="btn_cm" onclick="closeAlert()">취소</a>
+            <a href="#" id="alertConfirmButton" class="btn_cm blue" onclick="closeAlert()">확인</a>
+        </div>
+    </div>
+</body>
+</html>
