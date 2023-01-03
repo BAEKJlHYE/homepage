@@ -1,5 +1,36 @@
 /* etc */
 
+// alert
+function openAlertModal(message) {
+    document.getElementById('alertContent').innerText = message;
+    document.getElementById('alertBox').classList.add('on');
+
+    document.getElementById('alertCancelButton').style.display = 'none';
+    document.getElementById('alertConfirmButton').setAttribute('onclick', 'closeAlert()');
+}
+
+// alert - 확인 버튼, confirm - 확인·취소 버튼
+function closeAlert() {
+    document.getElementById('alertBox').classList.remove('on');
+}
+
+// confirm
+function openConfirmModal(message, callbackFunction) {
+    document.getElementById('alertContent').innerText = message;
+    document.getElementById('alertBox').classList.add('on');
+    document.getElementById('alertCancelButton').style.display = 'inline-block';
+
+    if(!isEmpty(callbackFunction))
+        document.getElementById('alertConfirmButton').setAttribute('onclick', 'confirm_confirm(' + callbackFunction + ')');
+}
+
+// confirm - 확인 버튼 (콜백 함수 존재 시)
+function confirm_confirm(callbackFunction) {
+    closeAlert();
+    if(typeof(callbackFunction) === 'function')
+        callbackFunction();
+}
+
 // 빈 값 확인
 function isEmpty(value) {
     if ((typeof value === "undefined") || (value === null) || (value === ""))
@@ -204,20 +235,17 @@ function validateFileCount(elementIdForSelectFile, elementIdForUploadFile, maxim
     }
 
     if(savedFileCount == maximumCount) {
-        // TODO: modal 창으로 변경
-        alert("첨부파일을 모두 선택하였습니다.");
+        openAlertModal("첨부파일을 모두 선택하였습니다.");
         return false;
     }
 
     if(selectedFileCount > maximumCount) {
-        // TODO: modal 창으로 변경
-        alert("첨부파일을 " + maximumCount + "개 이하로 선택해주시기 바랍니다.");
+        openAlertModal("첨부파일을 " + maximumCount + "개 이하로 선택해주시기 바랍니다.");
         return false;
     }
 
     if(selectedFileCount + savedFileCount > maximumCount) {
-        // TODO: modal 창으로 변경
-        alert("첨부파일을 " + (maximumCount - savedFileCount)  + "개 이하로 선택해주시기 바랍니다.");
+        openAlertModal("첨부파일을 " + (maximumCount - savedFileCount)  + "개 이하로 선택해주시기 바랍니다.");
         return false;
     }
 
@@ -228,22 +256,36 @@ function validateFileCount(elementIdForSelectFile, elementIdForUploadFile, maxim
 function saveFileForUpload(elementIdForSelectFile, elementIdForUploadFile, maximumFileSize, fileType) {
     var selectedFiles = document.getElementById(elementIdForSelectFile).files;
     var uploadFiles = document.getElementById(elementIdForUploadFile).files;
+
     var selectedFileArray = Array.from(selectedFiles);
     var uploadFilesArray = Array.from(uploadFiles);
 
+    var sizeAllAllowed = true;
+    var extensionAllAllowed = true;
+
     for(var i=selectedFileArray.length ; i>0 ; i--) {
         var file = selectedFileArray[i - 1];
-        var savableSize = isSavableSize(file.size, maximumFileSize);
-        var savableImageExtension = true;
 
-        if(isEmpty(fileType) || fileType == 'all') {
-            savableImageExtension = isSavableExtension(file.name);
-        } else if(fileType == 'image') {
-            savableImageExtension = isSavableImageExtension(file.name);
+        if(sizeAllAllowed)
+            sizeAllAllowed = isSavableSize(file.size, maximumFileSize);
+
+        if(extensionAllAllowed) {
+            if(isEmpty(fileType) || fileType == 'all')
+                extensionAllAllowed = isSavableExtension(file.name);
+            else if(fileType == 'image')
+                extensionAllAllowed = isSavableImageExtension(file.name);
         }
+    }
 
-        if(!savableSize || !savableImageExtension)
-            selectedFileArray.splice(i - 1, 1);
+    if(!sizeAllAllowed && !extensionAllAllowed) {
+        openAlertModal("첨부 불가능한 확장자가 포함되어 있습니다.\n(" + byteFormatter(maximumFileSize) + "이하의 파일만 추가 가능합니다.)");
+        return;
+    } else if(!sizeAllAllowed) {
+        openAlertModal(byteFormatter(maximumFileSize) + "이하의 파일만 추가 가능합니다.");
+        return;
+    } else if(!extensionAllAllowed) {
+        openAlertModal("첨부 불가능한 확장자가 포함되어 있습니다.");
+        return;
     }
 
     selectedFileArray.forEach(file => { uploadFilesArray.push(file) });
@@ -252,16 +294,9 @@ function saveFileForUpload(elementIdForSelectFile, elementIdForUploadFile, maxim
     uploadFilesArray.forEach(file => { dataTransfer.items.add(file) });
 
     document.getElementById(elementIdForUploadFile).files = dataTransfer.files;
-
-    // TODO: modal 창으로 변경
-    // 용량, 확장자가 제한되는 파일이 한 개라도 있을 때 alert
-    alert("");
 }
 
 
-
-// alert
-// confirm
 // validate
 // checkAll
 // uncheckAll

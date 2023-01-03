@@ -9,7 +9,7 @@ import java.util.List;
 public interface BoardMapper {
     public List<BoardVO> selectBoardList(BoardVO boardVO);
     public BoardVO selectBoard(BoardVO boardVO);
-    public int selectBoardCount();
+    public int selectBoardCount(BoardVO boardVO);
     public int insertBoard(BoardVO boardVO);
     public int updateBoard(BoardVO boardVO);
     public int deleteBoard(BoardVO boardVO);

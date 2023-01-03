@@ -2,11 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
 layout:decorate="layout/default_layout">
 <th:block layout:fragment="content">
-
-<div class="wrap">
-    <div class="skip">
-        <a href="#">본문바로가기</a>
-    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            var resultMessage = document.getElementById('resultMessage').value;
+            if (resultMessage != null && resultMessage != '' && resultMessage != undefined)
+                openAlertModal(resultMessage);
+        });
+    </script>
+<!--    <div class="skip">-->
+<!--        <a href="#">본문바로가기</a>-->
+<!--    </div>-->
 
     <div id="container" class="container bg_gray">
         <div class="content">
@@ -20,16 +25,17 @@ layout:decorate="layout/default_layout">
             </div>
             <div class="content_inner">
                 <div class="titarea">
-                    <h2>로그인5</h2>
+                    <h2>로그인</h2>
                 </div>
                 <section class="w600">
-                    <form th:action="@{/login_proc}" method="post">
+                    <input type="hidden" id="resultMessage" name="resultMessage" th:value="${loginVo.resultMessage}">
+                    <form th:action="@{/login/selectUser.do}" th:object="${loginForm}" method="post">
                         <div class="box_login">
-                            <input name="username" type="text" placeholder="아이디를 입력해주세요" required autofocus>
-                            <input name="password" type="password" placeholder="비밀번호를 입력해주세요" required>
-                            <a href="#" class="btn_login mint" type="submit">로그인</a>
+                            <input name="userId" type="text" placeholder="아이디를 입력해주세요" required autofocus>
+                            <input name="userPw" type="password" placeholder="비밀번호를 입력해주세요" required>
+                            <button class="btn_login mint" type="submit">로그인</button>
                             <ul>
-                                <li><a href="join.html">회원가입</a></li>
+                                <li><a th:href="@{/board/list}">회원가입</a></li>
                                 <li style="display: none"><a href="#">아이디/비밀번호 찾기</a></li>
                             </ul>
                         </div>
@@ -39,6 +45,5 @@ layout:decorate="layout/default_layout">
         </div>
         <a href="#" class="btn_top">TOP</a>
     </div>
-</div>
 </th:block>
 </html>

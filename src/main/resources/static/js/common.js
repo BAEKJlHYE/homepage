@@ -130,7 +130,7 @@ $(document).ready(function(){
         var $popClose = $(".btn_close");
         
         var $exAlertBtn = $(".exAlertBtn");
-        var $exAlert = $("#exAlert");
+        var $alertBox = $("#alertBox");
         var $exAlertClose = $(".alert .btn_cm");
 
         $exPopBtn.click(function (e) {
@@ -144,11 +144,11 @@ $(document).ready(function(){
 
         $exAlertBtn.click(function (e) {
             e.preventDefault();
-            $exAlert.addClass("on");
+            $alertBox.addClass("on");
         });
         $exAlertClose.click(function (e) {
             e.preventDefault();
-            $exAlert.removeClass("on");
+            $alertBox.removeClass("on");
         });
     }
     exPop();

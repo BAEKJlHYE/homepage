@@ -5,10 +5,11 @@
 
 <mapper namespace="anonymous.homepage.login.dao.LoginMapper">
     <!-- 로그인 조회 -->
-    <select id="selectUserAccount" parameterType="anonymous.homepage.login.vo.LoginVO" resultType="anonymous.homepage.login.vo.LoginVO">
+    <select id="selectUser" parameterType="anonymous.homepage.login.vo.LoginVO" resultType="anonymous.homepage.login.vo.LoginVO">
         SELECT *
           FROM USER_HD
-         WHERE USER_ID= #{userId}
+         WHERE USER_ID = #{userId}
+           AND USER_PW = #{userPw}
     </select>
 
 </mapper>

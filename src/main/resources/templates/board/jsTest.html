@@ -4,7 +4,12 @@
     <meta charset="utf-8">
     <title>JS Test</title>
 
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/all.css" />
+    <link rel="stylesheet" href="../css/jquery-ui.min.css" />
+
     <script type="text/javascript" src="../js/util.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.5.1.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function(){
             document.getElementById('text').focus();
@@ -28,15 +33,25 @@
             var text = document.getElementById('result1').innerText;
             copyToClipboard(text);
         }
+
+        function confirmCallbackTest() {
+            console.log('callback function!');
+        }
     </script>
 </head>
 <body>
     <div class="container">
-        <input type="text" id="text" value="" onkeyup="keyUpEvent()">
-        <button type="button" onclick="checkResult()">확인</button>
-        <button type="button" onclick="copyText()">복사</button>
-        <p id="result1"></p>
-        <p id="result2"></p>
+        <input type="text" id="text" value="" class="ipt" onkeyup="keyUpEvent()" style="width: 300px; height: 30px;">
+        <button type="button" class="btn_cm" onclick="checkResult()" style="">확인</button>
+        <button type="button" class="btn_cm" onclick="copyText()" style="">복사</button>
+        <p id="result1">1</p>
+        <p id="result2">2</p>
+
+        <hr>
+        <textarea class="txa" id="textarea" style="width: 300px; height: 200px;"></textarea>
+        <button type="button" class="btn_cm" onclick="openAlertModal('test')" style="">alert</button>
+        <button type="button" class="btn_cm" onclick="openConfirmModal('test', 'confirmCallbackTest')" style="">confirm</button>
     </div>
+    <div th:replace="~{fragments/alert :: alertBox}"></div>
 </body>
 </html>
