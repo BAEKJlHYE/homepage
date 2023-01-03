@@ -4,10 +4,9 @@ layout:decorate="layout/default_layout">
 <th:block layout:fragment="content">
     <script>
         document.addEventListener("DOMContentLoaded", function(){
-            debugger;
-            // var resultMessage = document.getElementById('resultMessage').value;
-            // if (resultMessage != null && resultMessage != '' && resultMessage != undefined)
-            //     openAlertModal(resultMessage);
+            var resultMessage = document.getElementById('resultMessage').value;
+            if (resultMessage != null && resultMessage != '' && resultMessage != undefined)
+                openAlertModal(resultMessage);
         });
     </script>
 <!--    <div class="skip">-->
@@ -29,7 +28,6 @@ layout:decorate="layout/default_layout">
                     <h2>로그인</h2>
                 </div>
                 <section class="w600">
-                    <span th:text="${loginVo.resultMessage}"></span>
                     <input type="hidden" id="resultMessage" name="resultMessage" th:value="${loginVo.resultMessage}">
                     <form th:action="@{/login/selectUser.do}" th:object="${loginForm}" method="post">
                         <div class="box_login">
@@ -37,7 +35,7 @@ layout:decorate="layout/default_layout">
                             <input name="userPw" type="password" placeholder="비밀번호를 입력해주세요" required>
                             <button class="btn_login mint" type="submit">로그인</button>
                             <ul>
-                                <li><a href="join.html">회원가입</a></li>
+                                <li><a th:href="@{/board/list}">회원가입</a></li>
                                 <li style="display: none"><a href="#">아이디/비밀번호 찾기</a></li>
                             </ul>
                         </div>

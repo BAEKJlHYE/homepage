@@ -31,8 +31,6 @@ public class LoginController {
         if (!MapUtils.isEmpty(redirectMap)) {
             model.addAttribute("loginVo", redirectMap.get("loginVo"));
         } else {
-//            LoginVO loginTest = new LoginVO();
-//            loginTest.setResultMessage("test");
             model.addAttribute("loginVo", new LoginVO());
         }
 
