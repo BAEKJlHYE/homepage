@@ -20,8 +20,8 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.selectBoard(boardVO);
     }
 
-    public int selectBoardCount() {
-        return boardMapper.selectBoardCount();
+    public int selectBoardCount(BoardVO boardVO) {
+        return boardMapper.selectBoardCount(boardVO);
     }
 
     public int insertBoard(BoardVO boardVO) {

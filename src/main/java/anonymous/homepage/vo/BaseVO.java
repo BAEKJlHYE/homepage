@@ -26,7 +26,7 @@ public class BaseVO {
     private String resultMessage;
 
     /* 검색 */
-    private String searchSe;            // 검색 구분
+    private String searchSeCd;          // 검색 구분
     private String searchKeyword;       // 검색어
 
     /* 첨부파일 */

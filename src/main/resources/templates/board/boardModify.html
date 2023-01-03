@@ -22,13 +22,11 @@
         function validateForm() {
             if(isEmpty(document.getElementById('title').value)) {
                 openAlertModal("제목을 입력해주시기 바랍니다.");
-                document.getElementById('title').focus();
                 return false;
             }
 
             if(isEmpty(document.getElementById('content').value)) {
                 openAlertModal("내용을 입력해주시기 바랍니다.");
-                document.getElementById('content').focus();
                 return false;
             }
 
@@ -42,7 +40,7 @@
             <input type="hidden" id="recordUnit" name="recordUnit" th:value="${boardInfo.recordUnit}">
             <input type="hidden" id="nowPage" name="nowPage" th:value="${boardInfo.nowPage}">
             <input type="hidden" id="pageUnit" name="pageUnit" th:value="${boardInfo.pageUnit}">
-            <input type="hidden" id="searchSe" name="searchSe" th:value="${boardInfo.searchSe}">
+            <input type="hidden" id="searchSeCd" name="searchSeCd" th:value="${boardInfo.searchSeCd}">
             <input type="hidden" id="searchKeyword" name="searchKeyword" th:value="${boardInfo.searchKeyword}">
 
             <div class="lnb">
@@ -74,8 +72,8 @@
                                         <tr>
                                             <th><span class="req">글 유형</span></th>
                                             <td>
-                                                <select class="select" style="width:400px;">
-                                                    <option th:each="header : ${headers}" th:text="${header.cdNm}" th:value="${header.cd}"></option>
+                                                <select class="select" id="headerSeCd" name="headerSeCd" style="width:400px;">
+                                                    <option th:each="header : ${headers}" th:text="${header.cdNm}" th:value="${header.cd}" th:selected="${board.headerSeCd} == ${header.cd}"></option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -93,7 +91,7 @@
                         </article>
                         <div class="btnbox cb">
                             <a href="#" class="btn_cm" onclick="moveToBoard()">취소</a>
-                            <a href="#" class="btn_cm mint" onclick="modifyBoard()">수정</a>
+                            <a th:if="${boardInfo.isPermitted}" href="#" class="btn_cm mint" onclick="modifyBoard()">수정</a>
                         </div>
                     </section>
                 </div>

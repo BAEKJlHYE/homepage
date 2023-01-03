@@ -11,6 +11,14 @@
                 openAlertModal(resultMessage);
         });
 
+        function searchBoard() {
+            document.getElementById('boardId').value = 0;
+            document.getElementById('resultMessage').value = '';
+            document.getElementById('nowPage').value = 1;
+
+            document.getElementById('boardPageInfo').submit();
+        }
+
         function moveToRegisterBoard() {
             document.getElementById('boardId').value = 0;
             document.getElementById('resultMessage').value = '';
@@ -43,8 +51,6 @@
             <input type="hidden" id="recordUnit" name="recordUnit" th:value="${boardInfo.recordUnit}">
             <input type="hidden" id="nowPage" name="nowPage" th:value="${boardInfo.nowPage}">
             <input type="hidden" id="pageUnit" name="pageUnit" th:value="${boardInfo.pageUnit}">
-            <input type="hidden" id="searchSe" name="searchSe" th:value="${boardInfo.searchSe}">
-            <input type="hidden" id="searchKeyword" name="searchKeyword" th:value="${boardInfo.searchKeyword}">
 
             <div class="lnb">
                 <div class="lnb_inner">
@@ -66,14 +72,16 @@
                                 <div class="on">
                                     <article>
                                         <div class="box_sch">
-                                            <select name="" id="" class="select">
-                                                <option value="">전체</option>
-                                                <option value="">제목</option>
-                                                <option value="">내용</option>
+                                            <select name="searchSeCd" id="searchSeCd" class="select">
+                                                <option th:each="searchSe, searchSeStat : ${searchSeCds}"
+                                                        th:text="${searchSe.cdNm}"
+                                                        th:value="${searchSe.cd}"
+                                                        th:selected="${boardInfo.searchSeCd} == ${searchSe.cd}">
+                                                </option>
                                             </select>
                                             <div class="ipt_sch">
-                                                <input type="text" class="ipt" placeholder="검색어를 입력해주세요.">
-                                                <a href="#" class="btn_sch">검색</a>
+                                                <input id="searchKeyword" name="searchKeyword" type="text" class="ipt" th:value="${boardInfo.searchKeyword}" placeholder="검색어를 입력해주세요.">
+                                                <a href="#" class="btn_sch" onclick="searchBoard()">검색</a>
                                             </div>
                                         </div>
                                         <div class="tit_tb">
@@ -81,7 +89,7 @@
                                                 <span th:text="|총 ${boardInfo.recordCount}건|"></span>
                                             </div>
                                         </div>
-                                        <div class="tbbox">
+                                        <div class="tbbox" th:classappend="${boardInfo.recordCount == 0} ? 'no'">
                                             <table class="tb ellipsis">
                                                 <colgroup>
                                                     <col style="width:82px"/>
@@ -102,7 +110,7 @@
                                                         <td><span th:text="${board.boardId}"></span></td>
                                                         <td class="tal">
                                                             <a class="link" href="#" th:onclick="|moveBoard(${board.boardId})|">
-                                                                <span class="label_blue">[일반]</span>
+                                                                <span class="label_blue" th:text="'[' + ${board.headerSeNm} + ']'"></span>
                                                                 <span th:text="${board.title}"></span>
                                                             </a>
                                                         </td>
@@ -124,7 +132,7 @@
                                                     <a href="#" th:onclick="|movePage(${boardInfo.nowPage - 1})|">이전</a>
                                                 </li>
                                                 <li th:each="i: ${#numbers.sequence(boardInfo.firstPage, boardInfo.lastPage)}"
-                                                    th:classappend="${boardInfo.nowPage == i} ? 'on' : ''">
+                                                    th:classappend="${boardInfo.nowPage == i} ? 'on'">
                                                     <a href="#" th:onclick="|movePage(${i})|" th:text="${i}">1</a>
                                                 </li>
                                                 <li class="next" th:if="${boardInfo.nextPageExist}">
@@ -135,7 +143,7 @@
                                                 </li>
                                             </ul>
                                             <div class="fr">
-                                                <a href="#" class="btn_cm mint" onclick="moveToRegisterBoard()">글쓰기</a>
+                                                <a th:if="${boardInfo.isPermitted}" href="#" class="btn_cm mint" onclick="moveToRegisterBoard()">글쓰기</a>
                                             </div>
                                         </div>
                                     </article>

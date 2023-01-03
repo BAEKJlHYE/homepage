@@ -10,6 +10,7 @@
              , A.TITLE
              , A.DISPLAY_REGIST_DT
              , A.VIEW_COUNT
+             , A.HEADER_SE_NM
         FROM (
                  SELECT ROWNUM AS RNUM
                       , A.*
@@ -18,7 +19,20 @@
                                , TITLE
                                , TO_CHAR(REGIST_DT, 'YYYY-MM-DD') AS DISPLAY_REGIST_DT
                                , VIEW_COUNT
+                               , (SELECT CD_NM FROM CD WHERE HEADER_SE_CD = CD) AS HEADER_SE_NM
                           FROM BOARD_HD
+                          WHERE 1 = 1
+                          <if test="searchSeCd != null and searchSeCd != ''">
+                            <if test="'A00018'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+                            AND REGEXP_LIKE(TITLE, #{searchKeyword})
+                            </if>
+                            <if test="'A00019'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+                            AND REGEXP_LIKE(CONTENT, #{searchKeyword})
+                            </if>
+                            <if test="'A00020'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+                            AND (REGEXP_LIKE(TITLE, #{searchKeyword}) OR REGEXP_LIKE(CONTENT, #{searchKeyword}))
+                            </if>
+                          </if>
                           ORDER BY REGIST_DT DESC, BOARD_ID DESC
                       ) A
              ) A
@@ -36,14 +50,28 @@
              , TO_CHAR(REGIST_DT, 'YYYY-MM-DD') AS DISPLAY_REGIST_DT
              , SUGGESTION_COUNT
              , VIEW_COUNT
+             , HEADER_SE_CD
+             , (SELECT CD_NM FROM CD WHERE HEADER_SE_CD = CD) AS HEADER_SE_NM
         FROM BOARD_HD
         WHERE BOARD_ID = #{boardId}
     </select>
 
     <!-- 게시글 건수 조회 -->
-    <select id="selectBoardCount" resultType="int">
+    <select id="selectBoardCount" parameterType="anonymous.homepage.board.vo.BoardVO" resultType="int">
         SELECT COUNT(1) AS RECORD_COUNT
         FROM BOARD_HD
+        WHERE 1 = 1
+        <if test="searchSeCd != null and searchSeCd != ''">
+          <if test="'A00018'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+          AND REGEXP_LIKE(TITLE, #{searchKeyword})
+          </if>
+          <if test="'A00019'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+          AND REGEXP_LIKE(CONTENT, #{searchKeyword})
+          </if>
+          <if test="'A00020'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+          AND (REGEXP_LIKE(TITLE, #{searchKeyword}) OR REGEXP_LIKE(CONTENT, #{searchKeyword}))
+          </if>
+        </if>
     </select>
 
     <!-- 게시글 추가 -->
@@ -62,6 +90,7 @@
             , UPDATE_DT
             , SUGGESTION_COUNT
             , VIEW_COUNT
+            , HEADER_SE_CD
         )
         VALUES (
             #{boardId}
@@ -74,6 +103,7 @@
             , SYSDATE
             , 0
             , 0
+            , #{headerSeCd}
         )
     </insert>
 
@@ -84,6 +114,7 @@
             , CONTENT = #{content}
             , UPDATE_ID = #{userId}
             , UPDATE_DT = SYSDATE
+            , HEADER_SE_CD = #{headerSeCd}
         WHERE BOARD_ID = #{boardId}
     </update>
 
