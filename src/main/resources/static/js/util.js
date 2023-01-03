@@ -1,5 +1,36 @@
 /* etc */
 
+// alert
+function openAlertModal(message) {
+    document.getElementById('alertContent').innerText = message;
+    document.getElementById('alertBox').classList.add('on');
+
+    document.getElementById('alertCancelButton').style.display = 'none';
+    document.getElementById('alertConfirmButton').setAttribute('onclick', 'closeAlert()');
+}
+
+// alert - 확인 버튼, confirm - 확인·취소 버튼
+function closeAlert() {
+    document.getElementById('alertBox').classList.remove('on');
+}
+
+// confirm
+function openConfirmModal(message, callbackFunction) {
+    document.getElementById('alertContent').innerText = message;
+    document.getElementById('alertBox').classList.add('on');
+    document.getElementById('alertCancelButton').style.display = 'inline-block';
+
+    if(!isEmpty(callbackFunction))
+        document.getElementById('alertConfirmButton').setAttribute('onclick', 'confirm_confirm(' + callbackFunction + ')');
+}
+
+// confirm - 확인 버튼 (콜백 함수 존재 시)
+function confirm_confirm(callbackFunction) {
+    closeAlert();
+    if(typeof(callbackFunction) === 'function')
+        callbackFunction();
+}
+
 // 빈 값 확인
 function isEmpty(value) {
     if ((typeof value === "undefined") || (value === null) || (value === ""))
@@ -259,9 +290,6 @@ function saveFileForUpload(elementIdForSelectFile, elementIdForUploadFile, maxim
 }
 
 
-
-// alert
-// confirm
 // validate
 // checkAll
 // uncheckAll
