@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <th:block th:fragment="headerFragment">
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+
+        });
+    </script>
+
     <header class="header">
         <div class="header_inner">
             <div class="header_top">
@@ -15,6 +21,8 @@
 <!--                                <li><a href="#">비밀번호 변경</a></li>-->
                             </ul>
                         </li>
+                        <li sec:authentication="name">로그인한놈</li>
+                        <li sec:authentication="principal.authorities">로그인한놈권한</li>
                         <li class="join"><a th:href="@{/join/getJoinPage.do}">회원가입</a></li>
                         <li class="login"><a th:href="@{/login/getLoginPage.do}">로그인</a></li>
                         <li class="logout"><a href="#">로그아웃</a></li>
@@ -37,12 +45,12 @@
                             <ul>
                                 <li>
                                     <ul class="dep2">
-                                        <li><a href="#">아파트</a></li>
-                                        <li><a href="#">주택</a></li>
-                                        <li><a href="#">원룸</a></li>
-                                        <li><a href="#">오피스텔</a></li>
-                                        <li><a href="#">상가</a></li>
-                                        <li><a href="#">사무실</a></li>
+                                        <li><a href="#">스크린골프</a></li>
+                                        <li><a href="#">골프연습장</a></li>
+                                        <li><a href="#">인도어연습장</a></li>
+<!--                                        <li><a href="#">오피스텔</a></li>-->
+<!--                                        <li><a href="#">상가</a></li>-->
+<!--                                        <li><a href="#">사무실</a></li>-->
                                     </ul>
                                 </li>
 <!--                                <li>-->

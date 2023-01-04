@@ -5,8 +5,9 @@ layout:decorate="layout/default_layout">
     <script>
         document.addEventListener("DOMContentLoaded", function(){
             var resultMessage = document.getElementById('resultMessage').value;
-            if (resultMessage != null && resultMessage != '' && resultMessage != undefined)
+            if (!isEmpty(resultMessage)) {
                 openAlertModal(resultMessage);
+            }
         });
     </script>
 <!--    <div class="skip">-->

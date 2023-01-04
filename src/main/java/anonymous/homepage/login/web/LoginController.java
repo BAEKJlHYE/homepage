@@ -8,11 +8,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.thymeleaf.util.MapUtils;
-import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -45,7 +47,6 @@ public class LoginController {
 
         if (ObjectUtils.isEmpty(vo)) {
             vo = new LoginVO();
-//            BeanUtils.copyProperties(loginVO, vo, "firstPage", "lastPage", "prevAllPageExist", "nextAllPageExist", "prevPageExist", "nextPageExist", "prevPageExist", "pageCount");
             BeanUtils.copyProperties(loginVO, vo);
             vo.setResultMessage("아이디 혹은 비밀번호가 일치하지 않습니다.");
 
