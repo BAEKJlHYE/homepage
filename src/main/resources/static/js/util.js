@@ -225,7 +225,7 @@ function isSavableImageExtension(fileName) {
         return false;
 }
 
-// 파일 개수 확인
+// 파일 목록 개수 검사
 function validateFileCount(elementIdForSelectFile, elementIdForUploadFile, maximumCount) {
     var selectedFileCount = document.getElementById(elementIdForSelectFile).files.length;
     var savedFileCount = document.getElementById(elementIdForUploadFile).files.length;
@@ -252,12 +252,12 @@ function validateFileCount(elementIdForSelectFile, elementIdForUploadFile, maxim
     return true;
 }
 
-// 업로드를 위한 파일 저장
+// input 요소에 파일 목록 저장
 function saveFileForUpload(elementIdForSelectFile, elementIdForUploadFile, maximumFileSize, fileType) {
     var selectedFiles = document.getElementById(elementIdForSelectFile).files;
-    var uploadFiles = document.getElementById(elementIdForUploadFile).files;
-
     var selectedFileArray = Array.from(selectedFiles);
+
+    var uploadFiles = document.getElementById(elementIdForUploadFile).files;
     var uploadFilesArray = Array.from(uploadFiles);
 
     var sizeAllAllowed = true;
@@ -277,6 +277,7 @@ function saveFileForUpload(elementIdForSelectFile, elementIdForUploadFile, maxim
         }
     }
 
+    // TODO 수정
     if(!sizeAllAllowed && !extensionAllAllowed) {
         openAlertModal("첨부 불가능한 확장자가 포함되어 있습니다.\n(" + byteFormatter(maximumFileSize) + "이하의 파일만 추가 가능합니다.)");
         return;
@@ -288,12 +289,21 @@ function saveFileForUpload(elementIdForSelectFile, elementIdForUploadFile, maxim
         return;
     }
 
+    var dataTransfer = new DataTransfer();
     selectedFileArray.forEach(file => { uploadFilesArray.push(file) });
+    uploadFilesArray.forEach(file => { dataTransfer.items.add(file) });
+    document.getElementById(elementIdForUploadFile).files = dataTransfer.files;
+}
+
+// input 요소에서 파일 1개 제거
+function deleteFileFromInput(elementId, fileIndex) {
+    var files = document.getElementById(elementId).files;
+    var fileArray = Array.from(files);
+    fileArray.splice(fileIndex, 1);
 
     var dataTransfer = new DataTransfer();
-    uploadFilesArray.forEach(file => { dataTransfer.items.add(file) });
-
-    document.getElementById(elementIdForUploadFile).files = dataTransfer.files;
+    fileArray.forEach(file => {dataTransfer.items.add(file)});
+    document.getElementById(elementId).files = dataTransfer.files;
 }
 
 

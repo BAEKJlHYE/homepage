@@ -743,7 +743,7 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
 .box_gray p{font-size: 15px;color:#555;line-height: 22px;}
 .box_gray + p{margin-top: 10px;font-size: 15px;color:#555;line-height: 22px;}
 
-.ipt_file{width: 100%;height: 50px;padding: 0 20px;border: 1px solid #ddd;border-radius: 8px;box-sizing: border-box;color: #333;font-size: 16px;background: #f7f7f7;}
+.ipt_file{width: 100%;min-height: 50px;padding: 0 20px;border: 1px solid #ddd;border-radius: 8px;box-sizing: border-box;color: #333;font-size: 16px;background: #f7f7f7;}
 .ipt_file li{display: inline-block;margin-right: 10px;line-height: 48px;}
 .ipt_file li > *{vertical-align: middle;}
 .ipt_file li .btn_del{display: inline-block;width:20px;height: 20px;margin-left: 4px;background: url(../image/ico_del.png) no-repeat center;}
