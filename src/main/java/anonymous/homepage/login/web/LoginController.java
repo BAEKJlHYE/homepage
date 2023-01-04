@@ -26,7 +26,6 @@ public class LoginController {
     // 로그인 화면 이동
     @GetMapping("/getLoginPage.do")
     public String getLoginPage(HttpServletRequest request, Model model) {
-        String loginParam = "";
         Map<String, ?> redirectMap = RequestContextUtils.getInputFlashMap(request);
         if (!MapUtils.isEmpty(redirectMap)) {
             model.addAttribute("loginVo", redirectMap.get("loginVo"));
