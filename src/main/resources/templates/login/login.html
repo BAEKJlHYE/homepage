@@ -31,8 +31,8 @@ layout:decorate="layout/default_layout">
                     <input type="hidden" id="resultMessage" name="resultMessage" th:value="${loginVo.resultMessage}">
                     <form th:action="@{/login/selectUser.do}" th:object="${loginForm}" method="post">
                         <div class="box_login">
-                            <input name="userId" type="text" placeholder="아이디를 입력해주세요" required autofocus>
-                            <input name="userPw" type="password" placeholder="비밀번호를 입력해주세요" required>
+                            <input name="userId" type="text" th:value="${loginVo.userId}" placeholder="아이디를 입력해주세요" required autofocus>
+                            <input name="userPw" type="password" th:value="${loginVo.userPw}" placeholder="비밀번호를 입력해주세요" required>
                             <button class="btn_login mint" type="submit">로그인</button>
                             <ul>
                                 <li><a th:href="@{/join/getJoinPage.do}">회원가입</a></li>

@@ -4,6 +4,7 @@ import anonymous.homepage.login.service.LoginService;
 import anonymous.homepage.login.vo.LoginVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -44,6 +45,8 @@ public class LoginController {
 
         if (ObjectUtils.isEmpty(vo)) {
             vo = new LoginVO();
+//            BeanUtils.copyProperties(loginVO, vo, "firstPage", "lastPage", "prevAllPageExist", "nextAllPageExist", "prevPageExist", "nextPageExist", "prevPageExist", "pageCount");
+            BeanUtils.copyProperties(loginVO, vo);
             vo.setResultMessage("아이디 혹은 비밀번호가 일치하지 않습니다.");
 
             returnUrl = "redirect:/login/getLoginPage.do";

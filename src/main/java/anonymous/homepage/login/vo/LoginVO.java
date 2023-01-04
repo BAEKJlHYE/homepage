@@ -4,7 +4,9 @@ import anonymous.homepage.vo.BaseVO;
 import lombok.Data;
 
 @Data
-public class LoginVO extends BaseVO {
+public class LoginVO {
+    private static final long serialVersionUID = 1L;
+    private String resultMessage;
     private String userId;
     private String userPw;
     private String userNm;
