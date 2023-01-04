@@ -103,6 +103,7 @@
                     </ul>
                 </div>
             </div>
+            <form>
             <div class="content_inner">
                 <div class="titarea">
                     <h2>회원가입</h2>
@@ -191,19 +192,20 @@
                     </div>
                     <div class="box_form">
                         <p class="tit">이름</p>
-                        <div><input type="text" placeholder="이름 입력"></div>
+                        <div><input type="text" placeholder="이름 입력" id="name"></div>
                     </div>
                     <div class="box_form">
                         <p class="tit">아이디</p>
                         <div>
-                            <input type="text" placeholder="아이디 입력" style="width: 490px;">
-                            <button class="btn_form">중복 확인</button>
+                            <input type="text" placeholder="아이디 입력" style="width: 490px;" id="USER_ID">
+                            <span id="idValidResult"></span>
+                            <button class="btn_form" onclick="">중복 확인</button>
                         </div>
                     </div>
                     <div class="box_form">
                         <p class="tit">비밀번호</p>
-                        <div><input type="password" placeholder="비밀번호 입력 (특수문자 포함 8~20자리)"></div>
-                        <div><input type="password" placeholder="비밀번호 재입력"></div>
+                        <div><input type="password" placeholder="비밀번호 입력 (특수문자 포함 8~20자리)" id="PASSWD1"></div>
+                        <div><input type="password" placeholder="비밀번호 재입력" id="PASSWD2"></div>
                     </div>
                     <div class="box_form">
                         <p class="tit">회원구분</p>
@@ -220,9 +222,9 @@
                         <p class="tit">생년월일</p>
                         <div>
                             <ul class="ly_form col3" style="width: 520px;">
-                                <li><input type="text" placeholder="년도 4자리 입력"></li>
+                                <li><input type="text" placeholder="년도 4자리 입력" id="Bday_YEAR"></li>
                                 <li>
-                                    <select name="" id="">
+                                    <select name="" id="Bday_MONTH">
                                         <option value="" selected>월</option>
                                         <option value="">1</option>
                                         <option value="">2</option>
@@ -239,7 +241,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <select name="" id="">
+                                    <select name="" id="Bday_DAYS">
                                         <option value="" selected>일</option>
                                         <option value="">1</option>
                                         <option value="">2</option>
@@ -275,13 +277,13 @@
                                     </select>
                                 </li>
                             </ul>
-                            <div class="chk" style="margin-top: 12px;"><input type="checkbox" name="" id="birth"><label for="birth">음력</label></div>
+                            <div class="chk" style="margin-top: 12px;"><input type="checkbox" name="" id="LUNAR"><label for="LUNAR">음력</label></div>
                         </div>
                     </div>
                     <div class="box_form">
                         <p class="tit">주민등록 앞자리</p>
                         <div>
-                            <input type="text" placeholder="주민등록번호 앞 6자리 입력" style="width:295px">
+                            <input type="text" placeholder="주민등록번호 앞 6자리 입력" style="width:295px" id="SSN">
                             <ul class="ly_form" style="width:295px">
                                 <li><input type="radio" name="gender" id="gender01"><label for="gender01">여성</label></li>
                                 <li><input type="radio" name="gender" id="gender02"><label for="gender02">남성</label></li>
@@ -291,12 +293,12 @@
                     <div class="box_form">
                         <p class="tit">자택주소</p>
                         <div>
-                            <input type="text" placeholder="우편번호" style="width:160px" readonly="readonly">
-                            <button class="btn_form">우편번호 검색</button>
+                            <input type="text" placeholder="우편번호" style="width:160px" readonly="readonly" for="ADRRESS_SEARCH">
+                            <button class="btn_form" id="ADRRESS_SEARCH">우편번호 검색</button>
                         </div>
                         <div>
-                            <input type="text" placeholder="주소" style="width:295px" readonly="readonly">
-                            <input type="text" placeholder="상세주소 입력" style="width:295px">
+                            <input type="text" placeholder="주소" style="width:295px" readonly="readonly" id="ADDRESS">
+                            <input type="text" placeholder="상세주소 입력" style="width:295px" id="ADDRESS_DETAIL" name="ADDRESS_DETAIL">
                         </div>
                     </div>
                     <div class="box_form">
@@ -304,7 +306,7 @@
                         <div>
                             <ul class="ly_form col3">
                                 <li>
-                                    <select name="" id="">
+                                    <select name="" id="PHONE1">
                                         <option value="">02</option>
                                         <option value="">031</option>
                                         <option value="">032</option>
@@ -323,8 +325,8 @@
                                         <option value="">064</option>
                                     </select>
                                 </li>
-                                <li><input type="text" placeholder="숫자 입력"></li>
-                                <li><input type="text" placeholder="숫자 입력"></li>
+                                <li><input type="text" placeholder="숫자 입력" id="PHONE2"></li>
+                                <li><input type="text" placeholder="숫자 입력" id="PHONE3"></li>
                             </ul>
                         </div>
                     </div>
@@ -333,7 +335,7 @@
                         <div>
                             <ul class="ly_form col3">
                                 <li>
-                                    <select name="" id="">
+                                    <select name="" id="MOBLPHONE1">
                                         <option value="">010</option>
                                         <option value="">011</option>
                                         <option value="">016</option>
@@ -342,8 +344,8 @@
                                         <option value="">019</option>
                                     </select>
                                 </li>
-                                <li><input type="text" placeholder="숫자 입력"></li>
-                                <li><input type="text" placeholder="숫자 입력"></li>
+                                <li><input type="text" placeholder="숫자 입력" id="MOBLPHONE2"></li>
+                                <li><input type="text" placeholder="숫자 입력" id="MOBLPHONE3"></li>
                             </ul>
                         </div>
                         <div>
@@ -355,10 +357,10 @@
                     <div class="box_form">
                         <p class="tit">이메일</p>
                         <div>
-                            <input type="text" placeholder="입력" style="width:190px">
+                            <input type="text" placeholder="입력" style="width:190px" id="EMAIL_ID">
                             <span class="txt_email"></span>
-                            <input type="text" placeholder="입력" style="width:190px">
-                            <select name="" id="" style="width:190px">
+                            <input type="text" placeholder="입력" style="width:190px" id="EMAIL_FORM">
+                            <select name="EMAIL_FORM1" id="EMAIL_FORM1" style="width:190px">
                                 <option value="">직접입력</option>
                                 <option value="">naver.com</option>
                                 <option value="">gmail.com</option>
@@ -380,7 +382,9 @@
                     </ul>
                 </section>
             </div>
+            </form>
         </div>
+
         <a href="#" class="btn_top">TOP</a>
     </div>
     <footer class="footer">
@@ -408,3 +412,56 @@
 </div>
 </body>
 </html>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+
+        window.onload = function(){
+            document.getElementById("ADRRESS_SEARCH").addEventListener("click", function(){ //주소입력칸을 클릭하면
+                //카카오 지도 발생
+                new daum.Postcode({
+                    oncomplete: function(data) { //선택시 입력값 세팅
+                        document.getElementById("ADDRESS").value = data.address; // 주소 넣기
+                        document.querySelector("input[name=ADDRESS_DETAIL]").focus(); //상세입력 포커싱
+                    }
+                }).open();
+            });
+        }
+
+        //아이디 중복확인
+         function idValidChck(){
+
+            params={
+                USERID:$("#USERID").val()
+            };
+
+            url:"/join/idValidAjax.do";
+            $.ajax({
+                url:url,
+                type:"post",
+                data:params
+                }).done(function(data){
+                    if(data!=null){
+
+                       document.getElementById("idValidResult").textContent="중복된 아이디입니다.";
+                       document.getElementById("idValidResult").style.color="red";
+                       return false;
+
+                    }
+                    else{
+
+                       document.getElementById("idValidResult").textContent="사용가능한 아이디입니다.";
+                       document.getElementById("idValidResult").style.color="green";
+                       return true;
+
+                    }
+
+
+                }).fail(data,textStatus,errorThrown){
+                    alert("서버 연결에 실패하였습니다. 다시 시도해주세요.");
+                    return;
+                });
+
+         }
+
+</script>

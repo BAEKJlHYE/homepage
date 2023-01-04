@@ -4,7 +4,12 @@
     <meta charset="utf-8">
     <title>파일 업로드</title>
 
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/all.css" />
+    <link rel="stylesheet" href="../css/jquery-ui.min.css" />
+
     <script type="text/javascript" src="../js/util.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.5.1.min.js"></script>
     <script>
         function checkFile() {
             if(!validateFileCount('selectedFiles', 'uploadFiles', 3))
@@ -30,5 +35,6 @@
             <input type="submit"/>
         </form>
     </div>
+    <div th:replace="~{fragments/alert :: alertBox}"></div>
 </body>
 </html>

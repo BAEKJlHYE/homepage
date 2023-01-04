@@ -22,13 +22,6 @@ import java.util.Map;
 public class JoinController {
     private final JoinService joinService;
 
-    @RequestMapping("/getJoinPage.do")
-    public ModelAndView getJoinPage(){
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("join/join");
-        return mav;
-    }
-
     @RequestMapping("/joinTerm.do")
     public ModelAndView joinTerm(){
 
