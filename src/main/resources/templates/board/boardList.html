@@ -11,36 +11,42 @@
                 openAlertModal(resultMessage);
         });
 
-        function searchBoard() {
-            document.getElementById('boardId').value = 0;
-            document.getElementById('resultMessage').value = '';
-            document.getElementById('nowPage').value = 1;
+        function keyUpEvent() {
+            if(window.event.keyCode == 13) {
+                searchBoard();
+            }
+        }
 
-            document.getElementById('boardPageInfo').submit();
+        function searchBoard() {
+            formSubmit(0, '', 1, '/board/selectBoardList.do');
         }
 
         function moveToRegisterBoard() {
-            document.getElementById('boardId').value = 0;
-            document.getElementById('resultMessage').value = '';
-
-            document.getElementById('boardPageInfo').action = '/board/registerBoard.do';
-            document.getElementById('boardPageInfo').submit();
+            var nowPage = document.getElementById('nowPage').value;
+            formSubmit(0, '', nowPage, '/board/registerBoard.do');
         }
 
         function moveBoard(boardId) {
-            document.getElementById('boardId').value = boardId;
-            document.getElementById('resultMessage').value = '';
-
-            document.getElementById('boardPageInfo').action = '/board/selectBoard.do';
-            document.getElementById('boardPageInfo').submit();
+            var nowPage = document.getElementById('nowPage').value;
+            formSubmit(boardId, '', nowPage, '/board/selectBoard.do');
         }
 
         function movePage(pageNumber) {
-            document.getElementById('boardId').value = 0;
-            document.getElementById('resultMessage').value = '';
+            formSubmit(0, '', pageNumber, '/board/selectBoardList.do');
+        }
+
+        function formSubmit(boardId, resultMessage, pageNumber, action) {
+            var searchKeyword = document.getElementById('searchKeyword').value;
+            if(!isEmpty(searchKeyword))
+                document.getElementById('searchKeyword').value = searchKeyword.trim();
+
+            document.getElementById('boardId').value = boardId;
+            document.getElementById('resultMessage').value = resultMessage;
             document.getElementById('nowPage').value = pageNumber;
 
-            document.getElementById('boardPageInfo').submit();
+            var form = document.getElementById('boardPageInfo');
+            form.action = action;
+            form.submit();
         }
     </script>
 
@@ -80,7 +86,10 @@
                                                 </option>
                                             </select>
                                             <div class="ipt_sch">
-                                                <input id="searchKeyword" name="searchKeyword" type="text" class="ipt" th:value="${boardInfo.searchKeyword}" placeholder="검색어를 입력해주세요.">
+                                                <input id="searchKeyword" name="searchKeyword" type="text" class="ipt"
+                                                       th:value="${boardInfo.searchKeyword}" placeholder="검색어를 입력해주세요."
+                                                       onkeyup="keyUpEvent()">
+                                                <input type="text" style="display: none;">
                                                 <a href="#" class="btn_sch" onclick="searchBoard()">검색</a>
                                             </div>
                                         </div>

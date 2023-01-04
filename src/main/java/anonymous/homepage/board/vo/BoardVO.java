@@ -16,4 +16,8 @@ public class BoardVO extends BaseVO {
     private int viewCount;
     private String headerSeCd;
     private String headerSeNm;
+    private int nextBoardId;
+    private String nextBoardTitle;
+    private int prevBoardId;
+    private String prevBoardTitle;
 }

@@ -12,22 +12,36 @@
         });
 
         function updateBoard() {
-            var boardPageInfoForm = document.getElementById('boardPageInfo');
-            boardPageInfoForm.action = '/board/modifyBoard.do';
-            boardPageInfoForm.submit();
+            var boardId = document.getElementById('boardId').value;
+            formSubmit(boardId, '', '/board/modifyBoard.do', 'get');
         }
 
         function deleteBoard() {
-            var boardPageInfoForm = document.getElementById('boardPageInfo');
-            boardPageInfoForm.method = 'post';
-            boardPageInfoForm.action = '/board/deleteBoard.do';
-            boardPageInfoForm.submit();
+            var boardId = document.getElementById('boardId').value;
+            formSubmit(boardId, '', '/board/deleteBoard.do', 'post');
         }
 
         function moveToBoardList() {
-            document.getElementById('resultMessage').remove();
-            document.getElementById('boardId').remove();
-            document.getElementById('boardPageInfo').submit();
+            var boardId = document.getElementById('boardId').value;
+            formSubmit(0, '', '/board/selectBoardList.do', 'get');
+        }
+
+        function moveToOtherBoard(otherBoardId) {
+            if(otherBoardId <= 0)
+                return;
+
+            var boardId = document.getElementById('boardId').value;
+            formSubmit(otherBoardId, '', '/board/selectBoard.do', 'get');
+        }
+
+        function formSubmit(boardId, resultMessage, action, method) {
+            document.getElementById('boardId').value = boardId;
+            document.getElementById('resultMessage').value = resultMessage;
+
+            var form = document.getElementById('boardPageInfo');
+            form.method = method;
+            form.action = action;
+            form.submit();
         }
     </script>
 
@@ -80,11 +94,17 @@
                         <div class="box_line">
                             <div class="line_grp">
                                 <span>이전글</span>
-                                <a href="#" class="link">신현재 부동산 오픈 이벤트</a>
+                                <a href="#" class="link"
+                                   th:onclick="|moveToOtherBoard(${board.prevBoardId})|"
+                                   th:classappend="${board.prevBoardId <= 0} ? 'no'"
+                                   th:text="${board.prevBoardTitle}"></a>
                             </div>
                             <div class="line_grp">
                                 <span>다음글</span>
-                                <a href="#" class="link no">다음글이 없습니다.</a>
+                                <a href="#" class="link"
+                                   th:onclick="|moveToOtherBoard(${board.nextBoardId})|"
+                                   th:classappend="${board.nextBoardId <= 0} ? 'no'"
+                                   th:text="${board.nextBoardTitle}"></a>
                             </div>
                         </div>
                     </section>

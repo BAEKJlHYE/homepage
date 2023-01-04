@@ -41,19 +41,26 @@
 
     <!-- 게시글 상세 조회 -->
     <select id="selectBoard" resultType="anonymous.homepage.board.vo.BoardVO">
-        SELECT BOARD_ID
-             , TITLE
-             , CONTENT
-             , WRITER
-             , BOARD_ORDER
-             , REGIST_DT
-             , TO_CHAR(REGIST_DT, 'YYYY-MM-DD') AS DISPLAY_REGIST_DT
-             , SUGGESTION_COUNT
-             , VIEW_COUNT
-             , HEADER_SE_CD
-             , (SELECT CD_NM FROM CD WHERE HEADER_SE_CD = CD) AS HEADER_SE_NM
-        FROM BOARD_HD
-        WHERE BOARD_ID = #{boardId}
+        SELECT A.*
+        FROM (
+                 SELECT BOARD_ID
+                      , TITLE
+                      , CONTENT
+                      , WRITER
+                      , BOARD_ORDER
+                      , REGIST_DT
+                      , TO_CHAR(REGIST_DT, 'YYYY-MM-DD') AS DISPLAY_REGIST_DT
+                      , SUGGESTION_COUNT
+                      , VIEW_COUNT
+                      , HEADER_SE_CD
+                      , (SELECT CD_NM FROM CD WHERE HEADER_SE_CD = CD) AS HEADER_SE_NM
+                      , LAG(BOARD_ID, 1, 0) OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS NEXT_BOARD_ID
+                      , LAG(TITLE, 1, '다음 글이 없습니다.') OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS NEXT_BOARD_TITLE
+                      , LEAD(BOARD_ID, 1, 0) OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS PREV_BOARD_ID
+                      , LEAD(TITLE, 1, '이전 글이 없습니다.') OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS PREV_BOARD_TITLE
+                 FROM BOARD_HD
+             ) A
+        WHERE A.BOARD_ID = #{boardId}
     </select>
 
     <!-- 게시글 건수 조회 -->
