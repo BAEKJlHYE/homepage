@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default_layout">
+
+<th:block layout:fragment="content">
+    <script>
+
+    </script>
+
+    <style>
+        .span_answer {
+            border: 1px solid #445fb7;
+            border-radius: 15px;
+            background-color: #445fb7;
+            color: white;
+            padding: 2px 10px;
+            margin-left: 5px;
+            font-size: 13px;
+        }
+        .lock {
+            margin-left: 5px;
+            position: absolute;
+        }
+    </style>
+
+    <div id="container" class="container">
+        <form id="inquiryPageInfo" action="/inquiry/selectInquiryList.do" method="get">
+            <input type="hidden" id="boardId" name="boardId" value="">
+            <input type="hidden" id="resultMessage" name="resultMessage" th:value="${inquiryInfo.resultMessage}">
+            <input type="hidden" id="recordUnit" name="recordUnit" th:value="${inquiryInfo.recordUnit}">
+            <input type="hidden" id="nowPage" name="nowPage" th:value="${inquiryInfo.nowPage}">
+            <input type="hidden" id="pageUnit" name="pageUnit" th:value="${inquiryInfo.pageUnit}">
+
+            <div class="lnb">
+                <div class="lnb_inner">
+                    <ul class="step">
+                        <li>홈</li>
+                        <li>커뮤니티</li>
+                        <li>매도·매수 문의</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <div class="content_inner">
+                    <div class="titarea">
+                        <h2>매도·매수 문의</h2>
+                    </div>
+                    <section>
+                        <div class="tabbox">
+                            <div class="tab_cont">
+                                <div class="on">
+                                    <article>
+                                        <div class="box_sch">
+                                            <select name="searchSeCd" id="searchSeCd" class="select">
+                                                <option th:each="searchSe, searchSeStat : ${searchSeCds}"
+                                                        th:text="${searchSe.cdNm}"
+                                                        th:value="${searchSe.cd}"
+                                                        th:selected="${inquiryInfo.searchSeCd} == ${searchSe.cd}">
+                                                </option>
+                                            </select>
+                                            <div class="ipt_sch">
+                                                <input id="searchKeyword" name="searchKeyword" type="text" class="ipt"
+                                                       th:value="${inquiryInfo.searchKeyword}" placeholder="검색어를 입력해주세요."
+                                                       onkeyup="keyUpEvent()">
+                                                <input type="text" style="display: none;">
+                                                <a href="#" class="btn_sch" onclick="searchBoard()">검색</a>
+                                            </div>
+                                        </div>
+                                        <div class="tit_tb">
+                                            <div class="fl">
+                                                <span th:text="|총 ${inquiryInfo.recordCount}건|"></span>
+                                            </div>
+                                        </div>
+                                        <div class="tbbox" th:classappend="${inquiryInfo.recordCount == 0} ? 'no'">
+                                            <table class="tb ellipsis">
+                                                <colgroup>
+                                                    <col style="width:82px"/>
+                                                    <col/>
+                                                    <col style="width:100px"/>
+                                                    <col style="width:163px"/>
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th><span>번호</span></th>
+                                                        <th><span>제목</span></th>
+                                                        <th><span>작성자</span></th>
+                                                        <th><span>등록일</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="inquiry : ${inquiryList}">
+                                                        <td><span th:text="${inquiry.boardId}"></span></td>
+                                                        <td class="tal">
+                                                            <a class="link" style="position: relative" href="#" th:onclick="|moveBoard(${inquiry.boardId})|">
+                                                                <span class="label_blue" th:text="'[' + ${inquiry.headerSeNm} + ']'"></span>
+                                                                <span th:text="${inquiry.title}"></span>
+                                                                <span th:if="${inquiry.answerYn == 'Y'}" class="span_answer">답변완료</span>
+                                                                <img th:if="${inquiry.secretYn == 'Y'}" src="../image/ico_lock.png" class="lock" width="20px" height="20px">
+                                                            </a>
+                                                        </td>
+                                                        <td><span th:text="${inquiry.writerNm}"></span></td>
+                                                        <td><span th:text="${inquiry.displayRegistDt}"></span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="empty">
+                                            <p>게시글이 없습니다.</p>
+                                        </div>
+                                        <div class="paging_box">
+                                            <ul class="paging">
+                                                <li th:if="${inquiryInfo.prevAllPageExist}" class="prev_all">
+                                                    <a href="#" th:onclick="|movePage(${inquiryInfo.firstPage - 1})|">첫페이지</a>
+                                                </li>
+                                                <li th:if="${inquiryInfo.prevPageExist}" class="prev">
+                                                    <a href="#" th:onclick="|movePage(${inquiryInfo.nowPage - 1})|">이전</a>
+                                                </li>
+                                                <li th:each="i: ${#numbers.sequence(inquiryInfo.firstPage, inquiryInfo.lastPage)}"
+                                                    th:classappend="${inquiryInfo.nowPage == i} ? 'on'">
+                                                    <a href="#" th:onclick="|movePage(${i})|" th:text="${i}">1</a>
+                                                </li>
+                                                <li class="next" th:if="${inquiryInfo.nextPageExist}">
+                                                    <a href="#" th:onclick="|movePage(${inquiryInfo.nowPage + 1})|">다음</a>
+                                                </li>
+                                                <li th:if="${inquiryInfo.nextAllPageExist}" class="next_all">
+                                                    <a href="#" th:onclick="|movePage(${inquiryInfo.lastPage + 1})|">끝페이지</a>
+                                                </li>
+                                            </ul>
+                                            <div class="fr">
+                                                <a th:if="${inquiryInfo.isPermitted}" href="#" class="btn_cm mint" onclick="moveToRegisterBoard()">글쓰기</a>
+                                            </div>
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <a href="#" class="btn_top">TOP</a>
+        </form>
+    </div>
+</th:block>
+</html>
