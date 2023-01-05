@@ -5,24 +5,26 @@
 
 <th:block layout:fragment="content">
     <script>
-        function changeSecretYn(inputElement) {
+        function changeSecretYn(checkboxElement) {
             var secretYn;
             var disabled;
+            var passwordInput = document.getElementById('password');
+            var passwordVisibilityButton = document.getElementById('passwordVisibilityButton');
 
-            if(inputElement.checked) {
+            if(checkboxElement.checked) {
                 secretYn = 'Y';
                 disabled = false;
-                document.getElementById('passwordVisibilityButton').setAttribute('onclick', 'showPassword()');
+                passwordVisibilityButton.setAttribute('onclick', 'showPassword()');
 
             } else {
                 secretYn = 'N';
                 disabled = true;
-                document.getElementById('passwordVisibilityButton').removeAttribute('onclick');
-                document.getElementById('password').value = '';
+                passwordVisibilityButton.removeAttribute('onclick');
+                passwordInput.value = '';
             }
 
-            inputElement.value = secretYn;
-            document.getElementById('password').disabled = disabled;
+            checkboxElement.value = secretYn;
+            passwordInput.disabled = disabled;
         }
 
         function showPassword() {
@@ -55,18 +57,47 @@
                 return false;
             }
 
-            var secretYn = document.getElementById('secretYn').value
-            var passwordElement = document.getElementById('password');
-            if(secretYn == 'Y' && isEmpty(passwordElement.value)) {
-                openAlertModal("비밀번호를 입력해주시기 바랍니다.");
-                return false;
+            var telNoSplits = [
+                document.getElementById('telNoFront').value
+                , document.getElementById('telNoMiddle').value
+                , document.getElementById('telNoBack').value
+            ];
+            var telNoRegExp = /^[0-9]{2,4}$/;
+
+            for(split of telNoSplits) {
+                if(isEmpty(split)) {
+                    openAlertModal("연락처를 입력해주시기 바랍니다.");
+                    return false;
+                }
+
+                if(!telNoRegExp.test(split)) {
+                    openAlertModal("올바른 연락처를 입력해주시기 바랍니다.");
+                    return false;
+                }
             }
 
-            // TODO 비밀번호 정규식 검사
+            document.getElementById('telNo').value = telNoSplits[0] + '-' + telNoSplits[1] + '-' + telNoSplits[2];
+
+            var secretYn = document.getElementById('secretYn').value
+            var passwordElement = document.getElementById('password');
+            var passwordRegExp = /^[a-zA-Z0-9]{4,6}$/;
+            if(secretYn == 'Y') {
+                if(isEmpty(passwordElement.value)) {
+                    openAlertModal("비밀번호를 입력해주시기 바랍니다.");
+                    return false;
+                }
+
+                if(!passwordRegExp.test(passwordElement.value)) {
+                    openAlertModal("4~6자리의 영문 대소문자 및 숫자를 입력해주시기 바랍니다.");
+                    return false;
+                }
+            }
 
             if(secretYn == 'N') {
                 passwordElement.value = '';
             }
+
+            document.getElementsByName('secretYn')[0].value = secretYn;
 
             if(isEmpty(document.getElementById('title').value)) {
                 openAlertModal("제목을 입력해주시기 바랍니다.");
@@ -120,15 +151,26 @@
                                     </colgroup>
                                     <tbody>
                                         <tr>
-                                            <th><span class="req">문의 유형</span></th>
-                                            <td>
-                                                <select class="select" id="headerSeCd" name="headerSeCd" style="width:400px;">
-                                                    <option th:each="header, headerStat : ${headers}" th:text="${header.cdNm}" th:value="${header.cd}" th:selected="${headerStat.index} == 0"></option>
-                                                </select>
-                                            </td>
                                             <th><span class="req">작성자명</span></th>
                                             <td>
                                                 <input type="text" id="writerNm" name="writerNm" class="ipt" maxlength="10">
+                                            </td>
+                                            <th><span class="req">연락처</span></th>
+                                            <td>
+                                                <div class="box_form">
+                                                    <ul class="ly_form col3">
+                                                        <li>
+                                                            <input type="text" id="telNoFront" maxlength="3">
+                                                        </li>
+                                                        <li>
+                                                            <input type="text" id="telNoMiddle" maxlength="4">
+                                                        </li>
+                                                        <li>
+                                                            <input type="text" id="telNoBack" maxlength="4">
+                                                        </li>
+                                                    </ul>
+                                                    <input type="hidden" id="telNo" name="telNo">
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr>
@@ -136,10 +178,11 @@
                                             <td>
                                                 <ul class="chk list">
                                                     <li>
-                                                        <input type="checkbox" name="secretYn" id="secretYn"
+                                                        <input type="checkbox" id="secretYn"
                                                                value="N" onchange="changeSecretYn(this)">
                                                         <label for="secretYn">비밀글</label>
                                                     </li>
+                                                    <input type="hidden" name="secretYn">
                                                 </ul>
                                             </td>
                                             <th><span>비밀번호</span></th>
@@ -148,6 +191,14 @@
                                                     <input type="password" id="password" name="password" class="ipt" maxlength="6" disabled="disabled">
                                                     <a href="#" class="btn_pwd show" id="passwordVisibilityButton">비밀번호 보기</a>
                                                 </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="req">문의 유형</span></th>
+                                            <td colspan="3">
+                                                <select class="select" id="headerSeCd" name="headerSeCd" style="width:371px;">
+                                                    <option th:each="header, headerStat : ${headers}" th:text="${header.cdNm}" th:value="${header.cd}" th:selected="${headerStat.index} == 0"></option>
+                                                </select>
                                             </td>
                                         </tr>
                                         <tr>

@@ -17,6 +17,8 @@
             , SECRET_YN
             , PASSWORD
             , HEADER_SE_CD
+            , TEL_NO
+            , ANSWER_YN
             , REGIST_DT
             , UPDATE_NM
             , UPDATE_DT
@@ -36,6 +38,8 @@
                 </otherwise>
             </choose>
             , #{headerSeCd}
+            , #{telNo}
+            , 'N'
             , SYSDATE
             , #{writerNm}
             , SYSDATE
