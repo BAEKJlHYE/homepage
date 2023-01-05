@@ -79,11 +79,18 @@
                                         </tr>
                                         <tr>
                                             <th><span class="req">제목</span></th>
-                                            <td><input type="text" id="title" name="title" class="ipt" th:value="${board.title}" placeholder="제목을 입력하세요."></td>
+                                            <td>
+                                                <input type="text" id="title" name="title" class="ipt" th:value="${board.title}"
+                                                       placeholder="제목을 입력하세요." maxlength="30">
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th><span class="req">내용</span></th>
-                                            <td><textarea class="txa" id="content" name="content" th:text="${board.content}" cols="30" rows="10" style="height: 290px;" placeholder="내용을 입력하세요."></textarea></td>
+                                            <td>
+                                                <textarea class="txa" id="content" name="content" th:text="${board.content}"
+                                                          cols="30" rows="10" style="height: 290px;" placeholder="내용을 입력하세요."
+                                                          maxlength="300"></textarea>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

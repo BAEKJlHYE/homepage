@@ -52,7 +52,7 @@
         function deleteFile(clickedATag) {
             // 파일 목록에서 제거
             var ul = document.getElementById('uploadFileList');
-            var lis = document.getElementById('uploadFileList').getElementsByTagName('li');
+            var lis = ul.getElementsByTagName('li');
             var fileIndex = -1;
             for (var i = 0; i < lis.length; i++) {
                 if (lis[i] == clickedATag.parentElement) {
