@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class DirectDealServiceImpl implements DirectDealMapper {
+public class DirectDealServiceImpl implements DirectDealService {
     private final DirectDealMapper directDealMapper;
 }

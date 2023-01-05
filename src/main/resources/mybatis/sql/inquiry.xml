@@ -4,5 +4,41 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="anonymous.homepage.inquiry.dao.InquiryMapper">
-
+    <!-- 문의사항 등록 -->
+    <insert id="insertInquiry" parameterType="anonymous.homepage.inquiry.vo.InquiryVO">
+        <selectKey keyProperty="boardId" resultType="int" order="BEFORE">
+            SELECT NVL(MAX(BOARD_ID), 0) + 1 FROM INQUIRY
+        </selectKey>
+        INSERT INTO INQUIRY (
+              BOARD_ID
+            , TITLE
+            , CONTENT
+            , WRITER_NM
+            , SECRET_YN
+            , PASSWORD
+            , HEADER_SE_CD
+            , REGIST_DT
+            , UPDATE_NM
+            , UPDATE_DT
+        )
+        VALUES(
+              #{boardId}
+            , #{title}
+            , #{content}
+            , #{writerNm}
+            , #{secretYn}
+            <choose>
+                <when test="password != null and password != ''">
+                    , #{password}
+                </when>
+                <otherwise>
+                    , NULL
+                </otherwise>
+            </choose>
+            , #{headerSeCd}
+            , SYSDATE
+            , #{writerNm}
+            , SYSDATE
+        )
+    </insert>
 </mapper>

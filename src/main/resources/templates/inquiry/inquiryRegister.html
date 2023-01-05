@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default_layout">
+
+<th:block layout:fragment="content">
+    <script>
+        function changeSecretYn(inputElement) {
+            var secretYn;
+            var disabled;
+
+            if(inputElement.checked) {
+                secretYn = 'Y';
+                disabled = false;
+                document.getElementById('passwordVisibilityButton').setAttribute('onclick', 'showPassword()');
+
+            } else {
+                secretYn = 'N';
+                disabled = true;
+                document.getElementById('passwordVisibilityButton').removeAttribute('onclick');
+                document.getElementById('password').value = '';
+            }
+
+            inputElement.value = secretYn;
+            document.getElementById('password').disabled = disabled;
+        }
+
+        function showPassword() {
+            var passwordElement = document.getElementById('password');
+            var type = passwordElement.getAttribute('type');
+            var classList = document.getElementById('passwordVisibilityButton').classList;
+
+            if(type == 'password') {
+                passwordElement.setAttribute('type', 'text');
+                classList.remove('show');
+                classList.add('hide');
+
+            } else if(type == 'text') {
+                passwordElement.setAttribute('type', 'password');
+                classList.remove('hide');
+                classList.add('show');
+            }
+        }
+
+        function registerInquiry() {
+            if(!validateForm())
+                return;
+
+            formSubmit('/inquiry/insertInquiry.do', 'post');
+        }
+
+        function validateForm() {
+            if(isEmpty(document.getElementById('writerNm').value)) {
+                openAlertModal("작성자명을 입력해주시기 바랍니다.");
+                return false;
+            }
+
+            var secretYn = document.getElementById('secretYn').value
+            var passwordElement = document.getElementById('password');
+            if(secretYn == 'Y' && isEmpty(passwordElement.value)) {
+                openAlertModal("비밀번호를 입력해주시기 바랍니다.");
+                return false;
+            }
+
+            // TODO 비밀번호 정규식 검사
+
+            if(secretYn == 'N') {
+                passwordElement.value = '';
+            }
+
+            if(isEmpty(document.getElementById('title').value)) {
+                openAlertModal("제목을 입력해주시기 바랍니다.");
+                return false;
+            }
+
+            if(isEmpty(document.getElementById('content').value)) {
+                openAlertModal("내용을 입력해주시기 바랍니다.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function formSubmit(action, method) {
+            var inquiryForm = document.getElementById('inquiryPageInfo');
+            inquiryForm.action = action;
+            inquiryForm.method = method;
+            inquiryForm.submit();
+        }
+    </script>
+
+    <div id="container" class="container">
+        <form id="inquiryPageInfo" action="/inquiry/selectInquiryList.do" method="get">
+            <div class="lnb">
+                <div class="lnb_inner">
+                    <ul class="step">
+                        <li>홈</li>
+                        <li>커뮤니티</li>
+                        <li>문의사항</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <div class="content_inner">
+                    <div class="titarea">
+                        <h2>문의사항</h2>
+                    </div>
+                    <section>
+                        <article>
+                            <div class="tit_tb">
+                                <div class="fr"><span><span class="cl_orange">*</span> 표시가 있는 항목은 필수로 입력하셔야 합니다.</span></div>
+                            </div>
+                            <div class="tbbox">
+                                <table class="tb type2">
+                                    <colgroup>
+                                        <col style="width:15%;"/>
+                                        <col style="width:35%;"/>
+                                        <col style="width:15%;"/>
+                                        <col style="width:35%;"/>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th><span class="req">문의 유형</span></th>
+                                            <td>
+                                                <select class="select" id="headerSeCd" name="headerSeCd" style="width:400px;">
+                                                    <option th:each="header, headerStat : ${headers}" th:text="${header.cdNm}" th:value="${header.cd}" th:selected="${headerStat.index} == 0"></option>
+                                                </select>
+                                            </td>
+                                            <th><span class="req">작성자명</span></th>
+                                            <td>
+                                                <input type="text" id="writerNm" name="writerNm" class="ipt" maxlength="10">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span>비밀글 여부</span></th>
+                                            <td>
+                                                <ul class="chk list">
+                                                    <li>
+                                                        <input type="checkbox" name="secretYn" id="secretYn"
+                                                               value="N" onchange="changeSecretYn(this)">
+                                                        <label for="secretYn">비밀글</label>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                            <th><span>비밀번호</span></th>
+                                            <td>
+                                                <div class="ipt_pwd">
+                                                    <input type="password" id="password" name="password" class="ipt" maxlength="6" disabled="disabled">
+                                                    <a href="#" class="btn_pwd show" id="passwordVisibilityButton">비밀번호 보기</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="req">제목</span></th>
+                                            <td colspan="3">
+                                                <input type="text" id="title" name="title" class="ipt" placeholder="제목을 입력하세요." maxlength="30">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="req">내용</span></th>
+                                            <td colspan="3">
+                                                <textarea class="txa" id="content" name="content" cols="30" rows="10" style="height: 290px;"
+                                                          placeholder="내용을 입력하세요." maxlength="300"></textarea>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                        <div class="btnbox cb">
+                            <a href="#" class="btn_cm">취소</a>
+                            <a href="#" class="btn_cm mint" onclick="registerInquiry()">등록</a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <a href="#" class="btn_top">TOP</a>
+        </form>
+    </div>
+</th:block>
+</html>

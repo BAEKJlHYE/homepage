@@ -7,16 +7,14 @@
     <script>
         function moveToBoardList() {
             document.getElementById('boardPageInfo').submit();
+            formSubmit('/board/selectBoardList.do', 'get');
         }
 
         function registerBoard() {
             if(!validateForm())
                 return;
 
-            var boardForm = document.getElementById('boardPageInfo');
-            boardForm.method = 'post';
-            boardForm.action = '/board/insertBoard.do';
-            boardForm.submit();
+            formSubmit('/board/insertBoard.do', 'post');
         }
 
         function validateForm() {
@@ -31,6 +29,13 @@
             }
 
             return true;
+        }
+
+        function formSubmit(action, method) {
+            var boardForm = document.getElementById('boardPageInfo');
+            boardForm.action = action;
+            boardForm.method = method;
+            boardForm.submit();
         }
     </script>
 

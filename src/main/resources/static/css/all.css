@@ -679,6 +679,11 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
 .box_sch .ipt_sch input[type=text]{height: 60px;padding-right: 54px;}
 .box_sch .ipt_sch .btn_sch{position: absolute;top:12px;right:18px;display: inline-block;width:34px;height: 34px;background: url(../image/ico_sch.png) no-repeat center;text-indent: -9999px;z-index: 10}
 
+.ipt_pwd { position: relative; }
+.btn_pwd { position: absolute; top: 8px; right: 10px; width: 34px; height: 34px; text-indent: -9999px; z-index: 10; }
+.btn_pwd.show { background: url("../image/ico_pwd_show.png") no-repeat center / 24px; }
+.btn_pwd.hide { background: url("../image/ico_pwd_hide.png") no-repeat center / 24px; }
+
 .box_line + .box_line{margin-top: 60px}
 .box_line .line_tit{border-top: 1px solid #333;border-bottom: 1px solid #333;padding:0 20px;height: 80px;line-height: 78px;box-sizing: border-box;}
 .box_line .line_tit span{font-size: 18px;color:#111;font-family:'Roboto', 'Noto-M';}
