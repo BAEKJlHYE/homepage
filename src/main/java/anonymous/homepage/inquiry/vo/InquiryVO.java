@@ -16,6 +16,12 @@ public class InquiryVO extends BaseVO {
     private String telNo;
     private String answerYn;
     private String atchDocId;
+    private int nextBoardId;
+    private String nextBoardTitle;
+    private String nextBoardSecretYn;
+    private int prevBoardId;
+    private String prevBoardTitle;
+    private String prevBoardSecretYn;
     private String registDt;
     private String displayRegistDt;
     private String updateNm;

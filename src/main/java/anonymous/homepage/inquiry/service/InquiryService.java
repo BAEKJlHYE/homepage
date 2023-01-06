@@ -9,5 +9,7 @@ public interface InquiryService {
 
     public int selectInquiryCount(InquiryVO inquiryVO);
 
+    public InquiryVO selectInquiry(InquiryVO inquiryVO);
+
     public int insertInquiry(InquiryVO inquiryVO);
 }

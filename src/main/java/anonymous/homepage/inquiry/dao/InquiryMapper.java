@@ -11,5 +11,7 @@ public interface InquiryMapper {
 
     public int selectInquiryCount(InquiryVO inquiryVO);
 
+    public InquiryVO selectInquiry(InquiryVO inquiryVO);
+
     public int insertInquiry(InquiryVO inquiryVO);
 }

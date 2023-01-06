@@ -41,15 +41,6 @@
         }
     </script>
 
-    <style>
-        .span_answer {
-            border: 1px solid #445fb7; border-radius: 15px; background-color: #445fb7; color: white; padding: 2px 10px; margin-left: 5px; margin-right: 2px; font-size: 13px;
-        }
-        .lock {
-            position: absolute; width: 20px; height: 24px; margin-left: 5px; background: url("../image/ico_lock.png") no-repeat center / 18px;
-        }
-    </style>
-
     <div id="container" class="container">
         <form id="inquiryPageInfo" action="/inquiry/selectInquiryList.do" method="get">
             <input type="hidden" id="boardId" name="boardId" value="">
@@ -154,7 +145,7 @@
                                                 </li>
                                             </ul>
                                             <div class="fr">
-                                                <a th:if="${inquiryInfo.isPermitted}" href="#" class="btn_cm mint" onclick="moveToRegisterInquiry()">글쓰기</a>
+                                                <a href="#" class="btn_cm mint" onclick="moveToRegisterInquiry()">글쓰기</a>
                                             </div>
                                         </div>
                                     </article>

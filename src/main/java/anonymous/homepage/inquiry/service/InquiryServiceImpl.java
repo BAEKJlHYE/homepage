@@ -23,6 +23,11 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
+    public InquiryVO selectInquiry(InquiryVO inquiryVO) {
+        return inquiryMapper.selectInquiry(inquiryVO);
+    }
+
+    @Override
     public int insertInquiry(InquiryVO inquiryVO) {
         return inquiryMapper.insertInquiry(inquiryVO);
     }

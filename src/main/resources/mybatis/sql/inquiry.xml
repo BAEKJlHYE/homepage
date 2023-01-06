@@ -62,6 +62,36 @@
         </if>
     </select>
 
+    <!-- 문의사항 상세 조회 -->
+    <select id="selectInquiry" parameterType="anonymous.homepage.inquiry.vo.InquiryVO" resultType="anonymous.homepage.inquiry.vo.InquiryVO">
+        SELECT A.*
+        FROM (
+                 SELECT BOARD_ID
+                      , TITLE
+                      , CONTENT
+                      , WRITER_NM
+                      , SECRET_YN
+                      , PASSWORD
+                      , HEADER_SE_CD
+                      , (SELECT CD_NM FROM CD WHERE HEADER_SE_CD = CD) AS HEADER_SE_NM
+                      , TEL_NO
+                      , ANSWER_YN
+                      , ATCH_DOC_ID
+                      , LAG(BOARD_ID, 1, 0) OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS NEXT_BOARD_ID
+                      , LAG(TITLE, 1, '다음 글이 없습니다.') OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS NEXT_BOARD_TITLE
+                      , LAG(SECRET_YN, 1) OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS NEXT_BOARD_SECRET_YN
+                      , LEAD(BOARD_ID, 1, 0) OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS PREV_BOARD_ID
+                      , LEAD(TITLE, 1, '이전 글이 없습니다.') OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS PREV_BOARD_TITLE
+                      , LEAD(SECRET_YN, 1) OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS PREV_BOARD_SECRET_YN
+                      , REGIST_DT
+                      , TO_CHAR(REGIST_DT, 'YYYY-MM-DD') AS DISPLAY_REGIST_DT
+                      , UPDATE_NM
+                      , UPDATE_DT
+                 FROM INQUIRY
+             ) A
+        WHERE A.BOARD_ID = #{boardId}
+    </select>
+
     <!-- 문의사항 등록 -->
     <insert id="insertInquiry" parameterType="anonymous.homepage.inquiry.vo.InquiryVO">
         <selectKey keyProperty="boardId" resultType="int" order="BEFORE">
