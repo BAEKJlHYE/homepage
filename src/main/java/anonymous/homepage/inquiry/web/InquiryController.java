@@ -51,7 +51,8 @@ public class InquiryController {
 
     // 문의사항 등록 화면 이동
     @GetMapping("/registerInquiry.do")
-    public String registerInquiry(Model model) {
+    public String registerInquiry(@ModelAttribute InquiryVO inquiryVO, Model model) {
+        model.addAttribute("inquiryInfo", inquiryVO);
         model.addAttribute("headers", cdService.selectCdList("A06"));
 
         return "inquiry/inquiryRegister";

@@ -5,7 +5,40 @@
 
 <th:block layout:fragment="content">
     <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            var resultMessage = document.getElementById('resultMessage').value;
+            if(!isEmpty(resultMessage))
+                openAlertModal(resultMessage);
+        });
 
+        function keyUpEvent() {
+            if(window.event.keyCode == 13) {
+                searchInquiry();
+            }
+        }
+
+        function searchInquiry() {
+            formSubmit(0, '', 1, '/inquiry/selectInquiryList.do');
+        }
+
+        function moveToRegisterInquiry() {
+            var nowPage = document.getElementById('nowPage').value;
+            formSubmit(0, '', nowPage, '/inquiry/registerInquiry.do');
+        }
+
+        function formSubmit(boardId, resultMessage, pageNumber, action) {
+            var searchKeyword = document.getElementById('searchKeyword').value;
+            if(!isEmpty(searchKeyword))
+                document.getElementById('searchKeyword').value = searchKeyword.trim();
+
+            document.getElementById('boardId').value = boardId;
+            document.getElementById('resultMessage').value = resultMessage;
+            document.getElementById('nowPage').value = pageNumber;
+
+            var form = document.getElementById('inquiryPageInfo');
+            form.action = action;
+            form.submit();
+        }
     </script>
 
     <style>
@@ -57,7 +90,7 @@
                                                        th:value="${inquiryInfo.searchKeyword}" placeholder="검색어를 입력해주세요."
                                                        onkeyup="keyUpEvent()">
                                                 <input type="text" style="display: none;">
-                                                <a href="#" class="btn_sch" onclick="searchBoard()">검색</a>
+                                                <a href="#" class="btn_sch" onclick="searchInquiry()">검색</a>
                                             </div>
                                         </div>
                                         <div class="tit_tb">
@@ -121,7 +154,7 @@
                                                 </li>
                                             </ul>
                                             <div class="fr">
-                                                <a th:if="${inquiryInfo.isPermitted}" href="#" class="btn_cm mint" onclick="moveToRegisterBoard()">글쓰기</a>
+                                                <a th:if="${inquiryInfo.isPermitted}" href="#" class="btn_cm mint" onclick="moveToRegisterInquiry()">글쓰기</a>
                                             </div>
                                         </div>
                                     </article>

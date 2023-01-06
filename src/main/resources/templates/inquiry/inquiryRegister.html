@@ -5,6 +5,10 @@
 
 <th:block layout:fragment="content">
     <script>
+        function moveToInquiryList() {
+            formSubmit('/inquiry/selectInquiryList.do', 'get');
+        }
+
         function changeSecretYn(checkboxElement) {
             var secretYn;
             var disabled;
@@ -122,6 +126,12 @@
 
     <div id="container" class="container">
         <form id="inquiryPageInfo" action="/inquiry/selectInquiryList.do" method="get">
+            <input type="hidden" id="recordUnit" name="recordUnit" th:value="${inquiryInfo.recordUnit}">
+            <input type="hidden" id="nowPage" name="nowPage" th:value="${inquiryInfo.nowPage}">
+            <input type="hidden" id="pageUnit" name="pageUnit" th:value="${inquiryInfo.pageUnit}">
+            <input type="hidden" id="searchSeCd" name="searchSeCd" th:value="${inquiryInfo.searchSeCd}">
+            <input type="hidden" id="searchKeyword" name="searchKeyword" th:value="${inquiryInfo.searchKeyword}">
+
             <div class="lnb">
                 <div class="lnb_inner">
                     <ul class="step">
@@ -219,8 +229,8 @@
                             </div>
                         </article>
                         <div class="btnbox cb">
-                            <a href="#" class="btn_cm">취소</a>
                             <a href="#" class="btn_cm mint" onclick="registerInquiry()">등록</a>
+                            <a href="#" class="btn_cm" onclick="moveToInquiryList()">취소</a>
                         </div>
                     </section>
                 </div>
