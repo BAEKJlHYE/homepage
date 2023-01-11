@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/default_layout">
+
 <th:block layout:fragment="content">
     <div class="wrap">
         <div class="skip">
@@ -48,7 +50,7 @@
                             // },
                         });
                     </script>
-                    <div class="box_main">
+                    <div class="box_main" style="display: none;">
                         <ul class="quick_menu">
                             <li><a href="#">스크린골프</a></li>
                             <li><a href="#">골프연습장</a></li>
@@ -132,9 +134,6 @@
                     <section id="sh_section">
                         <article class="saleList" id="sale_rcmd">
                             <div class="inner">
-                                <div class="tit">
-                                    <p>추천매물</p>
-                                </div>
                                 <ul class="item_list">
                                     <li>
                                         <a href="#" class="exPopBtn">
@@ -204,18 +203,7 @@
                                             </ul>
                                         </a>
                                     </li>
-
                                 </ul>
-                                <button class="more_btn" onClick="more('rcmd',4,5)">추천매물 더보기</button>
-
-                            </div>
-                        </article>
-                        <article class="saleList" id="sale_urgent" data-aos="fade-up" data-aos-duration="1000"
-                                 data-aos-delay="200">
-                            <div class="inner">
-                                <div class="tit">
-                                    <p>급매물</p>
-                                </div>
                                 <ul class="item_list">
                                     <li>
                                         <a href="javascript:land_view(99)">
@@ -286,7 +274,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                                <button class="more_btn" onClick="more('urgent',4,5)">급매물 더보기</button>
+                                <button class="more_btn" onClick="more('rcmd',4,5)">더보기</button>
                             </div>
                         </article>
                     </section>
