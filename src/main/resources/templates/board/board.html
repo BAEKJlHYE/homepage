@@ -7,7 +7,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function(){
             var resultMessage = document.getElementById('resultMessage').value;
-            if(resultMessage != null && resultMessage != '' && resultMessage != undefined)
+            if(!isEmpty(resultMessage))
                 openAlertModal(resultMessage);
         });
 
@@ -22,7 +22,6 @@
         }
 
         function moveToBoardList() {
-            var boardId = document.getElementById('boardId').value;
             formSubmit(0, '', '/board/selectBoardList.do', 'get');
         }
 

@@ -12,7 +12,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -41,7 +43,7 @@ public class InquiryController {
         List<InquiryVO> inquiryList = inquiryService.selectInquiryList(inquiryVO);
         if(!inquiryVO.getIsPermitted()) {
             for(InquiryVO inquiry : inquiryList)
-                inquiry.setWriterNm(masking.nameMasking(inquiry.getWriterNm()));
+                inquiry.setWriterNm(masking.nameMasking(inquiry.getUpdateNm()));
         }
 
         inquiryVO.setRecordCount(inquiryService.selectInquiryCount(inquiryVO));
@@ -55,12 +57,36 @@ public class InquiryController {
         return "inquiry/inquiryList";
     }
 
+    // 비밀번호 확인
+    @PostMapping("/checkPassword.do")
+    @ResponseBody
+    public Map<String, Object> checkPassword(@RequestBody InquiryVO inquiryVO) {
+        int count = inquiryService.checkPassword(inquiryVO);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("count", count);
+
+        return resultMap;
+    }
+
+    // 답변완료 처리
+    @PostMapping("/changeAnswerYn.do")
+    @ResponseBody
+    public Map<String, Object> changeAnswerYn(@RequestBody InquiryVO inquiryVO) {
+        int count = inquiryService.changeAnswerYn(inquiryVO);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("count", count);
+
+        return resultMap;
+    }
+
     // 문의사항 상세 화면 이동
     @GetMapping("/selectInquiry.do")
     public String selectInquiry(@ModelAttribute InquiryVO inquiryVO, Model model) {
         InquiryVO inquiry = inquiryService.selectInquiry(inquiryVO);
         if(!inquiryVO.getIsPermitted()) {
-            inquiry.setWriterNm(masking.nameMasking(inquiry.getWriterNm()));
+            inquiry.setWriterNm(masking.nameMasking(inquiry.getUpdateNm()));
             inquiry.setTelNo(masking.telNoMasking(inquiry.getTelNo()));
         }
 
@@ -80,10 +106,11 @@ public class InquiryController {
 
     // 문의사항 등록
     @PostMapping("/insertInquiry.do")
-    @ResponseBody
     public String insertInquiry(@ModelAttribute InquiryVO inquiryVO, RedirectAttributes redirect) {
         inquiryService.insertInquiry(inquiryVO);
+        inquiryVO.setResultMessage("게시글이 등록되었습니다.");
+        redirect.addFlashAttribute("inquiryVO", inquiryVO);
 
-        return "ok";
+        return "redirect:/inquiry/selectInquiry.do";
     }
 }

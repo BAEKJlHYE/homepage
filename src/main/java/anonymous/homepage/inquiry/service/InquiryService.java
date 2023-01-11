@@ -11,5 +11,9 @@ public interface InquiryService {
 
     public InquiryVO selectInquiry(InquiryVO inquiryVO);
 
+    public int checkPassword(InquiryVO inquiryVO);
+
     public int insertInquiry(InquiryVO inquiryVO);
+
+    public int changeAnswerYn(InquiryVO inquiryVO);
 }

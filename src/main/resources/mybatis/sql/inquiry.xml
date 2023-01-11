@@ -9,7 +9,7 @@
         SELECT A.BOARD_ID
              , A.TITLE
              , TO_CHAR(A.REGIST_DT, 'YYYY-MM-DD') AS DISPLAY_REGIST_DT
-             , A.WRITER_NM
+             , A.UPDATE_NM
              , A.SECRET_YN
              , (SELECT CD_NM FROM CD WHERE A.HEADER_SE_CD = CD) AS HEADER_SE_NM
              , A.ANSWER_YN
@@ -32,7 +32,7 @@
                             AND (REGEXP_LIKE(TITLE, #{searchKeyword}) OR REGEXP_LIKE(CONTENT, #{searchKeyword}))
                             </if>
                             <if test="'A00021'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
-                            AND REGEXP_LIKE(WRITER_NM, #{searchKeyword})
+                            AND REGEXP_LIKE(UPDATE_NM, #{searchKeyword})
                             </if>
                           </if>
                           ORDER BY REGIST_DT DESC , BOARD_ID DESC
@@ -57,7 +57,7 @@
           AND (REGEXP_LIKE(TITLE, #{searchKeyword}) OR REGEXP_LIKE(CONTENT, #{searchKeyword}))
           </if>
           <if test="'A00021'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
-          AND REGEXP_LIKE(WRITER_NM, #{searchKeyword})
+          AND REGEXP_LIKE(UPDATE_NM, #{searchKeyword})
           </if>
         </if>
     </select>
@@ -90,6 +90,14 @@
                  FROM INQUIRY
              ) A
         WHERE A.BOARD_ID = #{boardId}
+    </select>
+
+    <!-- 비밀번호 확인 -->
+    <select id="checkPassword" parameterType="anonymous.homepage.inquiry.vo.InquiryVO" resultType="int">
+        SELECT COUNT(1) AS COUNT
+        FROM INQUIRY
+        WHERE BOARD_ID = #{boardId}
+          AND PASSWORD = #{password}
     </select>
 
     <!-- 문의사항 등록 -->
@@ -133,4 +141,11 @@
             , SYSDATE
         )
     </insert>
+
+    <!-- 답변 처리 및 해제 -->
+    <update id="changeAnswerYn" parameterType="anonymous.homepage.inquiry.vo.InquiryVO">
+        UPDATE INQUIRY
+        SET ANSWER_YN = #{answerYn}
+        WHERE BOARD_ID = #{boardId}
+    </update>
 </mapper>
