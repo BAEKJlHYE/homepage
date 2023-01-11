@@ -30,7 +30,8 @@ layout:decorate="layout/default_layout">
                 </div>
                 <section class="w600">
                     <input type="hidden" id="resultMessage" name="resultMessage" th:value="${loginVo.resultMessage}">
-                    <form th:action="@{/login/selectUser.do}" th:object="${loginForm}" method="post">
+<!--                    <form th:action="@{/login/selectUser.do}" th:object="${loginForm}" method="post">-->
+                    <form th:action="@{/login/loginCheck.do}" th:object="${loginForm}" method="post">
                         <div class="box_login">
                             <input name="userId" type="text" th:value="${loginVo.userId}" placeholder="아이디를 입력해주세요" required autofocus>
                             <input name="userPw" type="password" th:value="${loginVo.userPw}" placeholder="비밀번호를 입력해주세요" required>

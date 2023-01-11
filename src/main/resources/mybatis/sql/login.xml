@@ -12,4 +12,11 @@
            AND USER_PW = #{userPw}
     </select>
 
+    <!-- 로그인ID 조회 -->
+    <select id="selectUserId" resultType="anonymous.homepage.login.config.CustomUserDetails">
+        SELECT *
+        FROM USER_HD
+        WHERE USER_ID = #{userId}
+    </select>
+
 </mapper>
