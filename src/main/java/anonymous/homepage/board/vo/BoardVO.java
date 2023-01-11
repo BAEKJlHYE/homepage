@@ -2,8 +2,10 @@ package anonymous.homepage.board.vo;
 
 import anonymous.homepage.vo.BaseVO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BoardVO extends BaseVO {
     private int boardId;
     private String title;

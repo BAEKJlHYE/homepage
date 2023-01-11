@@ -8,13 +8,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.thymeleaf.util.MapUtils;
+import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -39,24 +37,38 @@ public class LoginController {
         return "login/login";
     }
 
-    // 로그인
-    @PostMapping("/selectUser.do")
-    public String selectUser(@ModelAttribute("loginForm") LoginVO loginVO, RedirectAttributes redirect) {
-        String returnUrl = "";
-        LoginVO vo = loginService.selectUserByUsername(loginVO);
+    // 로그인 체크
+    @GetMapping("/loginCheck.do")
+    public String getLoginPage(@ModelAttribute("loginForm") LoginVO loginVO,
+                               Model model,
+                               @RequestParam(value = "error", required = false) String error,
+                               @RequestParam(value = "exception", required = false) String exception) {
+        model.addAttribute("error", error);
+        model.addAttribute("exception", exception);
 
-        if (ObjectUtils.isEmpty(vo)) {
-            vo = new LoginVO();
-            BeanUtils.copyProperties(loginVO, vo);
-            vo.setResultMessage("아이디 혹은 비밀번호가 일치하지 않습니다.");
-
-            returnUrl = "redirect:/login/getLoginPage.do";
+        if (StringUtils.isEmpty(error)) {
+            System.out.println("error : NO"+ error);
+            System.out.println("exception : NO"+ exception);
         } else {
-            returnUrl = "redirect:/main/main.do";
+            System.out.println("error : YES"+ error);
+            System.out.println("exception : YES"+ exception);
         }
 
-        redirect.addFlashAttribute("loginVo", vo);
-        return returnUrl;
+        return "login/login";
+    }
+
+    // 로그아웃
+    @GetMapping("/getLogout.do")
+    public String getLogout(HttpServletRequest request, Model model) {
+//        public String logout(HttpServletRequest request, HttpServletResponse response){
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        if(authentication != null){
+//            new SecurityContextLogoutHandler().logout(request,response,authentication);
+//        }
+//        return "redirect:/";
+
+        return "main/main";
     }
 
 }
