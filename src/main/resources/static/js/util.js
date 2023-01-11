@@ -1,9 +1,19 @@
+/* class */
+
+function addClass(elementId, className) {
+    document.getElementById(elementId).classList.add(className);
+}
+
+function removeClass(elementId, className) {
+    document.getElementById(elementId).classList.remove(className);
+}
+
 /* etc */
 
 // alert
 function openAlertModal(message) {
     document.getElementById('alertContent').innerText = message;
-    document.getElementById('alertBox').classList.add('on');
+    addClass('alertBox', 'on');
 
     document.getElementById('alertCancelButton').style.display = 'none';
     document.getElementById('alertConfirmButton').setAttribute('onclick', 'closeAlert()');
@@ -11,13 +21,13 @@ function openAlertModal(message) {
 
 // alert - 확인 버튼, confirm - 확인·취소 버튼
 function closeAlert() {
-    document.getElementById('alertBox').classList.remove('on');
+    removeClass('alertBox', 'on');
 }
 
 // confirm
 function openConfirmModal(message, callbackFunction) {
     document.getElementById('alertContent').innerText = message;
-    document.getElementById('alertBox').classList.add('on');
+    addClass('alertBox', 'on');
     document.getElementById('alertCancelButton').style.display = 'inline-block';
 
     if(!isEmpty(callbackFunction))

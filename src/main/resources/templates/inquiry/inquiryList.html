@@ -21,9 +21,68 @@
             formSubmit(0, '', 1, '/inquiry/selectInquiryList.do');
         }
 
+        function checkSecretYn(element) {
+            var boardId = element.dataset.boardid;
+            var secretYn = element.dataset.secretyn;
+            var nowPage = document.getElementById('nowPage').value;
+            var isPermitted = document.getElementById('isPermitted').value;
+
+            if(isPermitted) {
+                formSubmit(boardId, '', nowPage, '/inquiry/selectInquiry.do');
+                return;
+            }
+
+            document.getElementById('boardId').value = boardId;
+
+            if(secretYn == 'Y') {
+                onPasswordModal();
+            } else if(secretYn == 'N') {
+                formSubmit(boardId, '', nowPage, '/inquiry/selectInquiry.do');
+            }
+        }
+
+        function confirmPasswordModal() {
+            var boardId = document.getElementById('boardId').value;
+            var password = document.getElementById('passwordForCheck').value;
+            var nowPage = document.getElementById('nowPage').value;
+
+            if(isEmpty(password)) {
+                openAlertModal('비밀번호를 입력해주시기 바랍니다.');
+                return;
+            }
+
+            cancelPasswordModal();
+
+            data = {
+                boardId: boardId
+                , password: password
+            };
+            $.ajax({
+                type: 'POST'
+                , url: '/inquiry/checkPassword.do'
+                , contentType: 'application/json'
+                , data: JSON.stringify(data)
+                , success: function(result) {
+                    if(result.count == 0) {
+                        openAlertModal('비밀번호가 맞지 않습니다.');
+                        return;
+                    }
+
+                    formSubmit(boardId, '', nowPage, '/inquiry/selectInquiry.do');
+                }
+                , error: function() {
+                    openAlertModal('오류가 발생하였습니다. 관리자에게 문의해주시기 바랍니다.');
+                }
+            });
+        }
+
         function moveToRegisterInquiry() {
             var nowPage = document.getElementById('nowPage').value;
             formSubmit(0, '', nowPage, '/inquiry/registerInquiry.do');
+        }
+
+        function movePage(pageNumber) {
+            formSubmit(0, '', pageNumber, '/inquiry/selectInquiryList.do');
         }
 
         function formSubmit(boardId, resultMessage, pageNumber, action) {
@@ -48,6 +107,7 @@
             <input type="hidden" id="recordUnit" name="recordUnit" th:value="${inquiryInfo.recordUnit}">
             <input type="hidden" id="nowPage" name="nowPage" th:value="${inquiryInfo.nowPage}">
             <input type="hidden" id="pageUnit" name="pageUnit" th:value="${inquiryInfo.pageUnit}">
+            <input type="hidden" id="isPermitted" th:value="${inquiryInfo.isPermitted}">
 
             <div class="lnb">
                 <div class="lnb_inner">
@@ -109,14 +169,18 @@
                                                     <tr th:each="inquiry : ${inquiryList}">
                                                         <td><span th:text="${inquiry.boardId}"></span></td>
                                                         <td class="tal">
-                                                            <a class="link" style="position: relative" href="#" th:onclick="|moveBoard(${inquiry.boardId})|">
+                                                            <a class="link" style="position: relative" href="#"
+                                                               th:data-boardId="${inquiry.boardId}"
+                                                               th:data-secretYn="${inquiry.secretYn}"
+                                                               onclick="checkSecretYn(this)">
+                                                                <input type="hidden" name="secretYn" th:value="${inquiry.secretYn}">
                                                                 <span class="label_blue" th:text="'[' + ${inquiry.headerSeNm} + ']'"></span>
                                                                 <span th:text="${inquiry.title}"></span>
                                                                 <span th:if="${inquiry.answerYn == 'Y'}" class="span_answer">답변완료</span>
                                                                 <span th:if="${inquiry.secretYn == 'Y'}" class="lock"></span>
                                                             </a>
                                                         </td>
-                                                        <td><span th:text="${inquiry.writerNm}"></span></td>
+                                                        <td><span th:text="${inquiry.updateNm}"></span></td>
                                                         <td><span th:text="${inquiry.displayRegistDt}"></span></td>
                                                     </tr>
                                                 </tbody>
@@ -157,6 +221,7 @@
             </div>
             <a href="#" class="btn_top">TOP</a>
         </form>
+        <div th:replace="~{inquiry/passwordModal :: passwordModalBox}"></div>
     </div>
 </th:block>
 </html>

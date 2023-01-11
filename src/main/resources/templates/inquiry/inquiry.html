@@ -5,18 +5,145 @@
 
 <th:block layout:fragment="content">
     <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            var resultMessage = document.getElementById('resultMessage').value;
+            if(!isEmpty(resultMessage))
+                openAlertModal(resultMessage);
+        });
 
+        function clickUpdateInquiry() {
+            // TODO: 권한 존재 시 패스, 비밀글 아닐 경우 패스(작성자명으로 비교?), 비밀글일 경우 비밀번호 체크
+        }
+
+        function clickDeleteInquiry() {
+            // TODO: 게시글 삭제 확인(모달 이용) -> 권한 존재 시 패스, 비밀글 아닐 경우 패스(작성자명으로 비교?), 비밀글일 경우 비밀번호 체크
+        }
+
+        function updateInquiry() {
+            // TODO: 게시글 수정
+        }
+
+        function deleteInquiry() {
+            // TODO: 게시글 삭제
+        }
+
+        function moveToInquiryList() {
+            formSubmit(0, '', '/inquiry/selectInquiryList.do', 'get');
+        }
+
+        function checkSecretYn(element) {
+            var boardId = element.dataset.boardid;
+            document.getElementById('boardIdForMove').value = boardId;
+            if(boardId <= 0) {
+                return;
+            }
+
+            var isPermitted = document.getElementById('isPermitted').value;
+            if(isPermitted) {
+                formSubmit(boardId, '', '/inquiry/selectInquiry.do', 'get');
+                return;
+            }
+
+            var secretYn = element.dataset.secretyn;
+            if(secretYn == 'Y') {
+                onPasswordModal();
+            } else if(secretYn == 'N') {
+                formSubmit(boardId, '', '/inquiry/selectInquiry.do', 'get');
+            }
+        }
+
+        // TODO: 비밀글 수정, 삭제 시 이용 가능하도록 수정
+        var processType;        // S: 조회, U: 수정, D:삭제
+        var selectedboardId;    // 처리 대상 board id
+        var passwordForCheck;   // 입력한 비밀번호
+        var isCorrect;          // 비밀번호 일치여부
+        function confirmPasswordModal() {
+            var boardId = document.getElementById('boardIdForMove').value;
+            var password = document.getElementById('passwordForCheck').value;
+
+            if(isEmpty(password)) {
+                openAlertModal('비밀번호를 입력해주시기 바랍니다.');
+                return;
+            }
+
+            cancelPasswordModal();
+
+            data = {
+                boardId: boardId
+                , password: password
+            };
+            $.ajax({
+                type: 'POST'
+                , url: '/inquiry/checkPassword.do'
+                , contentType: 'application/json'
+                , data: JSON.stringify(data)
+                , success: function(result) {
+                    if(result.count == 0) {
+                        openAlertModal('비밀번호가 맞지 않습니다.');
+                        return;
+                    }
+
+                    formSubmit(boardId, '', '/inquiry/selectInquiry.do', 'get');
+                }
+                , error: function() {
+                    openAlertModal('오류가 발생하였습니다. 관리자에게 문의해주시기 바랍니다.');
+                }
+            });
+        }
+
+        function changeAnswerYn(answerYn) {
+            var boardId = document.getElementById('boardId').value;
+
+            data = {
+                boardId: boardId
+                , answerYn: answerYn
+            };
+
+            $.ajax({
+                type: 'POST'
+                , url: '/inquiry/changeAnswerYn.do'
+                , contentType: 'application/json'
+                , data: JSON.stringify(data)
+                , success: function(result) {
+                    if(answerYn == 'Y') {
+                        openAlertModal('답변 완료 처리하였습니다.');
+                        document.getElementById('answerYButton').style.display = 'none';
+                        document.getElementById('answerNButton').style.display = 'inline-block';
+                    } else if(answerYn == 'N') {
+                        openAlertModal('답변 해제 처리하였습니다.');
+                        document.getElementById('answerYButton').style.display = 'inline-block';
+                        document.getElementById('answerNButton').style.display = 'none';
+                    }
+                }
+                , error: function() {
+                    openAlertModal('오류가 발생하였습니다. 관리자에게 문의해주시기 바랍니다.');
+                }
+            });
+        }
+
+        function formSubmit(boardId, resultMessage, action, method) {
+            document.getElementById('boardId').value = boardId;
+            document.getElementById('resultMessage').value = resultMessage;
+
+            var form = document.getElementById('inquiryPageInfo');
+            form.method = method;
+            form.action = action;
+            form.submit();
+        }
     </script>
 
     <div id="container" class="container">
         <form id="inquiryPageInfo" action="/inquiry/selectInquiryList.do" method="get">
             <input type="hidden" id="boardId" name="boardId" th:value="${inquiryInfo.boardId}">
+            <input type="hidden" id="secretYn" name="secretYn" th:value="${inquiryInfo.secretYn}">
             <input type="hidden" id="resultMessage" name="resultMessage" th:value="${inquiryInfo.resultMessage}">
             <input type="hidden" id="recordUnit" name="recordUnit" th:value="${inquiryInfo.recordUnit}">
             <input type="hidden" id="nowPage" name="nowPage" th:value="${inquiryInfo.nowPage}">
             <input type="hidden" id="pageUnit" name="pageUnit" th:value="${inquiryInfo.pageUnit}">
             <input type="hidden" id="searchSeCd" name="searchSeCd" th:value="${inquiryInfo.searchSeCd}">
             <input type="hidden" id="searchKeyword" name="searchKeyword" th:value="${inquiryInfo.searchKeyword}">
+            <input type="hidden" id="isPermitted" th:value="${inquiryInfo.isPermitted}">
+            <input type="hidden" id="boardIdForMove">
 
             <div class="lnb">
                 <div class="lnb_inner">
@@ -48,9 +175,21 @@
                             </div>
                             <div class="line_btn cb">
                                 <div class="fr">
-                                    <a href="#" class="btn_cm" onclick="updateBoard()">글수정</a>
-                                    <a th:if="${inquiryInfo.isPermitted}" href="#" class="btn_cm" onclick="openConfirmModal('게시글을 삭제하시겠습니까?', 'deleteBoard')">글삭제</a>
-                                    <a href="#" class="btn_cm gray" onclick="moveToBoardList()">목록</a>
+<!--                                    <a href="#" class="btn_cm" onclick="">글수정</a>-->
+<!--                                    <a href="#" class="btn_cm" onclick="">글삭제</a>-->
+                                    <a th:style="${inquiryInfo.isPermitted && #strings.equals(inquiry.answerYn, 'N') ? 'display: inline-block;' : 'display: none;'}"
+                                       id="answerYButton"
+                                       href="#" class="btn_cm mint"
+                                       onclick="changeAnswerYn('Y')">
+                                        답변완료
+                                    </a>
+                                    <a th:style="${inquiryInfo.isPermitted && #strings.equals(inquiry.answerYn, 'Y') ? 'display: inline-block;' : 'display: none;'}"
+                                       id="answerNButton"
+                                       href="#" class="btn_cm mint"
+                                       onclick="changeAnswerYn('N')">
+                                        답변해제
+                                    </a>
+                                    <a href="#" class="btn_cm gray" onclick="moveToInquiryList()">목록</a>
                                 </div>
                             </div>
                         </div>
@@ -58,16 +197,22 @@
                             <div class="line_grp">
                                 <span>이전글</span>
                                 <a href="#" class="link"
-                                   th:onclick="|moveToOtherBoard(${inquiry.prevBoardId})|"
+                                   th:data-boardId="${inquiry.prevBoardId}"
+                                   th:data-secretYn="${inquiry.prevBoardSecretYn}"
                                    th:classappend="${inquiry.prevBoardId <= 0} ? 'no'"
-                                   th:text="${inquiry.prevBoardTitle}"></a>
+                                   th:text="${inquiry.prevBoardTitle}"
+                                   onclick="checkSecretYn(this)">
+                                </a>
                             </div>
                             <div class="line_grp">
                                 <span>다음글</span>
                                 <a href="#" class="link"
-                                   th:onclick="|moveToOtherBoard(${inquiry.nextBoardId})|"
+                                   th:data-boardId="${inquiry.nextBoardId}"
+                                   th:data-secretYn="${inquiry.nextBoardSecretYn}"
                                    th:classappend="${inquiry.nextBoardId <= 0} ? 'no'"
-                                   th:text="${inquiry.nextBoardTitle}"></a>
+                                   th:text="${inquiry.nextBoardTitle}"
+                                   onclick="checkSecretYn(this)">
+                                </a>
                             </div>
                         </div>
                     </section>
@@ -75,6 +220,7 @@
             </div>
             <a href="#" class="btn_top">TOP</a>
         </form>
+        <div th:replace="~{inquiry/passwordModal :: passwordModalBox}"></div>
     </div>
 </th:block>
 </html>

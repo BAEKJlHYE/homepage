@@ -28,7 +28,17 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
+    public int checkPassword(InquiryVO inquiryVO) {
+        return inquiryMapper.checkPassword(inquiryVO);
+    }
+
+    @Override
     public int insertInquiry(InquiryVO inquiryVO) {
         return inquiryMapper.insertInquiry(inquiryVO);
+    }
+
+    @Override
+    public int changeAnswerYn(InquiryVO inquiryVO) {
+        return inquiryMapper.changeAnswerYn(inquiryVO);
     }
 }
