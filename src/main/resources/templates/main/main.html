@@ -10,31 +10,63 @@
         <div id="container" class="container main">
             <div class="content">
                 <div class="content_inner">
-
-                    <div class="tit_main" style="display:none;">
-                        <p class="slogan">세움 골프~~<br><span class="fwb">세움 골프</span></p>
+                    <!-- <div class="tit_main">
+                        <p class="slogan">투명한 정보만 취급하는 부동산<br><span class="fwb">신현재 부동산</span></p>
                         <p class="slogan_en">SWC SWC SWC SWC SWC SWC </p>
+                    </div> -->
+                    <div class="swiper-mainb">
+                        <ul class="swiper-wrapper">
+                            <li class="swiper-slide"><img src="../image/temp_img4.jpg"
+                                                          alt="이미지1"></li>
+                            <li class="swiper-slide"><img src="../image/bg_main.png"
+                                                          alt="이미지2"></li>
+                            <li class="swiper-slide"><img src="../image/temp_img2.jpg"
+                                                          alt="이미지3"></li>
+                        </ul>
+                        <div class="swiper-pagination"></div>
+
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+
                     </div>
+                    <script>
+                        const swiper2 = new Swiper('.swiper-mainb', {
+                            // Optional parameters
+                            loop: true,
+                            // If we need pagination
+                            pagination: {
+                                el: '.swiper-pagination',
+                            },
+                            // Navigation arrows
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            },
+                            // And if we need scrollbar
+                            // scrollbar: {
+                            //     el: '.swiper-scrollbar',
+                            // },
+                        });
+                    </script>
                     <div class="box_main">
                         <ul class="quick_menu">
                             <li><a href="#">스크린골프</a></li>
                             <li><a href="#">골프연습장</a></li>
-                            <li><a href="#">골프장직거래</a></li>
                             <li><a href="#">매도.매수문의</a></li>
+                            <li><a href="#">골프장직거래</a></li>
                         </ul>
-<!--                        <ul class="quick_menu2">-->
-<!--                            <li><a href="#">골프장직거래 바로가기</a></li>-->
-<!--                            <li><a href="#">매도.매수문의 보러가기</a></li>-->
-<!--                            <li><a href="#">My 즐겨찾기 바로가기</a></li>-->
-<!--                        </ul>-->
+                        <!-- <ul class="quick_menu2">
+                            <li><a href="#">최신 분양정보 바로가기</a></li>
+                            <li><a href="#">HOT한 매물정보 보러가기</a></li>
+                            <li><a href="#">My 즐겨찾기 바로가기</a></li>
+                        </ul> -->
                     </div>
 
-                    <!--공지사항 등등 -->
                     <div class="box_noti" style="display:none;">
                         <div class="tab_main">
                             <ul>
                                 <li class="on"><a href="#">공지사항</a></li>
-                                <li><a href="#">부동산뉴스</a></li>
+                                <!-- <li><a href="#">부동산뉴스</a></li> -->
                             </ul>
                             <a href="#" class="more">더보기</a>
                         </div>
@@ -97,7 +129,6 @@
                             </div>
                         </div>
                     </div>
-
                     <section id="sh_section">
                         <article class="saleList" id="sale_rcmd">
                             <div class="inner">
@@ -108,74 +139,69 @@
                                     <li>
                                         <a href="#" class="exPopBtn">
                                             <div class="img"
-                                                style='background-image: url(../image/temp_img2.jpg)'>
+                                                 style='background-image: url(../image/temp_img2.jpg)'>
                                                 <div class="state_wrap">
-                                                    <span class="state">추천</span> <span class="state">급매물</span>
+                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/u.png" alt="">
                                                 </div>
+                                                <div class="sold">[수원]<br>텍스트입력</div>
                                             </div>
-                                            <div class="info">
-                                                <p class="cate">상가</p>
-                                                <p class="price">
-                                                    <span>매</span>9억8,000
-                                                </p>
-                                                <p class="subj">송내 로데오 상가</p>
-                                                <p class="wh">경기 부천시 송내동 303-5</p>
-                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p>5천만원</p></li>
+                                                <li><p>임대료</p><p>400</p></li>
+                                                <li><p>관리비</p><p>150</p></li>
+                                                <li><p>권리금</p><p>3억</p></li>
+                                            </ul>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" class="exPopBtn">
                                             <div class="img"
-                                                style='background-image: url(../image/temp_img3.jpg)'>
+                                                 style='background-image: url(../image/temp_img3.jpg)'>
                                                 <div class="state_wrap">
-                                                    <span class="state">추천</span>
+                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/f.png" alt="">
                                                 </div>
-                                                <div class="sold"></div>
+                                                <div class="sold">[수원]<br>텍스트입력</div>
                                             </div>
-                                            <div class="info">
-                                                <p class="cate">사무실</p>
-                                                <p class="price">
-                                                    <span>월</span>5,000/60
-                                                </p>
-                                                <p class="subj">샤이닝 빌딩</p>
-                                                <p class="wh">경기 부천시 상동 548-4</p>
-                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p>5천만원</p></li>
+                                                <li><p>임대료</p><p>400</p></li>
+                                                <li><p>관리비</p><p>150</p></li>
+                                                <li><p>권리금</p><p>3억</p></li>
+                                            </ul>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" class="exPopBtn">
                                             <div class="img"
-                                                style='background-image:url(../image/temp_img2.jpg)'>
+                                                 style='background-image:url(../image/temp_img2.jpg)'>
                                                 <div class="state_wrap">
-                                                    <span class="state">추천</span>
+                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/f.png" alt="">
                                                 </div>
+                                                <div class="sold">[수원]<br>텍스트입력</div>
                                             </div>
-                                            <div class="info">
-                                                <p class="cate">상가</p>
-                                                <p class="price">
-                                                    <span>매</span>50억
-                                                </p>
-                                                <p class="subj">샤이닝 상가</p>
-                                                <p class="wh">경기 부천시 심곡동 35</p>
-                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p>5천만원</p></li>
+                                                <li><p>임대료</p><p>400</p></li>
+                                                <li><p>관리비</p><p>150</p></li>
+                                                <li><p>권리금</p><p>3억</p></li>
+                                            </ul>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" class="exPopBtn">
                                             <div class="img"
-                                                style='background-image:url(../image/temp_img3.jpg)'>
+                                                 style='background-image:url(../image/temp_img3.jpg)'>
                                                 <div class="state_wrap">
-                                                    <span class="state">추천</span>
+                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/u.png" alt="">
                                                 </div>
+                                                <div class="sold">[수원]<br>텍스트입력</div>
                                             </div>
-                                            <div class="info">
-                                                <p class="cate">아파트</p>
-                                                <p class="price">
-                                                    <span>매</span>3억1,000
-                                                </p>
-                                                <p class="subj">DH씨밀레</p>
-                                                <p class="wh">경기 부천시 송내동 564-3</p>
-                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p>5천만원</p></li>
+                                                <li><p>임대료</p><p>400</p></li>
+                                                <li><p>관리비</p><p>150</p></li>
+                                                <li><p>권리금</p><p>3억</p></li>
+                                            </ul>
                                         </a>
                                     </li>
 
@@ -185,7 +211,7 @@
                             </div>
                         </article>
                         <article class="saleList" id="sale_urgent" data-aos="fade-up" data-aos-duration="1000"
-                            data-aos-delay="200">
+                                 data-aos-delay="200">
                             <div class="inner">
                                 <div class="tit">
                                     <p>급매물</p>
@@ -194,74 +220,69 @@
                                     <li>
                                         <a href="javascript:land_view(99)">
                                             <div class="img"
-                                                style='background-image:url(../image/temp_img2.jpg)'>
+                                                 style='background-image:url(../image/temp_img2.jpg)'>
                                                 <div class="state_wrap">
-                                                    <span class="state">추천</span> <span class="state">급매물</span>
+                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/u.png" alt="">
                                                 </div>
+                                                <div class="sold">[수원]<br>텍스트입력</div>
                                             </div>
-                                            <div class="info">
-                                                <p class="cate">상가</p>
-                                                <p class="price">
-                                                    <span>매</span>9억8,000
-                                                </p>
-                                                <p class="subj">송내 로데오 상가</p>
-                                                <p class="wh">경기 부천시 송내동 303-5</p>
-                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p>5천만원</p></li>
+                                                <li><p>임대료</p><p>400</p></li>
+                                                <li><p>관리비</p><p>150</p></li>
+                                                <li><p>권리금</p><p>3억</p></li>
+                                            </ul>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="javascript:land_view(94)">
                                             <div class="img"
-                                                style='background-image:url(../image/temp_img3.jpg)'>
+                                                 style='background-image:url(../image/temp_img3.jpg)'>
                                                 <div class="state_wrap">
-                                                    <span class="state">급매물</span>
+                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/u.png" alt="">
                                                 </div>
-                                                <div class="sold"></div>
+                                                <div class="sold">[수원]<br>텍스트입력</div>
                                             </div>
-                                            <div class="info">
-                                                <p class="cate">빌라</p>
-                                                <p class="price">
-                                                    <span>전</span>1억5,000
-                                                </p>
-                                                <p class="subj">송내 우리샤이닝</p>
-                                                <p class="wh">경기 부천시 송내동 323-1</p>
-                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p>5천만원</p></li>
+                                                <li><p>임대료</p><p>400</p></li>
+                                                <li><p>관리비</p><p>150</p></li>
+                                                <li><p>권리금</p><p>3억</p></li>
+                                            </ul>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="javascript:land_view(92)">
                                             <div class="img"
-                                                style='background-image:url(../image/temp_img2.jpg)'>
+                                                 style='background-image:url(../image/temp_img2.jpg)'>
                                                 <div class="state_wrap">
-                                                    <span class="state">급매물</span>
+                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/u.png" alt="">
                                                 </div>
+                                                <div class="sold">[수원]<br>텍스트입력</div>
                                             </div>
-                                            <div class="info">
-                                                <p class="cate">아파트</p>
-                                                <p class="price">
-                                                    <span>전</span>1억3,000
-                                                </p>
-                                                <p class="subj">중동에스티마</p>
-                                                <p class="wh">경기 부천시 중동 1031-1</p>
-                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p>5천만원</p></li>
+                                                <li><p>임대료</p><p>400</p></li>
+                                                <li><p>관리비</p><p>150</p></li>
+                                                <li><p>권리금</p><p>3억</p></li>
+                                            </ul>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="javascript:land_view(90)">
                                             <div class="img"
-                                                style='background-image:url(../image/temp_img3.jpg)'>
+                                                 style='background-image:url(../image/temp_img3.jpg)'>
                                                 <div class="state_wrap">
-                                                    <span class="state">급매물</span>
+                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/u.png" alt="">
                                                 </div>
+                                                <div class="sold">[수원]<br>텍스트입력</div>
                                             </div>
-                                            <div class="info">
-                                                <p class="cate">오피스텔</p>
-                                                <p class="price">
-                                                    <span>월</span>1,000/50
-                                                </p>
-                                                <p class="subj">매트로팰리스</p>
-                                                <p class="wh">경기 부천시 중동 1145</p>
-                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p>5천만원</p></li>
+                                                <li><p>임대료</p><p>400</p></li>
+                                                <li><p>관리비</p><p>150</p></li>
+                                                <li><p>권리금</p><p>3억</p></li>
+                                            </ul>
                                         </a>
                                     </li>
                                 </ul>
@@ -269,9 +290,6 @@
                             </div>
                         </article>
                     </section>
-
-
-
                 </div>
             </div>
             <a href="#" class="btn_top">TOP</a>
@@ -295,9 +313,12 @@
                                 </div>
                                 <div class="swiper-main">
                                     <ul class="swiper-wrapper">
-                                        <li class="swiper-slide"><img src="../image/temp_img2.jpg" alt="송내 로데오 상가 이미지1"></li>
-                                        <li class="swiper-slide"><img src="../image/temp_img3.jpg" alt="송내 로데오 상가 이미지2"></li>
-                                        <li class="swiper-slide"><img src="../image/temp_img3.jpg" alt="송내 로데오 상가 이미지2"></li>
+                                        <li class="swiper-slide"><img src="../image/temp_img2.jpg"
+                                                                      alt="송내 로데오 상가 이미지1"></li>
+                                        <li class="swiper-slide"><img src="../image/temp_img3.jpg"
+                                                                      alt="송내 로데오 상가 이미지2"></li>
+                                        <li class="swiper-slide"><img src="../image/temp_img3.jpg"
+                                                                      alt="송내 로데오 상가 이미지2"></li>
                                     </ul>
                                     <div class="swiper-pagination"></div>
 
@@ -309,21 +330,19 @@
 
                             </div>
                             <div class="titles">
-                                <div class="tip">
-                                    <span>매물번호10099</span>
-                                </div>
-                                <div class="tit">
-                                    <p class="price">
-                                        <span>매</span>9억8,000
-                                    </p>
-                                    <p class="desc">송내 로데오 상가</p>
-                                    <p class="loca">경기 부천시 송내동 303-5 2층</p>
-                                </div>
-                                <div class="kwd">
-                                    <span>상가</span>
-                                    <span>공급면적717㎡</span>
-                                </div>
-                                <div class="ps">송내 로데오 상가 입니다.</div>
+                                <dl class="dl_info">
+                                    <dt class="open">수원 7 ROOM </dt>
+                                    <dd>
+                                        <ul class="info_list">
+                                            <li class="add"><span>소재지</span>경기 부천시 송내동 303-5 2층</li>
+                                            <li><span>매물번호</span>10099</li>
+                                            <li><span>매물구분</span>상가</li>
+                                            <li><span>계약상태</span>계약가능</li>
+                                            <li><span>해당층/총층</span>7층/지하1층</li>
+                                            <li><span>공급면적</span>717㎡(217평)</li>
+                                        </ul>
+                                    </dd>
+                                </dl>
                             </div>
                         </div>
                         <!-- 이미지/타이틀 [e] -->
@@ -332,19 +351,7 @@
                             <dt class="open">매물정보</dt>
                             <dd>
                                 <ul class="info_list">
-                                    <li class="add"><span>소재지</span>경기 부천시 송내동 303-5 2층</li>
-                                    <li><span>매물번호</span>10099</li>
-                                    <li><span>매물구분</span>상가</li>
-                                    <li><span>계약상태</span>계약가능</li>
-                                    <li>
-                                        <span>가격정보</span>
-                                        매매 9억8,000
-                                    </li>
-                                    <li><span>해당층/총층</span>7층/지하1층</li>
-                                    <li><span>공급면적</span>717㎡(217평)</li>
-                                    <li><span>전용면적</span>717㎡(217평)</li>
-                                    <li><span>준공년도</span>2006년</li>
-                                    <li><span>입주일자</span>협의 후 가능</li>
+                                    <li class="add">매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 </li>
                                 </ul>
                             </dd>
                         </dl>
