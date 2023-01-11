@@ -808,6 +808,19 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
 .alert .alert_btn .btn_cm:hover{background: #e6e6e6;}
 .alert .alert_btn .btn_cm.blue:hover{background:#e0ecf7}
 
+.password_modal_bg{display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: rgba(0, 0, 0, 0.4); z-index: 9001;}
+.password_modal_bg.on{display: block;}
+.password_modal{display: none;width: 460px; min-height: 200px;padding-bottom:30px;position: fixed; left: 50%; top: 50%; background: #fff; z-index: 10001; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);border-radius: 8px;overflow: hidden;box-sizing: border-box;box-shadow:0 3px 18px rgba(0, 0, 0, 0.3);text-align: center;}
+.password_modal_bg.on .password_modal{display: block;}
+.password_modal .password_modal_cont{padding:0 30px}
+.password_modal .password_modal_cont p{margin-bottom: 0;}
+.password_modal .password_modal_cont input{text-align: center;}
+.password_modal .password_modal_btn .btn_cm{height: 40px;min-width: 120px;line-height: 38px;border:1px solid #ccc;background: #f7f7f7;color:#555;font-size: 15px;}
+.password_modal .password_modal_btn .btn_cm.blue{border:1px solid #a3c4e0;background: #eef5fb;color:#445fb7}
+.password_modal .password_modal_btn .btn_cm + .btn_cm{margin-left: 8px;}
+.password_modal .password_modal_btn .btn_cm:hover{background: #e6e6e6;}
+.password_modal .password_modal_btn .btn_cm.blue:hover{background:#e0ecf7}
+
 /* box_step */
 .box_step > ul::after{content:'';display:block;clear:both}
 .box_step > ul > li{position:relative;float:left;width:360px;height:210px;padding:40px 30px;text-align:center;background:url(../image/bg_step01.png) 0 0 no-repeat;box-sizing:border-box}
