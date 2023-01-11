@@ -32,22 +32,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .mvcMatchers("/", "/main/main.do", "/error/**", "/js/**", "/css/**", "/image/**", "/font/**").permitAll() // 해당 경로들은 접근을 허용
-//                .antMatchers("/","/main/main.do").permitAll()
-//                .antMatchers("/user").hasRole("USER")
+            .authorizeRequests()
+            .mvcMatchers("/", "/main/main.do", "/companyInfo/**", "/board/select**","/inquiry/**", "/error/**", "/js/**", "/css/**", "/image/**", "/font/**").permitAll() // 해당 경로들은 접근을 허용
+                .antMatchers("/register**","/insert**","/modify**","/update**","/delete**").hasRole("ADMIN")
 //                .antMatchers("/manager").hasRole("MANAGER")
 //                .antMatchers("/admin").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            .and()
-                .formLogin()
-                .usernameParameter("userId")
-                .passwordParameter("userPw")
-                .loginPage("/login/getLoginPage.do")             // 로그인 페이지
-                .loginProcessingUrl("/login/loginCheck.do")      // th:action="@{/login_proc}"
-                .defaultSuccessUrl("/main/main.do")              // 로그인 성공시 이동
-                .successHandler(authenticationSuccessHandler) // 성공 handler
-                .failureHandler(authenticationFailureHandler) // 실패 handler
-                .permitAll();
+            .anyRequest().authenticated()
+        .and()
+            .formLogin()
+            .usernameParameter("userId")
+            .passwordParameter("userPw")
+            .loginPage("/login/getLoginPage.do")             // 로그인 페이지
+            .loginProcessingUrl("/login/loginCheck.do")      // th:action="@{/login_proc}"
+            .defaultSuccessUrl("/main/main.do")              // 로그인 성공시 이동
+            .successHandler(authenticationSuccessHandler) // 성공 handler
+            .failureHandler(authenticationFailureHandler) // 실패 handler
+            .permitAll();
     }
 }
