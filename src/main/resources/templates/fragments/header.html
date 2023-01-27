@@ -21,11 +21,10 @@
 <!--                                <li><a href="#">비밀번호 변경</a></li>-->
                             </ul>
                         </li>
-<!--                        <li sec:authentication="name">로그인한놈</li>-->
-<!--                        <li sec:authentication="principal.authorities">로그인한놈권한</li>-->
+                        <li sec:authentication="name">환영합니다</li>
                         <li class="join" style="display: none"><a th:href="@{/join/getJoinPage.do}">회원가입</a></li>
-                        <li class="login"><a th:href="@{/login/getLoginPage.do}">로그인</a></li>
-                        <li class="logout"><a href="#">로그아웃</a></li>
+                        <li class="login" sec:authorize="!isAuthenticated()"><a th:href="@{/login/getLoginPage.do}">로그인</a></li>
+                        <li class="logout" sec:authorize="isAuthenticated()"><a href="#">로그아웃</a></li>
                     </ul>
                 </div>
             </div>
