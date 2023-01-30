@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface BuldService {
     public List<BuldVO> selectBuldList();
+
+    public int insertBoard(BuldVO buldVO);
 }

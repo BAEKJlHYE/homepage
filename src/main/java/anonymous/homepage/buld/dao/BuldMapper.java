@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface BuldMapper {
     public List<BuldVO> selectBuldList();
+
+    public int insertBoard(BuldVO buldVO);
 }

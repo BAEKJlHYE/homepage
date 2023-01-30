@@ -8,10 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -29,7 +27,7 @@ public class BuldController {
         return "buld/buldList";
     }
 
-    // 공지사항 등록 화면 이동
+    // 매물 등록 화면 이동
     @GetMapping("/registerBuld.do")
     public String registerBoard(Model model) {
         // 거래유형구분코드
@@ -40,6 +38,14 @@ public class BuldController {
         model.addAttribute("saleSeCds", cdService.selectCdList("A03"));
 
         return "buld/buldRegister";
+    }
+
+    // 매물 등록
+    @PostMapping("/insertBuld.do")
+    @ResponseBody
+    public String insertBoard(@ModelAttribute BuldVO buldVO, RedirectAttributes redirect) {
+        buldService.insertBoard(buldVO);
+        return "ok";
     }
 
 }

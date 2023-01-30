@@ -5,159 +5,262 @@
 
 <th:block layout:fragment="content">
     <script>
+        /* 우편번호 찾기 버튼 클릭 */
+        function findPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 검색 결과 항목 클릭 시 실행
+                    var addr = '';
+
+                    // 사용자가 선택한 주소 타입
+                    if (data.userSelectedType === 'R') {    // 도로명 주소 선택
+                        addr = data.roadAddress;
+                    } else {                                // 지번 주소 선택
+                        addr = data.jibunAddress;
+                    }
+
+                    document.getElementById('zipcd').value = data.zonecode;
+                    document.getElementById("addr").value = addr;
+                    document.getElementById("detailAddr").focus();
+                }
+            }).open();
+        }
+
+        /* 취소 버튼 클릭 */
+        function moveToBuldList() {
+            formSubmit('/buld/selectBuldList.do', 'get');
+        }
+
+        /* 등록 버튼 클릭 */
+        function registerBuld() {
+            if(!validateForm())
+                return;
+
+            return;
+            formSubmit('/buld/insertBuld.do', 'post');
+        }
+
+        /* 유효성 검사 */
+        function validateForm() {
+            // 필수값
+            var mandatoryInputIds = [ 'buldNm', 'zipcd', 'addr', 'detailAddr', 'rntchrg', 'telNoFront', 'telNoMiddle', 'telNoBack' ];
+            var mandatoryInputNames = [ '건물명', '주소', '주소', '주소', '임대료', '연락처', '연락처', '연락처' ];
+            for(var i=0 ; i<mandatoryInputIds.length ; i++) {
+                var value = document.getElementById(mandatoryInputIds[i]).value;
+                if(isEmpty(value)) {
+                    openAlertModal(mandatoryInputNames[i] + "을(를) 입력해주시기 바랍니다.");
+                    return false;
+                }
+            }
+
+            // 숫자만 입력
+            var numberOnlyInputIds = [ 'rntchrg', 'gtn', 'managect', 'premum', 'rlFloor', 'totFloor', 'suplyAr', 'suplyRlAea' ];
+            var numberOnlyInputNames = [ '임대료', '보증금', '관리비', '권리금', '해당층', '총층', '공급면적', '공급평수' ];
+            var numberRegExp = /^[0-9]+$/;
+
+            for(var i=0 ; i<numberOnlyInputIds.length ; i++) {
+                var value = document.getElementById(numberOnlyInputIds[i]).value;
+                if(!numberRegExp.test(value)) {
+                    openAlertModal(numberOnlyInputNames[i] + "은(는) 숫자만 입력 가능합니다.");
+                    return false;
+                }
+            }
+
+            // 연락처
+            var telNoSplits = [
+                document.getElementById('telNoFront').value
+                , document.getElementById('telNoMiddle').value
+                , document.getElementById('telNoBack').value
+            ];
+            var telNoRegExp = /^[0-9]{2,4}$/;
+
+            for(split of telNoSplits) {
+                if(!telNoRegExp.test(split)) {
+                    openAlertModal("올바른 연락처를 입력해주시기 바랍니다.");
+                    return false;
+                }
+            }
+            document.getElementById('telNo').value = telNoSplits[0] + '-' + telNoSplits[1] + '-' + telNoSplits[2];
+
+            return true;
+        }
+
+        /* form submit */
+        function formSubmit(action, method) {
+            var buldForm = document.getElementById('buldPageInfo');
+            buldForm.action = action;
+            buldForm.method = method;
+            buldForm.submit();
+        }
     </script>
 
     <div id="container" class="container">
-        <div class="lnb">
-            <div class="lnb_inner">
-                <ul class="step">
-                    <li>홈</li>
-                    <li>매물</li>
-                    <li></li>
-                </ul>
-            </div>
-        </div>
-        <div class="content">
-            <div class="content_inner">
-                <div class="titarea">
-                    <h2>매물</h2>
+        <form id="buldPageInfo" action="/buld/selectBuldList.do" method="get">
+            <div class="lnb">
+                <div class="lnb_inner">
+                    <ul class="step">
+                        <li>홈</li>
+                        <li>매물</li>
+                        <li></li>
+                    </ul>
                 </div>
-                <section>
-                    <article>
-                        <div class="tit_tb">
-                            <div class="fr"><span><span class="cl_orange">*</span> 표시가 있는 항목은 필수로 입력하셔야 합니다.</span></div>
-                        </div>
-                        <div class="tbbox">
-                            <table class="tb type2">
-                                <colgroup>
-                                    <col style="width:15%;"/>
-                                    <col style="width:35%;"/>
-                                    <col style="width:15%;"/>
-                                    <col style="width:35%;"/>
-                                </colgroup>
-                                <tbody>
-                                    <tr>
-                                        <th><span class="req">건물명</span></th>
-                                        <td>
-                                            <input type="text" id="buldNm" name="buldNm" class="ipt" maxlength="10">
-                                        </td>
-                                        <th><span class="req">계약상태</span></th>
-                                        <td>
-                                            <select class="select" id="cntrctSttusSeCd" name="cntrctSttusSeCd" style="width:400px;">
-                                                <option th:each="cntrctSttusSeCd, cntrctSttusSeCdStat : ${cntrctSttusSeCds}"
-                                                        th:text="${cntrctSttusSeCd.cdNm}"
-                                                        th:value="${cntrctSttusSeCd.cd}"
-                                                        th:selected="${cntrctSttusSeCdStat.index} == 0">
-                                                </option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><span class="req">소재지</span></th>
-                                        <td colspan="3">
-                                            <input type="text" id="zipcd" name="zipcd" class="ipt" maxlength="10">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><span class="req">임대료</span></th>
-                                        <td>
-                                            <input type="text" id="rntchrg" name="rntchrg" class="ipt" maxlength="10">
-                                        </td>
-                                        <th><span class="">보증금</span></th>
-                                        <td>
-                                            <input type="text" id="gtn" name="gtn" class="ipt" maxlength="10">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><span class="">관리비</span></th>
-                                        <td>
-                                            <input type="text" id="managect" name="managect" class="ipt" maxlength="10">
-                                        </td>
-                                        <th><span class="">권리금</span></th>
-                                        <td>
-                                            <input type="text" id="premum" name="premum" class="ipt" maxlength="10">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><span class="req">거래유형</span></th>
-                                        <td>
-                                            <select class="select" id="delngTySeCd" name="delngTySeCd" style="width:400px;">
-                                                <option th:each="delngTySeCd, delngTySeCdStat : ${delngTySeCds}"
-                                                        th:text="${delngTySeCd.cdNm}"
-                                                        th:value="${delngTySeCd.cd}"
-                                                        th:selected="${delngTySeCdStat.index} == 0">
-                                                </option>
-                                            </select>
-                                        </td>
-                                        <th><span class="req">매물구분</span></th>
-                                        <td>
-                                            <select class="select" id="saleSeCd" name="saleSeCd" style="width:400px;">
-                                                <option th:each="saleSeCd, saleSeCdStat : ${saleSeCds}"
-                                                        th:text="${saleSeCd.cdNm}"
-                                                        th:value="${saleSeCd.cd}"
-                                                        th:selected="${saleSeCdStat.index} == 0">
-                                                </option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><span class="">해당층</span></th>
-                                        <td>
-                                            <input type="text" id="rlFloor" name="rlFloor" class="ipt" maxlength="10">
-                                        </td>
-                                        <th><span class="">총층</span></th>
-                                        <td>
-                                            <input type="text" id="totFloor" name="totFloor" class="ipt" maxlength="10">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><span class="">공급면적</span></th>
-                                        <td>
-                                            <input type="text" id="suplyAr" name="suplyAr" class="ipt" maxlength="10">
-                                        </td>
-                                        <th><span class="">공급평수</span></th>
-                                        <td>
-                                            <input type="text" id="suplyRlAea" name="suplyRlAea" class="ipt" maxlength="10">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><span class="req">연락처</span></th>
-                                        <td colspan="3">
-                                            <div class="box_form">
-                                                <ul class="ly_form col3">
-                                                    <li>
-                                                        <input type="text" id="telNoFront" maxlength="3">
-                                                    </li>
-                                                    <li>
-                                                        <input type="text" id="telNoMiddle" maxlength="4">
-                                                    </li>
-                                                    <li>
-                                                        <input type="text" id="telNoBack" maxlength="4">
-                                                    </li>
-                                                </ul>
-                                                <input type="hidden" id="telNo" name="telNo">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><span class="">건물설명</span></th>
-                                        <td colspan="3">
-                                            <textarea class="txa" id="buldDc" name="buldDc" cols="30" rows="10" style="height: 290px;"
-                                                      placeholder="내용을 입력하세요." maxlength="1000"></textarea>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </article>
-                    <div class="btnbox cb">
-                        <a href="#" class="btn_cm mint" onclick="registerBoard()">등록</a>
-                        <a href="#" class="btn_cm" onclick="moveToBoardList()">취소</a>
-                    </div>
-                </section>
             </div>
-        </div>
-        <a href="#" class="btn_top">TOP</a>
+            <div class="content">
+                <div class="content_inner">
+                    <div class="titarea">
+                        <h2>매물</h2>
+                    </div>
+                    <section>
+                        <article>
+                            <div class="tit_tb">
+                                <div class="fr"><span><span class="cl_orange">*</span> 표시가 있는 항목은 필수로 입력하셔야 합니다.</span></div>
+                            </div>
+                            <div class="tbbox">
+                                <table class="tb type2">
+                                    <colgroup>
+                                        <col style="width:15%;"/>
+                                        <col style="width:35%;"/>
+                                        <col style="width:15%;"/>
+                                        <col style="width:35%;"/>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th><span class="req">건물명</span></th>
+                                            <td>
+                                                <input type="text" id="buldNm" name="buldNm" class="ipt" maxlength="10">
+                                            </td>
+                                            <th><span class="req">계약상태</span></th>
+                                            <td>
+                                                <select class="select" id="cntrctSttusSeCd" name="cntrctSttusSeCd" style="width:400px;">
+                                                    <option th:each="cntrctSttusSeCd, cntrctSttusSeCdStat : ${cntrctSttusSeCds}"
+                                                            th:text="${cntrctSttusSeCd.cdNm}"
+                                                            th:value="${cntrctSttusSeCd.cd}"
+                                                            th:selected="${cntrctSttusSeCdStat.index} == 0">
+                                                    </option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="req">소재지</span></th>
+                                            <td colspan="3">
+                                                <div class="box_form">
+                                                    <div>
+                                                        <input type="text" id="zipcd" name="zipcd" class="ipt"
+                                                               placeholder="우편번호" style="width:160px" maxlength="5"
+                                                               readonly="readonly" disabled="disabled">
+                                                        <button class="btn_form" onclick="findPostcode()">우편번호 검색</button>
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" id="addr" name="addr" class="ipt"
+                                                               placeholder="주소" style="width:395px" maxlength="100"
+                                                               readonly="readonly" disabled="disabled">
+                                                        <input type="text" id="detailAddr" name="detailAddr" class="ipt"
+                                                               placeholder="상세주소 입력" style="width:585px" maxlength="100">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="req">임대료</span></th>
+                                            <td>
+                                                <input type="text" id="rntchrg" name="rntchrg" class="ipt" maxlength="10">
+                                            </td>
+                                            <th><span class="">보증금</span></th>
+                                            <td>
+                                                <input type="text" id="gtn" name="gtn" class="ipt" maxlength="10">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="">관리비</span></th>
+                                            <td>
+                                                <input type="text" id="managect" name="managect" class="ipt" maxlength="10">
+                                            </td>
+                                            <th><span class="">권리금</span></th>
+                                            <td>
+                                                <input type="text" id="premum" name="premum" class="ipt" maxlength="10">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="req">거래유형</span></th>
+                                            <td>
+                                                <select class="select" id="delngTySeCd" name="delngTySeCd" style="width:400px;">
+                                                    <option th:each="delngTySeCd, delngTySeCdStat : ${delngTySeCds}"
+                                                            th:text="${delngTySeCd.cdNm}"
+                                                            th:value="${delngTySeCd.cd}"
+                                                            th:selected="${delngTySeCdStat.index} == 0">
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <th><span class="req">매물구분</span></th>
+                                            <td>
+                                                <select class="select" id="saleSeCd" name="saleSeCd" style="width:400px;">
+                                                    <option th:each="saleSeCd, saleSeCdStat : ${saleSeCds}"
+                                                            th:text="${saleSeCd.cdNm}"
+                                                            th:value="${saleSeCd.cd}"
+                                                            th:selected="${saleSeCdStat.index} == 0">
+                                                    </option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="">해당층</span></th>
+                                            <td>
+                                                <input type="text" id="rlFloor" name="rlFloor" class="ipt" maxlength="3">
+                                            </td>
+                                            <th><span class="">총층</span></th>
+                                            <td>
+                                                <input type="text" id="totFloor" name="totFloor" class="ipt" maxlength="3">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="">공급면적</span></th>
+                                            <td>
+                                                <input type="text" id="suplyAr" name="suplyAr" class="ipt" maxlength="8">
+                                            </td>
+                                            <th><span class="">공급평수</span></th>
+                                            <td>
+                                                <input type="text" id="suplyRlAea" name="suplyRlAea" class="ipt" maxlength="5">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="req">연락처</span></th>
+                                            <td colspan="3">
+                                                <div class="box_form">
+                                                    <ul class="ly_form col3" style="width: 400px;">
+                                                        <li>
+                                                            <input type="text" id="telNoFront" maxlength="3">
+                                                        </li>
+                                                        <li>
+                                                            <input type="text" id="telNoMiddle" maxlength="4">
+                                                        </li>
+                                                        <li>
+                                                            <input type="text" id="telNoBack" maxlength="4">
+                                                        </li>
+                                                    </ul>
+                                                    <input type="hidden" id="telNo" name="telNo">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="">건물설명</span></th>
+                                            <td colspan="3">
+                                                <textarea class="txa" id="buldDc" name="buldDc" cols="30" rows="10" style="height: 290px;"
+                                                          placeholder="내용을 입력하세요." maxlength="1000"></textarea>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                        <div class="btnbox cb">
+                            <a href="#" class="btn_cm mint" onclick="registerBuld()">등록</a>
+                            <a href="#" class="btn_cm" onclick="moveToBuldList()">취소</a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <a href="#" class="btn_top">TOP</a>
+        </form>
     </div>
 </th:block>
 </html>

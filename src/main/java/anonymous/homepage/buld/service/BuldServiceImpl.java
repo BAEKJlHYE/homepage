@@ -12,7 +12,13 @@ import java.util.List;
 public class BuldServiceImpl implements BuldService {
     private final BuldMapper buldMapper;
 
+    @Override
     public List<BuldVO> selectBuldList() {
         return buldMapper.selectBuldList();
+    }
+
+    @Override
+    public int insertBoard(BuldVO buldVO) {
+        return buldMapper.insertBoard(buldVO);
     }
 }

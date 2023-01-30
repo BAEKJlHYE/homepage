@@ -33,4 +33,8 @@ public class BuldVO {
     private String updateId;
     private String updateDt;
     private String atchDocId;
+    private String rntchrg;
+    private String managect;
+    private String premum;
+    private String buldDc;
 }
