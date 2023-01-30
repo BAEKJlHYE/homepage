@@ -1,9 +1,10 @@
 package anonymous.homepage.buld.vo;
 
+import anonymous.homepage.vo.BaseVO;
 import lombok.Data;
 
 @Data
-public class BuldVO {
+public class BuldVO extends BaseVO {
     private String buldNo;
     private String buldNm;
     private String zipcd;
