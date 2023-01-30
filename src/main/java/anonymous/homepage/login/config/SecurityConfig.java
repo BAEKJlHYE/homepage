@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http
             .authorizeRequests()
             .mvcMatchers("/", "/main/main.do", "/companyInfo/**", "/board/select**","/inquiry/**", "/error/**", "/js/**", "/css/**", "/image/**", "/font/**").permitAll() // 해당 경로들은 접근을 허용
