@@ -27,7 +27,7 @@
              , NVL(MVN_DE, '협의 후 가능') AS MVN_DE
              , SALE_SE_CD
              , (SELECT CD_NM FROM CD WHERE CD = SALE_SE_CD) AS SALE_SE_NM
-             , TELNO
+             , TEL_NO
              , RECOMEND_SALE_YN
              , EMRGNCY_SALE_YN
              , REGIST_ID
@@ -49,136 +49,136 @@
                FROM BULD
           </selectKey>
           INSERT INTO BULD (
-          BULD_NO
-          , BULD_NM
-          , ZIPCD
-          , ADDR
-          , DETAIL_ADDR
-          , DELNG_TY_SE_CD
-          <if test="gtn != null and gtn != ''">
-          , GTN
-          </if>
-          <if test="price != null and price != ''">
-          , PRICE
-          </if>
-          , CNTRCT_STTUS_SE_CD
-          <if test="rlFloor != null and rlFloor != ''">
-          , RL_FLOOR
-          </if>
-          <if test="totFloor != null and totFloor != ''">
-          , TOT_FLOOR
-          </if>
-          <if test="dvrAr != null and dvrAr != ''">
-          , DVR_AR
-          </if>
-          <if test="dvrRlAea != null and gtn != ''">
-          , DVR_RL_AEA
-          </if>
-          <if test="suplyAr != null and suplyAr != ''">
-          , SUPLY_AR
-          </if>
-          <if test="suplyRlAea != null and suplyRlAea != ''">
-          , SUPLY_RL_AEA
-          </if>
-          <if test="competYear != null and competYear != ''">
-          , COMPET_YEAR
-          </if>
-          <if test="mvnDe != null and mvnDe != ''">
-          , MVN_DE
-          </if>
-          , SALE_SE_CD
-          , TEL_NO
-          <if test="recomendSaleYn != null and recomendSaleYn != ''">
-          , RECOMEND_SALE_YN
-          </if>
-          <if test="emrgncySaleYn != null and emrgncySaleYn != ''">
-          , EMRGNCY_SALE_YN
-          </if>
-          , REGIST_ID
-          , REGIST_DT
-          , UPDATE_ID
-          , UPDATE_DT
-          <if test="atchDocId != null and atchDocId != ''">
-          , ATCH_DOC_ID
-          </if>
-          <if test="rntchrg != null and rntchrg != ''">
-          , RNTCHRG
-          </if>
-          <if test="managect != null and managect != ''">
-          , MANAGECT
-          </if>
-          <if test="premum != null and premum != ''">
-          , PREMUM
-          </if>
-          <if test="buldDc != null and buldDc != ''">
-          , BULD_DC
-          </if>
+               BULD_NO
+               , BULD_NM
+               , ZIPCD
+               , ADDR
+               , DETAIL_ADDR
+               , DELNG_TY_SE_CD
+               <if test="gtn != null and gtn != ''">
+               , GTN
+               </if>
+               <if test="price != null and price != ''">
+               , PRICE
+               </if>
+               , CNTRCT_STTUS_SE_CD
+               <if test="rlFloor != null and rlFloor != ''">
+               , RL_FLOOR
+               </if>
+               <if test="totFloor != null and totFloor != ''">
+               , TOT_FLOOR
+               </if>
+               <if test="dvrAr != null and dvrAr != ''">
+               , DVR_AR
+               </if>
+               <if test="dvrRlAea != null and dvrRlAea != ''">
+               , DVR_RL_AEA
+               </if>
+               <if test="suplyAr != null and suplyAr != ''">
+               , SUPLY_AR
+               </if>
+               <if test="suplyRlAea != null and suplyRlAea != ''">
+               , SUPLY_RL_AEA
+               </if>
+               <if test="competYear != null and competYear != ''">
+               , COMPET_YEAR
+               </if>
+               <if test="mvnDe != null and mvnDe != ''">
+               , MVN_DE
+               </if>
+               , SALE_SE_CD
+               , TEL_NO
+               <if test="recomendSaleYn != null and recomendSaleYn != ''">
+               , RECOMEND_SALE_YN
+               </if>
+               <if test="emrgncySaleYn != null and emrgncySaleYn != ''">
+               , EMRGNCY_SALE_YN
+               </if>
+               , REGIST_ID
+               , REGIST_DT
+               , UPDATE_ID
+               , UPDATE_DT
+               <if test="atchDocId != null and atchDocId != ''">
+               , ATCH_DOC_ID
+               </if>
+               <if test="rntchrg != null and rntchrg != ''">
+               , RNTCHRG
+               </if>
+               <if test="managect != null and managect != ''">
+               , MANAGECT
+               </if>
+               <if test="premum != null and premum != ''">
+               , PREMUM
+               </if>
+               <if test="buldDc != null and buldDc != ''">
+               , BULD_DC
+               </if>
           )
           VALUES (
-          #{buldNo}
-          , #{buldNm}
-          , #{zipcd}
-          , #{addr}
-          , #{detailAddr}
-          , #{delngTySeCd}
-          <if test="gtn != null and gtn != ''">
-          , #{gtn}
-          </if>
-          <if test="price != null and price != ''">
-          , #{price}
-          </if>
-          , #{cntrctSttusSeCd}
-          <if test="rlFloor != null and rlFloor != ''">
-          , #{rlFloor}
-          </if>
-          <if test="totFloor != null and totFloor != ''">
-          , #{totFloor}
-          </if>
-          <if test="dvrAr != null and dvrAr != ''">
-          , #{dvrAr}
-          </if>
-          <if test="dvrRlAea != null and dvrRlAea != ''">
-          , #{dvrRlAea}
-          </if>
-          <if test="suplyAr != null and suplyAr != ''">
-          , #{suplyAr}
-          </if>
-          <if test="suplyRlAea != null and suplyRlAea != ''">
-          , #{suplyRlAea}
-          </if>
-          <if test="competYear != null and competYear != ''">
-          , #{competYear}
-          </if>
-          <if test="mvnDe != null and mvnDe != ''">
-          , #{mvnDe}
-          </if>
-          , #{saleSeCd}
-          , #{telNo}
-          <if test="recomendSaleYn != null and recomendSaleYn != ''">
-          , #{recomendSaleYn}
-          </if>
-          <if test="emrgncySaleYn != null and emrgncySaleYn != ''">
-          , #{emrgncySaleYn}
-          </if>
-          , #{registId}
-          , #{registDt}
-          , #{updateId}
-          , #{updateDt}
-          <if test="atchDocId != null and atchDocId != ''">
-          , #{atchDocId}
-          </if>
-          <if test="rntchrg != null and rntchrg != ''">
-          , #{rntchrg}
-          </if>
-          <if test="managect != null and managect != ''">
-          , #{managect}
-          </if>
-          <if test="premum != null and premum != ''">
-          , #{premum}
-          </if>
-          <if test="buldDc != null and buldDc != ''">
-          , #{buldDc}
-          </if>
+               #{buldNo}
+               , #{buldNm}
+               , #{zipcd}
+               , #{addr}
+               , #{detailAddr}
+               , #{delngTySeCd}
+               <if test="gtn != null and gtn != ''">
+               , #{gtn}
+               </if>
+               <if test="price != null and price != ''">
+               , #{price}
+               </if>
+               , #{cntrctSttusSeCd}
+               <if test="rlFloor != null and rlFloor != ''">
+               , #{rlFloor}
+               </if>
+               <if test="totFloor != null and totFloor != ''">
+               , #{totFloor}
+               </if>
+               <if test="dvrAr != null and dvrAr != ''">
+               , #{dvrAr}
+               </if>
+               <if test="dvrRlAea != null and dvrRlAea != ''">
+               , #{dvrRlAea}
+               </if>
+               <if test="suplyAr != null and suplyAr != ''">
+               , #{suplyAr}
+               </if>
+               <if test="suplyRlAea != null and suplyRlAea != ''">
+               , #{suplyRlAea}
+               </if>
+               <if test="competYear != null and competYear != ''">
+               , #{competYear}
+               </if>
+               <if test="mvnDe != null and mvnDe != ''">
+               , #{mvnDe}
+               </if>
+               , #{saleSeCd}
+               , #{telNo}
+               <if test="recomendSaleYn != null and recomendSaleYn != ''">
+               , #{recomendSaleYn}
+               </if>
+               <if test="emrgncySaleYn != null and emrgncySaleYn != ''">
+               , #{emrgncySaleYn}
+               </if>
+               , #{registId}
+               , #{registDt}
+               , #{updateId}
+               , #{updateDt}
+               <if test="atchDocId != null and atchDocId != ''">
+               , #{atchDocId}
+               </if>
+               <if test="rntchrg != null and rntchrg != ''">
+               , #{rntchrg}
+               </if>
+               <if test="managect != null and managect != ''">
+               , #{managect}
+               </if>
+               <if test="premum != null and premum != ''">
+               , #{premum}
+               </if>
+               <if test="buldDc != null and buldDc != ''">
+               , #{buldDc}
+               </if>
           )
      </insert>
 </mapper>

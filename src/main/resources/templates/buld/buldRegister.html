@@ -36,7 +36,6 @@
             if(!validateForm())
                 return;
 
-            return;
             formSubmit('/buld/insertBuld.do', 'post');
         }
 
@@ -60,9 +59,11 @@
 
             for(var i=0 ; i<numberOnlyInputIds.length ; i++) {
                 var value = document.getElementById(numberOnlyInputIds[i]).value;
-                if(!numberRegExp.test(value)) {
-                    openAlertModal(numberOnlyInputNames[i] + "은(는) 숫자만 입력 가능합니다.");
-                    return false;
+                if(!isEmpty(value)) {
+                    if(!numberRegExp.test(value)) {
+                        openAlertModal(numberOnlyInputNames[i] + "은(는) 숫자만 입력 가능합니다.");
+                        return false;
+                    }
                 }
             }
 
@@ -95,7 +96,7 @@
     </script>
 
     <div id="container" class="container">
-        <form id="buldPageInfo" action="/buld/selectBuldList.do" method="get">
+        <form th:action id="buldPageInfo" method="get">
             <div class="lnb">
                 <div class="lnb_inner">
                     <ul class="step">
@@ -148,7 +149,7 @@
                                                         <input type="text" id="zipcd" name="zipcd" class="ipt"
                                                                placeholder="우편번호" style="width:160px" maxlength="5"
                                                                readonly="readonly" disabled="disabled">
-                                                        <button class="btn_form" onclick="findPostcode()">우편번호 검색</button>
+                                                        <button class="btn_form" type="button" onclick="findPostcode()">우편번호 검색</button>
                                                     </div>
                                                     <div>
                                                         <input type="text" id="addr" name="addr" class="ipt"

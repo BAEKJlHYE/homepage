@@ -44,7 +44,7 @@ public class BuldController {
     @PostMapping("/insertBuld.do")
     @ResponseBody
     public String insertBoard(@ModelAttribute BuldVO buldVO, RedirectAttributes redirect) {
-        buldService.insertBoard(buldVO);
+        buldService.insertBuld(buldVO);
         return "ok";
     }
 
