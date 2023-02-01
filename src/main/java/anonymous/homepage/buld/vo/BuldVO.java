@@ -26,7 +26,7 @@ public class BuldVO extends BaseVO {
     private String mvnDe;
     private String saleSeCd;
     private String saleSeNm;
-    private String telno;
+    private String telNo;
     private String recomendSaleYn;
     private String emrgncySaleYn;
     private String registId;

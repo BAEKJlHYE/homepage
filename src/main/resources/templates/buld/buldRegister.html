@@ -19,9 +19,11 @@
                         addr = data.jibunAddress;
                     }
 
+                    document.getElementById('tempZipcd').value = data.zonecode;
                     document.getElementById('zipcd').value = data.zonecode;
-                    document.getElementById("addr").value = addr;
-                    document.getElementById("detailAddr").focus();
+                    document.getElementById('tempAddr').value = addr;
+                    document.getElementById('addr').value = addr;
+                    document.getElementById('detailAddr').focus();
                 }
             }).open();
         }
@@ -146,15 +148,17 @@
                                             <td colspan="3">
                                                 <div class="box_form">
                                                     <div>
-                                                        <input type="text" id="zipcd" name="zipcd" class="ipt"
+                                                        <input type="text" id="tempZipcd" class="ipt"
                                                                placeholder="우편번호" style="width:160px" maxlength="5"
                                                                readonly="readonly" disabled="disabled">
+                                                        <input type="hidden" id="zipcd" name="zipcd">
                                                         <button class="btn_form" type="button" onclick="findPostcode()">우편번호 검색</button>
                                                     </div>
                                                     <div>
-                                                        <input type="text" id="addr" name="addr" class="ipt"
+                                                        <input type="text" id="tempAddr" class="ipt"
                                                                placeholder="주소" style="width:395px" maxlength="100"
                                                                readonly="readonly" disabled="disabled">
+                                                        <input type="hidden" id="addr" name="addr">
                                                         <input type="text" id="detailAddr" name="detailAddr" class="ipt"
                                                                placeholder="상세주소 입력" style="width:585px" maxlength="100">
                                                     </div>

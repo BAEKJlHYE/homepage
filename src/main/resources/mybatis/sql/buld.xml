@@ -160,10 +160,10 @@
                <if test="emrgncySaleYn != null and emrgncySaleYn != ''">
                , #{emrgncySaleYn}
                </if>
-               , #{registId}
-               , #{registDt}
-               , #{updateId}
-               , #{updateDt}
+               , #{userId}
+               , SYSDATE
+               , #{userId}
+               , SYSDATE
                <if test="atchDocId != null and atchDocId != ''">
                , #{atchDocId}
                </if>
