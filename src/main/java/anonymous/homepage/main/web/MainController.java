@@ -1,6 +1,6 @@
 package anonymous.homepage.main.web;
 
-import anonymous.homepage.login.vo.LoginVO;
+import anonymous.homepage.main.vo.MainVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

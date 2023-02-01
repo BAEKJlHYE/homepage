@@ -36,18 +36,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .mvcMatchers("/", "/main/main.do", "/companyInfo/**", "/board/select**","/inquiry/**", "/error/**", "/js/**", "/css/**", "/image/**", "/font/**").permitAll() // 해당 경로들은 접근을 허용
                 .antMatchers("/register**","/insert**","/modify**","/update**","/delete**").hasRole("ADMIN")
-//                .antMatchers("/manager").hasRole("MANAGER")
 //                .antMatchers("/admin").hasRole("ADMIN")
             .anyRequest().authenticated()
         .and()
             .formLogin()
-            .usernameParameter("userId")
-            .passwordParameter("userPw")
-            .loginPage("/login/getLoginPage.do")             // 로그인 페이지
-            .loginProcessingUrl("/login/loginCheck.do")      // th:action="@{/login_proc}"
-            .defaultSuccessUrl("/main/main.do")              // 로그인 성공시 이동
-            .successHandler(authenticationSuccessHandler) // 성공 handler
-            .failureHandler(authenticationFailureHandler) // 실패 handler
-            .permitAll();
+                .usernameParameter("userId")
+                .passwordParameter("userPw")
+                .loginPage("/login/getLoginPage.do")             // 로그인 페이지
+                .loginProcessingUrl("/login/loginCheck.do")      // th:action="@{/login_proc}"
+                .defaultSuccessUrl("/main/main.do")              // 로그인 성공시 이동
+                .successHandler(authenticationSuccessHandler) // 성공 handler
+                .failureHandler(authenticationFailureHandler) // 실패 handler
+                .permitAll()
+        .and()
+            .logout()
+                .permitAll()
+                .logoutUrl("/login/getLogout.do")
+                .logoutSuccessUrl("/main/main.do")
+        ;
     }
 }

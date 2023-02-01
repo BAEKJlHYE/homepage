@@ -40,7 +40,7 @@
 .header_gnb::after{content:"";display:block;clear:both}
 .header_gnb .logo, .header_gnb .dep1{float:left}
 .header_gnb .logo{display:inline-block;width:180px;height:70px;margin-top:10px;/*text-indent: -9999px;*/}
-.header_gnb .logo a{display:flex;align-items: center;width:100%;height:100%;background:url(../image/logo.png) 0 center no-repeat;background-size: 45px;padding-left: 50px;box-sizing: border-box;font-size: 22px;font-weight: bold;}
+.header_gnb .logo a{display:flex;align-items: center;width:100%;height:100%;background:url(../image/img_comLogo.png) 0 center no-repeat;background-size: 45px;padding-left: 50px;box-sizing: border-box;font-size: 22px;font-weight: bold;}
 .gnb_box::after{content:"";display:block;clear:both}
 nav .dep1{margin-left:10px;margin-top:10px}
 nav .dep1 li{float:left}

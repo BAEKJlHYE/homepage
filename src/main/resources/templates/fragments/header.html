@@ -13,7 +13,7 @@
             <div class="header_top">
                 <div class="util_box">
                     <ul>
-                        <li class="mypage">
+                        <li class="mypage" sec:authorize="isAuthenticated()">
                             <a href="#">마이페이지</a>
                             <ul class="mypage_list"> 
 <!--                                <li><a href="#">내 글 목록</a></li>-->
@@ -21,10 +21,12 @@
 <!--                                <li><a href="#">비밀번호 변경</a></li>-->
                             </ul>
                         </li>
-                        <li sec:authentication="name">환영합니다</li>
+
+                        <li sec:authorize="isAuthenticated()" sec:authentication="name">사용자명</li>
+
                         <li class="join" style="display: none"><a th:href="@{/join/getJoinPage.do}">회원가입</a></li>
                         <li class="login" sec:authorize="!isAuthenticated()"><a th:href="@{/login/getLoginPage.do}">로그인</a></li>
-                        <li class="logout" sec:authorize="isAuthenticated()"><a href="#">로그아웃</a></li>
+                        <li class="logout" sec:authorize="isAuthenticated()"><a th:href="@{/login/getLogout.do}">로그아웃</a></li>
                     </ul>
                 </div>
             </div>

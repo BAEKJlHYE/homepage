@@ -4,6 +4,9 @@ import anonymous.homepage.login.service.LoginService;
 import anonymous.homepage.login.vo.LoginVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,7 @@ import org.thymeleaf.util.MapUtils;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Slf4j
@@ -59,16 +63,16 @@ public class LoginController {
 
     // 로그아웃
     @GetMapping("/getLogout.do")
-    public String getLogout(HttpServletRequest request, Model model) {
-//        public String logout(HttpServletRequest request, HttpServletResponse response){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        if(authentication != null){
-//            new SecurityContextLogoutHandler().logout(request,response,authentication);
-//        }
-//        return "redirect:/";
+//    public String getLogout(HttpServletRequest request, Model model) {
+    public String getLogout(HttpServletRequest request, HttpServletResponse response){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return "main/main";
+        if(authentication != null){
+            new SecurityContextLogoutHandler().logout(request,response,authentication);
+        }
+        return "redirect:/";
+
+//        return "main/main.do";
     }
 
 }
