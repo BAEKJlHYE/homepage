@@ -1,41 +1,1051 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
-    <title>건물 목록</title>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default_layout">
 
+<th:block layout:fragment="content">
     <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            // do nothing
+        });
     </script>
-</head>
-<body>
-    <div class="container" style="max-width: 600px">
-        <div class="py-5 text-center">
-            <h2>건물 목록</h2>
-        </div>
 
-        <div class="row">
-            <div class="col">
-                <button class="btn btn-primary float-end" type="button">
-                    건물 등록
-                </button>
+    <div id="container" class="container list">
+        <div class="content">
+            <div class="content_inner">
+                <div id="landHd">
+                    <!------- 1. 검색 [s] -->
+                    <div class="sch_wrap">
+                        <input type="text" autocomplete="off" id="sch_kwd" class="sh_input"
+                            placeholder="지역, 지하철역, 매물번호 검색" title="지역, 지하철역, 매물번호 검색" onkeyup="text_search()"
+                            value="">
+                        <button type="submit" class="sch_btn" onclick="text_direct_pick()"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-search">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg></button>
+                        <div id="text_result" style="display: none;">
+                            <ul id="text_result_list"></ul>
+                        </div>
+                    </div>
+                    <!------- 1. 검색 [e] -->
+                    <div class="filter_bg" style="display: none;"></div>
+                    <!------- 2. 필터 [s] -->
+                    <div class="filter_wrap">
+                        <!------- 매물종류 [s] -->
+                        <div class="filter_area">
+                            <div class="filter_btn"><button id="landSortRst" type="button">아파트,오피스텔,빌라,주택,원룸,상가,사무실
+                                </button></div>
+                            <div class="filter_detail land_sort" style="display: none;">
+                                <div class="detail_inner">
+                                    <div class="tit">
+                                        <p>매물종류</p>
+                                        중복선택이 가능합니다.
+                                    </div>
+                                    <ul class="ckbox_wrap scroll_area">
+                                        <li><input type="checkbox" name="land_sort_ck" id="land_sort0"
+                                                onclick="return search_select('sort')" value="아파트" checked=""><label
+                                                for="land_sort0">아파트</label></li>
+                                        <li><input type="checkbox" name="land_sort_ck" id="land_sort1"
+                                                onclick="return search_select('sort')" value="오피스텔"
+                                                checked=""><label for="land_sort1">오피스텔</label></li>
+                                        <li><input type="checkbox" name="land_sort_ck" id="land_sort2"
+                                                onclick="return search_select('sort')" value="빌라" checked=""><label
+                                                for="land_sort2">빌라</label></li>
+                                        <li><input type="checkbox" name="land_sort_ck" id="land_sort3"
+                                                onclick="return search_select('sort')" value="주택" checked=""><label
+                                                for="land_sort3">주택</label></li>
+                                        <li><input type="checkbox" name="land_sort_ck" id="land_sort4"
+                                                onclick="return search_select('sort')" value="원룸" checked=""><label
+                                                for="land_sort4">원룸</label></li>
+                                        <li><input type="checkbox" name="land_sort_ck" id="land_sort5"
+                                                onclick="return search_select('sort')" value="상가" checked=""><label
+                                                for="land_sort5">상가</label></li>
+                                        <li><input type="checkbox" name="land_sort_ck" id="land_sort6"
+                                                onclick="return search_select('sort')" value="사무실" checked=""><label
+                                                for="land_sort6">사무실</label></li>
+                                    </ul>
+                                </div>
+                                <button class="filter_close btm">적용</button>
+                                <button class="filter_close top"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-x">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg></button>
+                            </div>
+                        </div>
+                        <!------- 매물종류 [e] -->
+                        <!------- 거래유형 및 가격 [s] -->
+                        <div class="filter_area">
+                            <div class="filter_btn"><button id="landTypeRst" type="button">매매,전세,월세</button></div>
+                            <div class="filter_detail land_type_price" style="display: none;">
+                                <div class="detail_inner">
+                                    <div class="tit">
+                                        <p>거래유형</p>
+                                        중복선택이 가능합니다.
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <div class="clear">
+                                                <div class="ckbox_wrap"><input name="land_type_ck" type="checkbox"
+                                                        id="sale" onclick="return search_select('type')" value="매매"
+                                                        checked=""><label id="saleOn" for="sale">매매</label></div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="clear">
+                                                <div class="ckbox_wrap"><input name="land_type_ck" type="checkbox"
+                                                        id="rent" onclick="return search_select('type')" value="전세"
+                                                        checked=""><label id="rentOn" for="rent">전세</label></div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="clear">
+                                                <div class="ckbox_wrap"><input name="land_type_ck" type="checkbox"
+                                                        id="monthly" onclick="return search_select('type')"
+                                                        value="월세" checked=""><label id="monthlyOn"
+                                                        for="monthly">월세</label></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="tit">
+                                        <p>가격</p>
+                                    </div>
+                                    <ul class="scroll_area price_area">
+                                        <li id="sale_range_area" style="display: list-item;">
+                                            <div class="clear">
+                                                <p class="stit">매매가</p>
+                                                <div class="values"><span id="val-lower-sale" class="sale_hide_area"
+                                                        style="display: none;">0</span><span class="sale_hide_area"
+                                                        style="display: none;"> ~ </span><span
+                                                        id="val-upper-sale">무제한</span></div>
+                                            </div>
+                                            <div class="range_slier_wrap">
+                                                <div id="rangeSlidersale"
+                                                    class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr">
+                                                    <div class="noUi-base">
+                                                        <div class="noUi-connects">
+                                                            <div class="noUi-connect noUi-draggable"
+                                                                style="transform: translate(0%, 0px) scale(1, 1);">
+                                                            </div>
+                                                        </div>
+                                                        <div class="noUi-origin"
+                                                            style="transform: translate(-100%, 0px); z-index: 5;">
+                                                            <div class="noUi-handle noUi-handle-lower"
+                                                                data-handle="0" tabindex="0" role="slider"
+                                                                aria-orientation="horizontal" aria-valuemin="0.0"
+                                                                aria-valuemax="95000.0" aria-valuenow="0.0"
+                                                                aria-valuetext="0">
+                                                                <div class="noUi-touch-area"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="noUi-origin"
+                                                            style="transform: translate(0%, 0px); z-index: 4;">
+                                                            <div class="noUi-handle noUi-handle-upper"
+                                                                data-handle="1" tabindex="0" role="slider"
+                                                                aria-orientation="horizontal" aria-valuemin="5000.0"
+                                                                aria-valuemax="100000.0" aria-valuenow="100000.0"
+                                                                aria-valuetext="100000">
+                                                                <div class="noUi-touch-area"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="noUi-pips noUi-pips-horizontal">
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 0%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="0" style="left: 0%;">0</div>
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 50%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="50000" style="left: 50%;">5억</div>
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 100%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="100000" style="left: 100%;">무제한</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li id="rent_range_area">
+                                            <div class="clear">
+                                                <p class="stit">전세가/보증금</p>
+                                                <div class="values"><span id="val-lower-rent" class="rent_hide_area"
+                                                        style="display: none;">0</span><span class="rent_hide_area"
+                                                        style="display: none;"> ~ </span><span
+                                                        id="val-upper-rent">무제한</span></div>
+                                            </div>
+                                            <div class="range_slier_wrap">
+                                                <div id="rangeSliderrent"
+                                                    class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr">
+                                                    <div class="noUi-base">
+                                                        <div class="noUi-connects">
+                                                            <div class="noUi-connect noUi-draggable"
+                                                                style="transform: translate(0%, 0px) scale(1, 1);">
+                                                            </div>
+                                                        </div>
+                                                        <div class="noUi-origin"
+                                                            style="transform: translate(-100%, 0px); z-index: 5;">
+                                                            <div class="noUi-handle noUi-handle-lower"
+                                                                data-handle="0" tabindex="0" role="slider"
+                                                                aria-orientation="horizontal" aria-valuemin="0.0"
+                                                                aria-valuemax="47500.0" aria-valuenow="0.0"
+                                                                aria-valuetext="0">
+                                                                <div class="noUi-touch-area"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="noUi-origin"
+                                                            style="transform: translate(0%, 0px); z-index: 4;">
+                                                            <div class="noUi-handle noUi-handle-upper"
+                                                                data-handle="1" tabindex="0" role="slider"
+                                                                aria-orientation="horizontal" aria-valuemin="2500.0"
+                                                                aria-valuemax="50000.0" aria-valuenow="50000.0"
+                                                                aria-valuetext="50000">
+                                                                <div class="noUi-touch-area"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="noUi-pips noUi-pips-horizontal">
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 0%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="0" style="left: 0%;">0</div>
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 50%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="25000" style="left: 50%;">2억5,000만</div>
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 100%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="50000" style="left: 100%;">무제한</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li id="monthly_range_area">
+                                            <div class="clear">
+                                                <p class="stit">월세</p>
+                                                <div class="values"><span id="val-lower-monthly"
+                                                        class="monthly_hide_area"
+                                                        style="display: none;">0</span><span
+                                                        class="monthly_hide_area" style="display: none;"> ~
+                                                    </span><span id="val-upper-monthly">무제한</span></div>
+                                            </div>
+                                            <div class="range_slier_wrap">
+                                                <div id="rangeSlidermonthly"
+                                                    class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr">
+                                                    <div class="noUi-base">
+                                                        <div class="noUi-connects">
+                                                            <div class="noUi-connect noUi-draggable"
+                                                                style="transform: translate(0%, 0px) scale(1, 1);">
+                                                            </div>
+                                                        </div>
+                                                        <div class="noUi-origin"
+                                                            style="transform: translate(-100%, 0px); z-index: 5;">
+                                                            <div class="noUi-handle noUi-handle-lower"
+                                                                data-handle="0" tabindex="0" role="slider"
+                                                                aria-orientation="horizontal" aria-valuemin="0.0"
+                                                                aria-valuemax="475.0" aria-valuenow="0.0"
+                                                                aria-valuetext="0">
+                                                                <div class="noUi-touch-area"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="noUi-origin"
+                                                            style="transform: translate(0%, 0px); z-index: 4;">
+                                                            <div class="noUi-handle noUi-handle-upper"
+                                                                data-handle="1" tabindex="0" role="slider"
+                                                                aria-orientation="horizontal" aria-valuemin="25.0"
+                                                                aria-valuemax="500.0" aria-valuenow="500.0"
+                                                                aria-valuetext="500">
+                                                                <div class="noUi-touch-area"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="noUi-pips noUi-pips-horizontal">
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 0%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="0" style="left: 0%;">0</div>
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 50%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="250" style="left: 50%;">250만</div>
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 100%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="500" style="left: 100%;">무제한</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button class="filter_close btm">적용</button>
+                                <button class="filter_close top"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-x">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg></button>
+                            </div>
+                        </div>
+                        <!------- 거래유형 및 가격 [e] -->
+                        <!------- 면적 [s] -->
+                        <div class="filter_area">
+                            <div class="filter_btn"><button type="button" id="landSpaceRst">면적</button></div>
+                            <div class="filter_detail land_space" style="display: none;">
+                                <div class="detail_inner">
+                                    <div class="tit">
+                                        <p>면적</p>
+                                        전용면적/공급면적 조회가 가능합니다.
+                                    </div>
+                                    <ul class="scroll_area">
+                                        <li>
+                                            <div class="clear">
+                                                <div class="stit">전용면적</div>
+                                                <div class="values"><span id="val-lower-space1"
+                                                        class="space1_hide_area"
+                                                        style="display: none;">0</span><span
+                                                        class="space1_hide_area" style="display: none;"> ~
+                                                    </span><span id="val-upper-space1">무제한</span></div>
+                                            </div>
+                                            <div class="range_slier_wrap">
+                                                <div id="rangeSliderspace1"
+                                                    class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr">
+                                                    <div class="noUi-base">
+                                                        <div class="noUi-connects">
+                                                            <div class="noUi-connect noUi-draggable"
+                                                                style="transform: translate(0%, 0px) scale(1, 1);">
+                                                            </div>
+                                                        </div>
+                                                        <div class="noUi-origin"
+                                                            style="transform: translate(-100%, 0px); z-index: 5;">
+                                                            <div class="noUi-handle noUi-handle-lower"
+                                                                data-handle="0" tabindex="0" role="slider"
+                                                                aria-orientation="horizontal" aria-valuemin="0.0"
+                                                                aria-valuemax="145.0" aria-valuenow="0.0"
+                                                                aria-valuetext="0">
+                                                                <div class="noUi-touch-area"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="noUi-origin"
+                                                            style="transform: translate(0%, 0px); z-index: 4;">
+                                                            <div class="noUi-handle noUi-handle-upper"
+                                                                data-handle="1" tabindex="0" role="slider"
+                                                                aria-orientation="horizontal" aria-valuemin="5.0"
+                                                                aria-valuemax="150.0" aria-valuenow="150.0"
+                                                                aria-valuetext="150">
+                                                                <div class="noUi-touch-area"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="noUi-pips noUi-pips-horizontal">
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 0%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="0" style="left: 0%;">0</div>
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 50%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="75" style="left: 50%;">75㎡(23평)</div>
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 100%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="150" style="left: 100%;">무제한</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="clear">
+                                                <div class="stit">공급면적</div>
+                                                <div class="values"><span id="val-lower-space2"
+                                                        class="space2_hide_area"
+                                                        style="display: none;">0</span><span
+                                                        class="space2_hide_area" style="display: none;"> ~
+                                                    </span><span id="val-upper-space2">무제한</span></div>
+                                            </div>
+                                            <div class="range_slier_wrap">
+                                                <div id="rangeSliderspace2"
+                                                    class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr">
+                                                    <div class="noUi-base">
+                                                        <div class="noUi-connects">
+                                                            <div class="noUi-connect noUi-draggable"
+                                                                style="transform: translate(0%, 0px) scale(1, 1);">
+                                                            </div>
+                                                        </div>
+                                                        <div class="noUi-origin"
+                                                            style="transform: translate(-100%, 0px); z-index: 5;">
+                                                            <div class="noUi-handle noUi-handle-lower"
+                                                                data-handle="0" tabindex="0" role="slider"
+                                                                aria-orientation="horizontal" aria-valuemin="0.0"
+                                                                aria-valuemax="145.0" aria-valuenow="0.0"
+                                                                aria-valuetext="0">
+                                                                <div class="noUi-touch-area"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="noUi-origin"
+                                                            style="transform: translate(0%, 0px); z-index: 4;">
+                                                            <div class="noUi-handle noUi-handle-upper"
+                                                                data-handle="1" tabindex="0" role="slider"
+                                                                aria-orientation="horizontal" aria-valuemin="5.0"
+                                                                aria-valuemax="150.0" aria-valuenow="150.0"
+                                                                aria-valuetext="150">
+                                                                <div class="noUi-touch-area"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="noUi-pips noUi-pips-horizontal">
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 0%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="0" style="left: 0%;">0</div>
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 50%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="75" style="left: 50%;">75㎡(23평)</div>
+                                                        <div class="noUi-marker noUi-marker-horizontal noUi-marker-large"
+                                                            style="left: 100%;"></div>
+                                                        <div class="noUi-value noUi-value-horizontal noUi-value-large"
+                                                            data-value="150" style="left: 100%;">무제한</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button class="filter_close btm">적용</button>
+                                <button class="filter_close top"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-x">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg></button>
+                            </div>
+                        </div>
+                        <!------- 면적 [e] -->
+                    </div>
+                    <!------- 2. 필터 [e] -->
+                    <!------- 3. 전체필터/버튼 [s] -->
+                    <div class="right_btns">
+                        <button class="r_btn refresh_btn"> <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <polyline points="1 20 1 14 7 14"></polyline>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15">
+                                </path>
+                            </svg></button>
+                        <button class="r_btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-list">
+                                <line x1="8" y1="6" x2="21" y2="6"></line>
+                                <line x1="8" y1="12" x2="21" y2="12"></line>
+                                <line x1="8" y1="18" x2="21" y2="18"></line>
+                                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                            </svg></button>
+                    </div>
+                    <!------- 3. 전체필터/버튼 [e] -->
+                </div>
+                <section id="sh_section" class="landList">
+                    <div id="landList" style="display: block;"><ul class="item_list"><li class="land_list99">
+                        <a href="javascript:void(0)" onclick="land_view(99)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_K5UpaDbx_53b8b7aea54ab090d98d4bdf5bf2833b86e41241_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                <span class="badge black">추천</span>                <span class="badge black">급매물</span>            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                    <span class="badge black">추천</span>                    <span class="badge black">급매물</span>                </div>
+                                <span class="badge">리모델링</span>            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(99)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10099</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(99)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>매</span>9억8,000				</p>
+                                <p class="desc">송내 로데오 상가</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 송내동 303-5</p>
+                            </div>
+                            <div class="kwd">
+                                <span>상가</span>
+                                <span>공급면적717㎡</span>								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list102">
+                        <a href="javascript:void(0)" onclick="land_view(102)">
+                        <div class="img"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                                        </div>
+                                            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(102)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10102</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(102)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>매</span>60억				</p>
+                                <p class="desc">송내동 건물</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 송내동 303-5</p>
+                            </div>
+                            <div class="kwd">
+                                <span>상가</span>
+                                <span>대지면적300㎡</span>				<span>관리비150만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list100">
+                        <a href="javascript:void(0)" onclick="land_view(100)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_jxl9YJcB_edb0911db820ec8660966238e82ceb07d7804e7b_768x502.jpg"><div class="sold"></div></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                <span class="badge black">추천</span>                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                    <span class="badge black">추천</span>                                    </div>
+                                            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(100)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10100</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(100)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>월</span>5,000/60				</p>
+                                <p class="desc">샤이닝 빌딩</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 상동 548-4</p>
+                            </div>
+                            <div class="kwd">
+                                <span>사무실</span>
+                                <span>공급면적300㎡</span>				<span>관리비100만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list98">
+                        <a href="javascript:void(0)" onclick="land_view(98)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_bmEyjqse_4cd2818e4463dea16d362d1beb9f6a874655c927_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                <span class="badge black">추천</span>                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                    <span class="badge black">추천</span>                                    </div>
+                                            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(98)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10098</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(98)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>매</span>50억				</p>
+                                <p class="desc">샤이닝 상가</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 심곡동 35</p>
+                            </div>
+                            <div class="kwd">
+                                <span>상가</span>
+                                <span>공급면적39㎡</span>								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list97">
+                        <a href="javascript:void(0)" onclick="land_view(97)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_e5rWP02M_8881bda38c2f65668cbd963fbbbdf7917c01c01b_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                <span class="badge black">추천</span>                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                    <span class="badge black">추천</span>                                    </div>
+                                <span class="badge">히트매물</span>            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(97)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10097</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(97)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>매</span>3억1,000				</p>
+                                <p class="desc">DH씨밀레</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 송내동 564-3</p>
+                            </div>
+                            <div class="kwd">
+                                <span>아파트</span>
+                                <span>공급면적68㎡</span>				<span>관리비3만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list95">
+                        <a href="javascript:void(0)" onclick="land_view(95)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_B2oHaCwA_abda0a04f719c37579ff34db6dbd0cce93ebd6dc_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                                        </div>
+                                            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(95)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10095</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(95)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>매</span>4억7,000				</p>
+                                <p class="desc">부천 샤이닝</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 심곡본동 535-23</p>
+                            </div>
+                            <div class="kwd">
+                                <span>아파트</span>
+                                <span>공급면적60㎡</span>				<span>관리비5만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list94">
+                        <a href="javascript:void(0)" onclick="land_view(94)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_RB91HxcU_94b4a49a064376541b08f687134426a3e78ffebf_768x502.jpg"><div class="sold"></div></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                <span class="badge black">급매물</span>            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                        <span class="badge black">급매물</span>                </div>
+                                <span class="badge">리모델링</span>            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(94)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10094</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(94)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>전</span>1억5,000				</p>
+                                <p class="desc">송내 우리샤이닝</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 송내동 323-1</p>
+                            </div>
+                            <div class="kwd">
+                                <span>빌라</span>
+                                <span>공급면적50㎡</span>				<span>관리비1만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list93">
+                        <a href="javascript:void(0)" onclick="land_view(93)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_Aqsr3y0v_7d348f2052d5e63eca571640257622c95826ec9d_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                                        </div>
+                                <span class="badge">역근처</span>            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(93)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10093</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(93)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>전</span>3억6,000				</p>
+                                <p class="desc">송내 샤이닝</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 송내동 299-11</p>
+                            </div>
+                            <div class="kwd">
+                                <span>빌라</span>
+                                <span>공급면적96㎡</span>				<span>관리비2만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list92">
+                        <a href="javascript:void(0)" onclick="land_view(92)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_BKrSzdCU_4a9368b2498d64f39e41cdf475779907641a6301_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                <span class="badge black">급매물</span>            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                        <span class="badge black">급매물</span>                </div>
+                                            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(92)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10092</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(92)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>전</span>1억3,000				</p>
+                                <p class="desc">중동에스티마</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1031-1</p>
+                            </div>
+                            <div class="kwd">
+                                <span>아파트</span>
+                                <span>공급면적64㎡</span>				<span>관리비7만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list91">
+                        <a href="javascript:void(0)" onclick="land_view(91)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_B3fUZNVm_0918887ede4ce27a4bd0efff7b45ae9fdf05a526_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                                        </div>
+                                <span class="badge">굿초이스</span>            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(91)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10091</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(91)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>전</span>3억8,000				</p>
+                                <p class="desc">상동 주택</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 상동 526-3</p>
+                            </div>
+                            <div class="kwd">
+                                <span>주택</span>
+                                                <span>관리비1만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list90">
+                        <a href="javascript:void(0)" onclick="land_view(90)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_FV1LXSis_20126d9b8ab53d26834821b04020f8995f6b35df_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                <span class="badge black">급매물</span>            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                        <span class="badge black">급매물</span>                </div>
+                                <span class="badge">리모델링</span>            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(90)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10090</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(90)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>월</span>1,000/50				</p>
+                                <p class="desc">매트로팰리스</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1145</p>
+                            </div>
+                            <div class="kwd">
+                                <span>오피스텔</span>
+                                <span>공급면적58㎡</span>				<span>관리비10만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list89">
+                        <a href="javascript:void(0)" onclick="land_view(89)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_VEKsDBx4_5a8f1159722697541a3d79015fa65335c7f64f92_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                                        </div>
+                                            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(89)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10089</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(89)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>월</span>2,000/50				</p>
+                                <p class="desc">샤이닝 빌라</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1028</p>
+                            </div>
+                            <div class="kwd">
+                                <span>빌라</span>
+                                <span>공급면적50㎡</span>				<span>관리비5만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list88">
+                        <a href="javascript:void(0)" onclick="land_view(88)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_jFGZUnk3_ae4ed16dc8c74af636946be63660dfe4576c1098_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                                        </div>
+                                <span class="badge">추천매물</span>            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(88)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10088</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(88)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>월</span>8,000/60				</p>
+                                <p class="desc">샤이닝 아파트</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1205-5</p>
+                            </div>
+                            <div class="kwd">
+                                <span>아파트</span>
+                                <span>공급면적91㎡</span>				<span>관리비3만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list87">
+                        <a href="javascript:void(0)" onclick="land_view(87)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_5iCVTwIE_a36e93411add4e2ca44042dcf24a262d4d003f8d_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                <span class="badge black">급매물</span>            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                        <span class="badge black">급매물</span>                </div>
+                                            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(87)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10087</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(87)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>전</span>8,000				</p>
+                                <p class="desc">중동아크로텔</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1131</p>
+                            </div>
+                            <div class="kwd">
+                                <span>원룸</span>
+                                <span>공급면적73㎡</span>				<span>관리비12만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list86">
+                        <a href="javascript:void(0)" onclick="land_view(86)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_3RUmwpj0_0d72cf4e1ed393a8479e6651678c769fdfcafc90_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                                                        </div>
+                                <span class="badge">역근처</span>            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(86)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10086</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(86)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>월</span>500/60				</p>
+                                <p class="desc">중동아크로텔</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1131</p>
+                            </div>
+                            <div class="kwd">
+                                <span>오피스텔</span>
+                                <span>공급면적73㎡</span>				<span>관리비12만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="land_list85">
+                        <a href="javascript:void(0)" onclick="land_view(85)">
+                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_tDMhX41U_722b12ab808e968b12ac0769c4b92e9b495a49ed_768x502.jpg"></div>
+                    </a>
+                    <div class="info">
+                        <div class="tip">
+                            <div class="badge_wrap_mo">
+                                <span class="badge black">추천</span>                            </div>
+                            <div class="badge_wrap">
+                                <div>
+                                    <span class="badge black">추천</span>                                    </div>
+                                <span class="badge">핫한매물</span>            </div>
+                            <button type="button" class="wish_btn" onclick="favorite(85)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+                            <p>매물번호 10085</p>
+                        </div>
+                        <a href="javascript:void(0)" onclick="land_view(85)">
+                            <div class="tit">
+                                <p class="price">
+                                    <span>월</span>500/40				</p>
+                                <p class="desc">상동대우마이빌</p>
+                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 상동 442-1</p>
+                            </div>
+                            <div class="kwd">
+                                <span>오피스텔</span>
+                                <span>공급면적47㎡</span>				<span>관리비9만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                </ul></div>
+                </section>
             </div>
         </div>
-        <hr class="my-4">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>건물번호</th>
-                    <th>건물명</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="buld : ${buldList}">
-                    <td><span th:text="${buld.buldNo}" href="#"></span></td>
-                    <td><a th:text="${buld.buldNm}" href="#"></a></td>
-                </tr>
-            </tbody>
-        </table>
+        <a href="#" class="btn_top">TOP</a>
     </div>
-</body>
+
+    <!-- 매물 상세 -->
+    <div class="popup" id="exPop">
+        <div class="pop_header">
+            <h2>추천매물 - 매물01</h2>
+            <button class="btn_close">닫기</button>
+        </div>
+        <div class="pop_cont" id="landView">
+            <div class="inner">
+                <!-- scr_area [s] -->
+                <div class="scr_area">
+                    <!-- 이미지/타이틀 [s] -->
+                    <div class="top_info">
+                        <div class="landImg">
+                            <div class="badge_wrap">
+                                <span class="badge black">추천</span> <span class="badge black">급매물</span> <span
+                                    class="badge">리모델링</span>
+                            </div>
+                            <div class="swiper-main">
+                                <ul class="swiper-wrapper">
+                                    <li class="swiper-slide"><img src="../image/temp_img2.jpg"
+                                            alt="송내 로데오 상가 이미지1"></li>
+                                    <li class="swiper-slide"><img src="../image/temp_img3.jpg"
+                                            alt="송내 로데오 상가 이미지2"></li>
+                                    <li class="swiper-slide"><img src="../image/temp_img3.jpg"
+                                            alt="송내 로데오 상가 이미지2"></li>
+                                </ul>
+                                <div class="swiper-pagination"></div>
+
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+
+                                <!-- <div class="swiper-scrollbar"></div> -->
+                            </div>
+
+                        </div>
+                        <div class="titles">
+                            <div class="tip">
+                                <span>매물번호10099</span>
+                            </div>
+                            <div class="tit">
+                                <p class="price">
+                                    <span>매</span>9억8,000
+                                </p>
+                                <p class="desc">송내 로데오 상가</p>
+                                <p class="loca">경기 부천시 송내동 303-5 2층</p>
+                            </div>
+                            <div class="kwd">
+                                <span>상가</span>
+                                <span>공급면적717㎡</span>
+                            </div>
+                            <div class="ps">송내 로데오 상가 입니다.</div>
+                        </div>
+                    </div>
+                    <!-- 이미지/타이틀 [e] -->
+                    <!-- 매물정보 [s] -->
+                    <dl class="dl_info">
+                        <dt class="open">매물정보</dt>
+                        <dd>
+                            <ul class="info_list">
+                                <li class="add"><span>소재지</span>경기 부천시 송내동 303-5 2층</li>
+                                <li><span>매물번호</span>10099</li>
+                                <li><span>매물구분</span>상가</li>
+                                <li><span>계약상태</span>계약가능</li>
+                                <li>
+                                    <span>가격정보</span>
+                                    매매 9억8,000
+                                </li>
+                                <li><span>해당층/총층</span>7층/지하1층</li>
+                                <li><span>공급면적</span>717㎡(217평)</li>
+                                <li><span>전용면적</span>717㎡(217평)</li>
+                                <li><span>준공년도</span>2006년</li>
+                                <li><span>입주일자</span>협의 후 가능</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+                <!-- scr_area [e] -->
+            </div>
+        </div>
+        <div class="pop_footer full">
+            <button class="btn_cm mint">문의하기</button>
+            <button class="btn_cm">고객센터(1588-1588)</button>
+        </div>
+    </div>
+    <div class="dim"></div>
+    <script>
+        const swiper = new Swiper('.swiper-main', {
+            // Optional parameters
+            loop: true,
+
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+                type: "progressbar",
+            },
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+        });
+    </script>
+</th:block>
 </html>
