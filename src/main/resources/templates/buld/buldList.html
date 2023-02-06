@@ -474,19 +474,28 @@
                         <ul class="item_list">
                             <li class="land_list" th:each="buld : ${buldList}">
                                 <a href="#" onclick="test()">
-                                    <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_K5UpaDbx_53b8b7aea54ab090d98d4bdf5bf2833b86e41241_768x502.jpg"></div>
+                                    <div th:if="${#strings.isEmpty(buld.atchDocId)}" class="noImg">
+                                        <p class="noImgTxt">이미지 준비 중입니다.</p>
+                                    </div>
+                                    <div th:if="${not #strings.isEmpty(buld.atchDocId)}" class="img">
+                                        <img th:each="atchFile, atchFileStat : ${buld.atchFiles}"
+                                             th:if="${atchFileStat.index} == 0"
+                                             th:src="|/file/image/${atchFile.atchFileId}|"
+                                             height="235"/>
+                                    </div>
                                 </a>
                                 <div class="info">
                                     <div class="tip">
                                         <div class="badge_wrap">
-                                            <img src="../image/img_smallLogo1.png" alt="">
-                                            <img src="../image/img_quick.png" alt="">
+                                            <img th:if="${buld.logoTy} == '1'" src="../image/img_smallLogo1.png" alt="">
+                                            <img th:if="${buld.logoTy} == '2'" src="../image/img_smallLogo2.png" alt="">
+                                            <img th:if="${buld.emrgncySaleYn} == 'Y'" src="../image/img_quick.png" alt="">
                                         </div>
                                         <p th:text="|매물번호 ${buld.buldNo}|"></p>
                                     </div>
                                     <a href="#" onclick="test()">
                                         <div class="tit">
-                                            <p class="desc">송내 로데오 상가</p>
+                                            <p class="desc" th:text="${buld.buldNm}"></p>
                                             <p class="loca">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                                                 <span th:text="|${buld.addr} ${buld.detailAddr}|" style="font-size: 15px; color: rgb(153, 153, 153);"></span>

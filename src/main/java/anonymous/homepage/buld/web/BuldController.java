@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,7 +30,15 @@ public class BuldController {
 
     @GetMapping("/selectBuldList.do")
     public String selectBuldList(Model model) {
-        model.addAttribute("buldList", buldService.selectBuldList());
+        List<BuldVO> buldList = buldService.selectBuldList();
+        for(BuldVO buldVO : buldList) {
+            String atchDocId = buldVO.getAtchDocId();
+            if(StringUtils.hasText(atchDocId)) {
+                buldVO.setAtchFiles(fileService.selectAtchFileList(atchDocId));
+            }
+        }
+
+        model.addAttribute("buldList", buldList);
         return "buld/buldList";
     }
 

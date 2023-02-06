@@ -41,7 +41,13 @@
              , BULD_DC
              , LOGO_TY
         FROM BULD
+        ORDER BY BULD_NO DESC
     </select>
+
+     <!-- 건물 조회 -->
+     <select id="selectBuld" parameterType="anonymous.homepage.buld.vo.BuldVO" resultType="anonymous.homepage.buld.vo.BuldVO">
+
+     </select>
 
      <!-- 건물 등록 -->
      <insert id="insertBuld" parameterType="anonymous.homepage.buld.vo.BuldVO">
