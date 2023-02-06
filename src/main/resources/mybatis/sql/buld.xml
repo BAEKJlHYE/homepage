@@ -39,6 +39,7 @@
              , MANAGECT
              , PREMUM
              , BULD_DC
+             , LOGO_TY
         FROM BULD
     </select>
 
