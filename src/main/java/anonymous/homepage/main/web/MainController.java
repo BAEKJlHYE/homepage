@@ -1,12 +1,13 @@
 package anonymous.homepage.main.web;
 
 import anonymous.homepage.buld.service.BuldService;
+import anonymous.homepage.main.service.MainService;
+import anonymous.homepage.main.vo.MainVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.thymeleaf.util.MapUtils;
 
@@ -20,6 +21,8 @@ import java.util.Map;
 public class MainController {
     private final BuldService buldService;
 
+    private final MainService mainService;
+
     // 메인 화면 이동
     @GetMapping("/main.do")
     public String getMainPage(HttpServletRequest request, Model model) {
@@ -30,5 +33,13 @@ public class MainController {
 
         model.addAttribute("buldList", buldService.selectBuldList());
         return "main/main";
+    }
+
+    // 메인 매물 상세 조회
+//    @PostMapping("/selectMainBuldDetail.do")
+    @RequestMapping(value = "/selectMainBuldDetail.do", method = { RequestMethod.POST })
+    public String selectMainBuldDetail(@ModelAttribute("buldDetailForm") MainVO mainVO, Model model) {
+        model.addAttribute("buldDetail", mainService.selectMainBuldDetail(mainVO));
+        return "/main/selectMainBuldDetail.do :: #exPop";
     }
 }

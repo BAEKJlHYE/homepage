@@ -16,4 +16,5 @@ public class MainVO {
     private String updateId;
     private String updateDt;
     private String userEmail;
+    private String buldNo;
 }

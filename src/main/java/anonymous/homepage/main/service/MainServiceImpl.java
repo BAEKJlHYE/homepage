@@ -1,8 +1,7 @@
 package anonymous.homepage.main.service;
 
-import anonymous.homepage.login.dao.LoginMapper;
-import anonymous.homepage.login.service.LoginService;
-import anonymous.homepage.login.vo.LoginVO;
+import anonymous.homepage.buld.vo.BuldVO;
+import anonymous.homepage.main.dao.MainMapper;
 import anonymous.homepage.main.vo.MainVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,10 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MainServiceImpl implements MainService {
-//    private final LoginMapper LoginMapper;
+    private final MainMapper mainMapper;
 
-    public MainVO selectMain(MainVO mainVO) {
-        return null;
+    public BuldVO selectMainBuldDetail(MainVO mainVO) {
+        return mainMapper.selectMainBuldDetail(mainVO);
     }
 
 }

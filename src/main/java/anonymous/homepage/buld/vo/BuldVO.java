@@ -2,8 +2,10 @@ package anonymous.homepage.buld.vo;
 
 import anonymous.homepage.vo.BaseVO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BuldVO extends BaseVO {
     private String buldNo;
     private String buldNm;
