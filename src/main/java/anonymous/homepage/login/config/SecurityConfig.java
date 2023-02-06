@@ -34,7 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http
             .authorizeRequests()
-            .mvcMatchers("/", "/main/main.do", "/companyInfo/**", "/board/select**","/inquiry/**", "/error/**", "/js/**", "/css/**", "/image/**", "/font/**").permitAll() // 해당 경로들은 접근을 허용
+            .mvcMatchers("/", "/main/**", "/companyInfo/**", "/board/select**","/inquiry/**", "/buld/select**"
+                    , "/error/**", "/js/**", "/css/**", "/image/**", "/font/**").permitAll() // 해당 경로들은 접근을 허용
                 .antMatchers("/register**","/insert**","/modify**","/update**","/delete**").hasRole("ADMIN")
 //                .antMatchers("/admin").hasRole("ADMIN")
             .anyRequest().authenticated()
@@ -43,16 +44,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("userId")
                 .passwordParameter("userPw")
                 .loginPage("/login/getLoginPage.do")             // 로그인 페이지
-                .loginProcessingUrl("/login/loginCheck.do")      // th:action="@{/login_proc}"
+                .loginProcessingUrl("/login/loginCheck.do")      // th:action="@{/login/loginCheck.do}"
                 .defaultSuccessUrl("/main/main.do")              // 로그인 성공시 이동
-                .successHandler(authenticationSuccessHandler) // 성공 handler
-                .failureHandler(authenticationFailureHandler) // 실패 handler
+                .successHandler(authenticationSuccessHandler)    // 성공 handler
+                .failureHandler(authenticationFailureHandler)    // 실패 handler
                 .permitAll()
         .and()
             .logout()
                 .permitAll()
-                .logoutUrl("/login/getLogout.do")
-                .logoutSuccessUrl("/main/main.do")
+                .logoutUrl("/login/getLogout.do")     // 로그아웃
+                .logoutSuccessUrl("/main/main.do")    // 로그아웃 성공시 이동
+                .invalidateHttpSession(true)          // session 무효화
         ;
     }
 }

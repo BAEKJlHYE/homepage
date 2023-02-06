@@ -16,16 +16,15 @@
                         <li class="mypage" sec:authorize="isAuthenticated()">
                             <a href="#">마이페이지</a>
                             <ul class="mypage_list"> 
-<!--                                <li><a href="#">내 글 목록</a></li>-->
                                 <li><a href="#">회원정보 수정</a></li>
-<!--                                <li><a href="#">비밀번호 변경</a></li>-->
                             </ul>
                         </li>
 
+                        <li sec:authorize="isAnonymous()"></li>
                         <li sec:authorize="isAuthenticated()" sec:authentication="name">사용자명</li>
 
                         <li class="join" style="display: none"><a th:href="@{/join/getJoinPage.do}">회원가입</a></li>
-                        <li class="login" sec:authorize="!isAuthenticated()"><a th:href="@{/login/getLoginPage.do}">로그인</a></li>
+                        <li class="login" sec:authorize="!isAuthenticated()"><a th:href="@{/login/getLoginPage.do}">관리자로그인</a></li>
                         <li class="logout" sec:authorize="isAuthenticated()"><a th:href="@{/login/getLogout.do}">로그아웃</a></li>
                     </ul>
                 </div>
@@ -40,7 +39,7 @@
                         <li><a href="/buld/selectBuldList.do">인도어연습장</a></li>
                         <li><a href="/companyInfo">오시는길</a></li>
                     </ul>
-                    <!-- <a class="site_map" href="#">사이트맵</a> -->
+<!--                     <a class="site_map" href="#">사이트맵</a>-->
                     <div class="dep2_box">
                         <div class="dep2_inner">
                             <ul>

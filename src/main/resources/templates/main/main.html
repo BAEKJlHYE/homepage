@@ -4,6 +4,12 @@
       layout:decorate="layout/default_layout">
 
 <th:block layout:fragment="content">
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+
+        });
+    </script>
+
     <div class="wrap">
         <div class="skip">
             <a href="#container">본문바로가기</a>
@@ -20,7 +26,6 @@
                         <ul class="swiper-wrapper">
                             <li class="swiper-slide"><img src="../image/img_mainBanner.jpg" alt="이미지1"></li>
                             <li class="swiper-slide"><img src="../image/bg_main.png" alt="이미지2"></li>
-<!--                            <li class="swiper-slide"><img src="../image/temp_img2.jpg" alt="이미지3"></li>-->
                         </ul>
                         <div class="swiper-pagination"></div>
 
@@ -129,92 +134,64 @@
                         </div>
                     </div>
 
+                    <!-- 1.메인 리스트 출력 -->
                     <section id="sh_section">
                         <article class="saleList" id="sale_rcmd">
                             <div class="inner">
                                 <ul class="item_list">
-
-                                    <li>
+                                    <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count lt 5}">
                                         <a href="#" class="exPopBtn">
-                                            <div class="img"
-                                                 style='background-image: url(../image/temp_img2.jpg)'>
-                                                <div class="state_wrap">
-                                                    <img src="../image/img_smallLogo1.png" alt="">
-                                                    <img src="../image/img_quick.png" alt="">
+                                            <div class="img" style='background-image: url(../image/temp_img2.jpg)'> <!--TODO 이미지 불러와서 세팅-->
+                                                <div class="state_wrap" th:switch="${buld.logoTy}">
+                                                    <img th:case="1" src="../image/img_smallLogo1.png" alt="">
+                                                    <img th:case="2" src="../image/img_smallLogo2.png" alt="">
+                                                    <img th:if="${buld.emrgncySaleYn == 'Y'}" src="../image/img_quick.png" alt="">
                                                 </div>
-                                                <div class="sold">[수원]<br>텍스트입력</div>
+                                                <div class="sold" th:text="|[${buld.cntrctSttusSeNm}] ${buld.buldNm} ${buldListStat.count}|">
+                                                </div>
                                             </div>
                                             <ul class="info2">
-                                                <li><p>보증금</p><p>5천만원</p></li>
-                                                <li><p>임대료</p><p>400</p></li>
-                                                <li><p>관리비</p><p>150</p></li>
-                                                <li><p>권리금</p><p>3억</p></li>
+                                                <li><p>보증금</p><p th:text="${buld.gtn}">5천만원</p></li>
+                                                <li><p>임대료</p><p th:text="${buld.rntchrg}">400</p></li>
+                                                <li><p>관리비</p><p th:text="${buld.managect}">150</p></li>
+                                                <li><p>권리금</p><p th:text="${buld.premum}">3억</p></li>
                                             </ul>
                                         </a>
                                     </li>
-
-<!--                                    <li>-->
-<!--                                        <a href="#" class="exPopBtn">-->
-<!--                                            <div class="img"-->
-<!--                                                 style='background-image: url(../image/temp_img3.jpg)'>-->
-<!--                                                <div class="state_wrap">-->
-<!--                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/f.png" alt="">-->
-<!--                                                </div>-->
-<!--                                                <div class="sold">[수원]<br>텍스트입력</div>-->
-<!--                                            </div>-->
-<!--                                            <ul class="info2">-->
-<!--                                                <li><p>보증금</p><p>5천만원</p></li>-->
-<!--                                                <li><p>임대료</p><p>400</p></li>-->
-<!--                                                <li><p>관리비</p><p>150</p></li>-->
-<!--                                                <li><p>권리금</p><p>3억</p></li>-->
-<!--                                            </ul>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
-<!--                                    <li>-->
-<!--                                        <a href="#" class="exPopBtn">-->
-<!--                                            <div class="img"-->
-<!--                                                 style='background-image:url(../image/temp_img2.jpg)'>-->
-<!--                                                <div class="state_wrap">-->
-<!--                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/f.png" alt="">-->
-<!--                                                </div>-->
-<!--                                                <div class="sold">[수원]<br>텍스트입력</div>-->
-<!--                                            </div>-->
-<!--                                            <ul class="info2">-->
-<!--                                                <li><p>보증금</p><p>5천만원</p></li>-->
-<!--                                                <li><p>임대료</p><p>400</p></li>-->
-<!--                                                <li><p>관리비</p><p>150</p></li>-->
-<!--                                                <li><p>권리금</p><p>3억</p></li>-->
-<!--                                            </ul>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
-<!--                                    <li>-->
-<!--                                        <a href="#" class="exPopBtn">-->
-<!--                                            <div class="img"-->
-<!--                                                 style='background-image:url(../image/temp_img3.jpg)'>-->
-<!--                                                <div class="state_wrap">-->
-<!--                                                    <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/u.png" alt="">-->
-<!--                                                </div>-->
-<!--                                                <div class="sold">[수원]<br>텍스트입력</div>-->
-<!--                                            </div>-->
-<!--                                            <ul class="info2">-->
-<!--                                                <li><p>보증금</p><p>5천만원</p></li>-->
-<!--                                                <li><p>임대료</p><p>400</p></li>-->
-<!--                                                <li><p>관리비</p><p>150</p></li>-->
-<!--                                                <li><p>권리금</p><p>3억</p></li>-->
-<!--                                            </ul>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
                                 </ul>
 
                                 <ul class="item_list">
+                                    <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count ge 5} and ${buldListStat.count lt 9}">
+                                        <a href="#" class="exPopBtn">
+                                            <div class="img" style='background-image: url(../image/temp_img2.jpg)'> <!--TODO 이미지 불러와서 세팅-->
+                                                <div class="state_wrap" th:switch="${buld.logoTy}">
+                                                    <img th:case="1" src="../image/img_smallLogo1.png" alt="">
+                                                    <img th:case="2" src="../image/img_smallLogo2.png" alt="">
+                                                    <img th:if="${buld.emrgncySaleYn == 'Y'}" src="../image/img_quick.png" alt="">
+                                                </div>
+                                                <div class="sold" th:text="|[${buld.cntrctSttusSeNm}] ${buld.buldNm}|">
+                                                </div>
+                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p th:text="${buld.gtn}">5천만원</p></li>
+                                                <li><p>임대료</p><p th:text="${buld.rntchrg}">400</p></li>
+                                                <li><p>관리비</p><p th:text="${buld.managect}">150</p></li>
+                                                <li><p>권리금</p><p th:text="${buld.premum}">3억</p></li>
+                                            </ul>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="item_list" style="display:none;">
                                     <li>
-                                        <a href="javascript:land_view(99)">
+                                        <a href="#" class="exPopBtn">
+<!--                                        <a href="javascript:land_view(99)">-->
                                             <div class="img"
                                                  style='background-image:url(../image/temp_img2.jpg)'>
                                                 <div class="state_wrap">
                                                     <img src="http://play-golf.co.kr/wp-content/uploads/2018/11/u.png" alt="">
                                                 </div>
-                                                <div class="sold">[수원]<br>텍스트입력</div>
+                                                <div class="sold">[수원99]<br>텍스트입력</div>
                                             </div>
                                             <ul class="info2">
                                                 <li><p>보증금</p><p>5천만원</p></li>
@@ -276,7 +253,11 @@
                                         </a>
                                     </li>
                                 </ul>
-                                <button class="more_btn" onClick="more('rcmd',4,5)">더보기</button>
+
+                                <a th:href="@{/buld/selectBuldList.do}">
+                                    <button class="more_btn">더보기</button>
+                                </a>
+<!--                                <button class="more_btn" onClick="more('rcmd',4,5)">더보기</button>-->
                             </div>
                         </article>
                     </section>
@@ -285,6 +266,7 @@
             <a href="#" class="btn_top">TOP</a>
         </div>
 
+        <!-- 상세팝업 -->
         <div class="popup" id="exPop">
             <div class="pop_header">
                 <h2>추천매물 - 매물01</h2>

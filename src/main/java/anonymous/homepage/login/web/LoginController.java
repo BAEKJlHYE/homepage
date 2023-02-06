@@ -32,6 +32,11 @@ public class LoginController {
     @GetMapping("/getLoginPage.do")
     public String getLoginPage(HttpServletRequest request, Model model) {
         Map<String, ?> redirectMap = RequestContextUtils.getInputFlashMap(request);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Object asd = auth.getPrincipal();
+        String asdd = auth.getAuthorities().toString();
+
         if (!MapUtils.isEmpty(redirectMap)) {
             model.addAttribute("loginVo", redirectMap.get("loginVo"));
         } else {
@@ -63,16 +68,13 @@ public class LoginController {
 
     // 로그아웃
     @GetMapping("/getLogout.do")
-//    public String getLogout(HttpServletRequest request, Model model) {
-    public String getLogout(HttpServletRequest request, HttpServletResponse response){
+    public String getLogout(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication != null){
+        if (authentication != null) {
             new SecurityContextLogoutHandler().logout(request,response,authentication);
         }
-        return "redirect:/";
-
-//        return "main/main.do";
+        return null;
     }
 
 }
