@@ -4,6 +4,9 @@ import anonymous.homepage.board.vo.BoardVO;
 import anonymous.homepage.buld.service.BuldService;
 import anonymous.homepage.buld.vo.BuldVO;
 import anonymous.homepage.cd.service.CdService;
+import anonymous.homepage.file.FileStore;
+import anonymous.homepage.file.service.FileService;
+import anonymous.homepage.file.vo.AtchFileVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -11,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -20,6 +24,8 @@ import java.util.List;
 public class BuldController {
     private final BuldService buldService;
     private final CdService cdService;
+    private final FileStore fileStore;
+    private final FileService fileService;
 
     @GetMapping("/selectBuldList.do")
     public String selectBuldList(Model model) {
@@ -43,8 +49,15 @@ public class BuldController {
     // 매물 등록
     @PostMapping("/insertBuld.do")
     @ResponseBody
-    public String insertBoard(@ModelAttribute BuldVO buldVO, RedirectAttributes redirect) {
+    public String insertBoard(@ModelAttribute BuldVO buldVO, RedirectAttributes redirect) throws IOException {
+        // 첨부파일 등록
+        List<AtchFileVO> atchFiles = fileStore.saveFiles(buldVO.getUploadFiles());
+        buldVO.setAtchFiles(atchFiles);
+        fileService.saveFiles(buldVO);
+
+        buldVO.setAtchDocId(buldVO.getAtchDoc().getAtchDocId());
         buldService.insertBuld(buldVO);
+
         return "ok";
     }
 

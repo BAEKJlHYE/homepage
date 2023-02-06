@@ -28,6 +28,86 @@
             }).open();
         }
 
+        /* 급매물여부 변경 */
+        function changeCheckboxStatus(checkboxElement) {
+            var hiddenComponent = document.getElementsByName(checkboxElement.id)[0];
+            var ynValue;
+
+            if(checkboxElement.checked) {
+                ynValue = 'Y';
+            } else {
+                ynValue = 'N';
+            }
+
+            checkboxElement.value = ynValue;
+            hiddenComponent.value = ynValue;
+        }
+
+        /* 파일 등록 버튼 클릭 */
+        function selectFile() {
+            document.getElementById('selectedFiles').click();
+        }
+
+        /* 파일 유효성 검사 */
+        function checkFile() {
+            // 파일 최대 개수 검사
+            if (!validateFileCount('selectedFiles', 'uploadFiles', 3))
+                return;
+
+            // input 요소에 파일 추가
+            saveFileForUpload('selectedFiles', 'uploadFiles', 10 * 1024, 'image');
+
+            // 파일 목록 추가
+            showFiles();
+        }
+
+        /* 파일 목록 표시 */
+        function showFiles() {
+            // 기존 파일 목록 삭제
+            var ul = document.getElementById('uploadFileList');
+            var lis = ul.getElementsByTagName('li');
+            for (var i = lis.length; i > 0; i--) {
+                lis[i - 1].remove();
+            }
+
+            // 파일 목록 추가
+            var files = document.getElementById('uploadFiles').files;
+            for (file of files) {
+                var textNode = document.createTextNode(file.name + ' (' + byteFormatter(file.size) + ')');
+                var span = document.createElement('span');
+                span.appendChild(textNode);
+
+                var a = document.createElement('a');
+                a.setAttribute('href', '#');
+                a.setAttribute('class', 'btn_del');
+                a.setAttribute('onclick', 'deleteFile(this)');
+
+                var li = document.createElement('li');
+                li.appendChild(span);
+                li.appendChild(a);
+
+                ul.appendChild(li);
+            }
+        }
+
+        /* 파일 삭제 */
+        function deleteFile(clickedATag) {
+            // 파일 목록에서 제거
+            var ul = document.getElementById('uploadFileList');
+            var lis = ul.getElementsByTagName('li');
+            var fileIndex = -1;
+            for (var i = 0; i < lis.length; i++) {
+                if (lis[i] == clickedATag.parentElement) {
+                    fileIndex = i;
+                    lis[i].remove();
+                    break;
+                }
+            }
+
+            // input 요소에서 파일 제거
+            deleteFileFromInput('uploadFiles', fileIndex);
+        }
+
         /* 취소 버튼 클릭 */
         function moveToBuldList() {
             formSubmit('/buld/selectBuldList.do', 'get');
@@ -38,7 +118,7 @@
             if(!validateForm())
                 return;
 
-            formSubmit('/buld/insertBuld.do', 'post');
+            formSubmit('/buld/insertBuld.do', 'post', 'multipart/form-data');
         }
 
         /* 유효성 검사 */
@@ -52,6 +132,18 @@
                     openAlertModal(mandatoryInputNames[i] + "을(를) 입력해주시기 바랍니다.");
                     return false;
                 }
+            }
+
+            // 필수값 - radio
+            var logoInputs = document.getElementsByName('logoTy');
+            var logoTy;
+            for(var logoInput of logoInputs) {
+                if(logoInput.checked)
+                    logoTy = logoInput.value;
+            }
+            if(isEmpty(logoTy)) {
+                openAlertModal("로고유형을(를) 선택해주시기 바랍니다.");
+                return false;
             }
 
             // 숫자만 입력
@@ -89,16 +181,23 @@
         }
 
         /* form submit */
-        function formSubmit(action, method) {
+        function formSubmit(action, method, enctype) {
             var buldForm = document.getElementById('buldPageInfo');
             buldForm.action = action;
             buldForm.method = method;
+            buldForm.encoding = enctype;
             buldForm.submit();
         }
     </script>
 
+    <style>
+        .logoImgRadio { top: 15px !important; }
+        .logoImgLabel:before { top: 12px !important; }
+        .logoImgLabel:after { top: 19px !important; }
+    </style>
+
     <div id="container" class="container">
-        <form th:action id="buldPageInfo" method="get">
+        <form action="/buld/selectBuldList.do" id="buldPageInfo" method="get">
             <div class="lnb">
                 <div class="lnb_inner">
                     <ul class="step">
@@ -150,17 +249,17 @@
                                                     <div>
                                                         <input type="text" id="tempZipcd" class="ipt"
                                                                placeholder="우편번호" style="width:160px" maxlength="5"
-                                                               readonly="readonly" disabled="disabled">
+                                                               readonly="readonly" disabled택="disabled">
                                                         <input type="hidden" id="zipcd" name="zipcd">
                                                         <button class="btn_form" type="button" onclick="findPostcode()">우편번호 검색</button>
                                                     </div>
                                                     <div>
                                                         <input type="text" id="tempAddr" class="ipt"
-                                                               placeholder="주소" style="width:395px" maxlength="100"
+                                                               placeholder="주소" style="width:398px" maxlength="100"
                                                                readonly="readonly" disabled="disabled">
                                                         <input type="hidden" id="addr" name="addr">
                                                         <input type="text" id="detailAddr" name="detailAddr" class="ipt"
-                                                               placeholder="상세주소 입력" style="width:585px" maxlength="100">
+                                                               placeholder="상세주소 입력" style="width:582px" maxlength="100">
                                                     </div>
                                                 </div>
                                             </td>
@@ -228,6 +327,32 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <th><span class="">로고선택</span></th>
+                                            <td>
+                                                <ul class="radio list">
+                                                    <li>
+                                                        <input type="radio" id="logo1" value="1" name="logoTy" class="logoImgRadio">
+                                                        <label for="logo1" class="logoImgLabel"><img src="../image/img_smallLogo1.png" style="width: 40px;"></label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="radio" id="logo2" value="2" name="logoTy" class="logoImgRadio">
+                                                        <label for="logo2" class="logoImgLabel"><img src="../image/img_smallLogo2.png" style="width: 40px;"></label>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                            <th><span class="">급매물여부</span></th>
+                                            <td>
+                                                <ul class="chk list">
+                                                    <li>
+                                                        <input type="checkbox" id="emrgncySaleYn"
+                                                               value="N" onchange="changeCheckboxStatus(this)">
+                                                        <label for="emrgncySaleYn">급매물</label>
+                                                    </li>
+                                                    <input type="hidden" name="emrgncySaleYn" value="N">
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <th><span class="req">연락처</span></th>
                                             <td colspan="3">
                                                 <div class="box_form">
@@ -251,6 +376,19 @@
                                             <td colspan="3">
                                                 <textarea class="txa" id="buldDc" name="buldDc" cols="30" rows="10" style="height: 290px;"
                                                           placeholder="내용을 입력하세요." maxlength="1000"></textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span>첨부파일</span></th>
+                                            <td colspan="3">
+                                                <div class="ly_grp">
+                                                    <a href="#" class="btn_df" onclick="selectFile()">파일첨부</a>
+                                                    <input type="file" multiple="multiple" id="selectedFiles"
+                                                           onchange="checkFile()" style="display: none;">
+                                                    <input type="file" multiple="multiple" id="uploadFiles"
+                                                           name="uploadFiles" style="display: none;">
+                                                    <ul id="uploadFileList" class="ipt_file" style="width: 700px;"></ul>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>

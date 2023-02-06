@@ -45,7 +45,7 @@
      <!-- 건물 등록 -->
      <insert id="insertBuld" parameterType="anonymous.homepage.buld.vo.BuldVO">
           <selectKey keyProperty="buldNo" resultType="String" order="BEFORE">
-               SELECT LPAD(NVL(MAX(TO_NUMBER(BULD_NO)), 0) + 1, 8, 0) AS BULD_NO
+               SELECT LPAD(NVL(MAX(TO_NUMBER(BULD_NO)), 0) + 1, 6, 0) AS BULD_NO
                FROM BULD
           </selectKey>
           INSERT INTO BULD (
@@ -113,6 +113,7 @@
                <if test="buldDc != null and buldDc != ''">
                , BULD_DC
                </if>
+               , LOGO_TY
           )
           VALUES (
                #{buldNo}
@@ -179,6 +180,7 @@
                <if test="buldDc != null and buldDc != ''">
                , #{buldDc}
                </if>
+               , #{logoTy}
           )
      </insert>
 </mapper>

@@ -38,4 +38,5 @@ public class BuldVO extends BaseVO {
     private String managect;
     private String premum;
     private String buldDc;
+    private String logoTy;
 }

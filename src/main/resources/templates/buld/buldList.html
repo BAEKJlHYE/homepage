@@ -6,8 +6,24 @@
 <th:block layout:fragment="content">
     <script>
         document.addEventListener("DOMContentLoaded", function(){
-            // do nothing
+            // 금액 포매터 적용
+            formatPrice();
         });
+
+        /* 금액 포매터 적용 */
+        function formatPrice() {
+            var priceComponents = document.getElementsByClassName('price');
+            for(var priceComponent of priceComponents) {
+                if(priceComponent.tagName.toUpperCase() != 'UL')
+                    break;
+
+                var lis = priceComponent.children;
+                for(var li of lis) {
+                    var price = li.children[1].innerHTML;
+                    li.children[1].innerHTML = priceWonShortenFormatter(price);
+                }
+            }
+        }
     </script>
 
     <div id="container" class="container list">
@@ -19,19 +35,16 @@
                         <input type="text" autocomplete="off" id="sch_kwd" class="sh_input"
                             placeholder="지역, 지하철역, 매물번호 검색" title="지역, 지하철역, 매물번호 검색" onkeyup="text_search()"
                             value="">
-                        <button type="submit" class="sch_btn" onclick="text_direct_pick()"><svg
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        <button type="submit" class="sch_btn" onclick="text_direct_pick()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="feather feather-search">
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg></button>
-                        <div id="text_result" style="display: none;">
-                            <ul id="text_result_list"></ul>
-                        </div>
+                            </svg>
+                        </button>
                     </div>
                     <!------- 1. 검색 [e] -->
-                    <div class="filter_bg" style="display: none;"></div>
                     <!------- 2. 필터 [s] -->
                     <div class="filter_wrap">
                         <!------- 매물종류 [s] -->
@@ -457,487 +470,55 @@
                     <!------- 3. 전체필터/버튼 [e] -->
                 </div>
                 <section id="sh_section" class="landList">
-                    <div id="landList" style="display: block;"><ul class="item_list"><li class="land_list99">
-                        <a href="javascript:void(0)" onclick="land_view(99)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_K5UpaDbx_53b8b7aea54ab090d98d4bdf5bf2833b86e41241_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                <span class="badge black">추천</span>                <span class="badge black">급매물</span>            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                    <span class="badge black">추천</span>                    <span class="badge black">급매물</span>                </div>
-                                <span class="badge">리모델링</span>            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(99)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10099</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(99)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>매</span>9억8,000				</p>
-                                <p class="desc">송내 로데오 상가</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 송내동 303-5</p>
-                            </div>
-                            <div class="kwd">
-                                <span>상가</span>
-                                <span>공급면적717㎡</span>								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
+                    <div id="landList" style="display: block;">
+                        <ul class="item_list">
+                            <li class="land_list" th:each="buld : ${buldList}">
+                                <a href="#" onclick="test()">
+                                    <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_K5UpaDbx_53b8b7aea54ab090d98d4bdf5bf2833b86e41241_768x502.jpg"></div>
+                                </a>
+                                <div class="info">
+                                    <div class="tip">
+                                        <div class="badge_wrap">
+                                            <img src="../image/img_smallLogo1.png" alt="">
+                                            <img src="../image/img_quick.png" alt="">
+                                        </div>
+                                        <p th:text="|매물번호 ${buld.buldNo}|"></p>
+                                    </div>
+                                    <a href="#" onclick="test()">
+                                        <div class="tit">
+                                            <p class="desc">송내 로데오 상가</p>
+                                            <p class="loca">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                <span th:text="|${buld.addr} ${buld.detailAddr}|" style="font-size: 15px; color: rgb(153, 153, 153);"></span>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <ul class="price">
+                                    <li>
+                                        <p>보증금</p>
+                                        <p th:if="${not #strings.isEmpty(buld.gtn)}" th:text="${buld.gtn}"></p>
+                                        <p th:if="${#strings.isEmpty(buld.gtn)}">-</p>
+                                    </li>
+                                    <li>
+                                        <p>임대료</p>
+                                        <p th:if="${not #strings.isEmpty(buld.rntchrg)}" th:text="${buld.rntchrg}"></p>
+                                        <p th:if="${#strings.isEmpty(buld.rntchrg)}">-</p>
+                                    </li>
+                                    <li>
+                                        <p>관리비</p>
+                                        <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>
+                                        <p th:if="${#strings.isEmpty(buld.managect)}">-</p>
+                                    </li>
+                                    <li>
+                                        <p>권리금</p>
+                                        <p th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
+                                        <p th:if="${#strings.isEmpty(buld.premum)}">-</p>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
-                </li>
-
-                <li class="land_list102">
-                        <a href="javascript:void(0)" onclick="land_view(102)">
-                        <div class="img"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                                        </div>
-                                            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(102)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10102</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(102)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>매</span>60억				</p>
-                                <p class="desc">송내동 건물</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 송내동 303-5</p>
-                            </div>
-                            <div class="kwd">
-                                <span>상가</span>
-                                <span>대지면적300㎡</span>				<span>관리비150만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list100">
-                        <a href="javascript:void(0)" onclick="land_view(100)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_jxl9YJcB_edb0911db820ec8660966238e82ceb07d7804e7b_768x502.jpg"><div class="sold"></div></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                <span class="badge black">추천</span>                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                    <span class="badge black">추천</span>                                    </div>
-                                            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(100)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10100</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(100)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>월</span>5,000/60				</p>
-                                <p class="desc">샤이닝 빌딩</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 상동 548-4</p>
-                            </div>
-                            <div class="kwd">
-                                <span>사무실</span>
-                                <span>공급면적300㎡</span>				<span>관리비100만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list98">
-                        <a href="javascript:void(0)" onclick="land_view(98)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_bmEyjqse_4cd2818e4463dea16d362d1beb9f6a874655c927_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                <span class="badge black">추천</span>                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                    <span class="badge black">추천</span>                                    </div>
-                                            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(98)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10098</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(98)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>매</span>50억				</p>
-                                <p class="desc">샤이닝 상가</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 심곡동 35</p>
-                            </div>
-                            <div class="kwd">
-                                <span>상가</span>
-                                <span>공급면적39㎡</span>								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list97">
-                        <a href="javascript:void(0)" onclick="land_view(97)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_e5rWP02M_8881bda38c2f65668cbd963fbbbdf7917c01c01b_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                <span class="badge black">추천</span>                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                    <span class="badge black">추천</span>                                    </div>
-                                <span class="badge">히트매물</span>            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(97)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10097</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(97)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>매</span>3억1,000				</p>
-                                <p class="desc">DH씨밀레</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 송내동 564-3</p>
-                            </div>
-                            <div class="kwd">
-                                <span>아파트</span>
-                                <span>공급면적68㎡</span>				<span>관리비3만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list95">
-                        <a href="javascript:void(0)" onclick="land_view(95)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_B2oHaCwA_abda0a04f719c37579ff34db6dbd0cce93ebd6dc_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                                        </div>
-                                            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(95)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10095</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(95)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>매</span>4억7,000				</p>
-                                <p class="desc">부천 샤이닝</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 심곡본동 535-23</p>
-                            </div>
-                            <div class="kwd">
-                                <span>아파트</span>
-                                <span>공급면적60㎡</span>				<span>관리비5만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list94">
-                        <a href="javascript:void(0)" onclick="land_view(94)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_RB91HxcU_94b4a49a064376541b08f687134426a3e78ffebf_768x502.jpg"><div class="sold"></div></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                <span class="badge black">급매물</span>            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                        <span class="badge black">급매물</span>                </div>
-                                <span class="badge">리모델링</span>            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(94)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10094</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(94)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>전</span>1억5,000				</p>
-                                <p class="desc">송내 우리샤이닝</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 송내동 323-1</p>
-                            </div>
-                            <div class="kwd">
-                                <span>빌라</span>
-                                <span>공급면적50㎡</span>				<span>관리비1만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list93">
-                        <a href="javascript:void(0)" onclick="land_view(93)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_Aqsr3y0v_7d348f2052d5e63eca571640257622c95826ec9d_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                                        </div>
-                                <span class="badge">역근처</span>            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(93)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10093</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(93)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>전</span>3억6,000				</p>
-                                <p class="desc">송내 샤이닝</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 송내동 299-11</p>
-                            </div>
-                            <div class="kwd">
-                                <span>빌라</span>
-                                <span>공급면적96㎡</span>				<span>관리비2만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list92">
-                        <a href="javascript:void(0)" onclick="land_view(92)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_BKrSzdCU_4a9368b2498d64f39e41cdf475779907641a6301_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                <span class="badge black">급매물</span>            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                        <span class="badge black">급매물</span>                </div>
-                                            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(92)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10092</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(92)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>전</span>1억3,000				</p>
-                                <p class="desc">중동에스티마</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1031-1</p>
-                            </div>
-                            <div class="kwd">
-                                <span>아파트</span>
-                                <span>공급면적64㎡</span>				<span>관리비7만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list91">
-                        <a href="javascript:void(0)" onclick="land_view(91)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_B3fUZNVm_0918887ede4ce27a4bd0efff7b45ae9fdf05a526_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                                        </div>
-                                <span class="badge">굿초이스</span>            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(91)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10091</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(91)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>전</span>3억8,000				</p>
-                                <p class="desc">상동 주택</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 상동 526-3</p>
-                            </div>
-                            <div class="kwd">
-                                <span>주택</span>
-                                                <span>관리비1만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list90">
-                        <a href="javascript:void(0)" onclick="land_view(90)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_FV1LXSis_20126d9b8ab53d26834821b04020f8995f6b35df_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                <span class="badge black">급매물</span>            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                        <span class="badge black">급매물</span>                </div>
-                                <span class="badge">리모델링</span>            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(90)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10090</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(90)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>월</span>1,000/50				</p>
-                                <p class="desc">매트로팰리스</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1145</p>
-                            </div>
-                            <div class="kwd">
-                                <span>오피스텔</span>
-                                <span>공급면적58㎡</span>				<span>관리비10만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list89">
-                        <a href="javascript:void(0)" onclick="land_view(89)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_VEKsDBx4_5a8f1159722697541a3d79015fa65335c7f64f92_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                                        </div>
-                                            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(89)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10089</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(89)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>월</span>2,000/50				</p>
-                                <p class="desc">샤이닝 빌라</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1028</p>
-                            </div>
-                            <div class="kwd">
-                                <span>빌라</span>
-                                <span>공급면적50㎡</span>				<span>관리비5만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list88">
-                        <a href="javascript:void(0)" onclick="land_view(88)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_jFGZUnk3_ae4ed16dc8c74af636946be63660dfe4576c1098_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                                        </div>
-                                <span class="badge">추천매물</span>            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(88)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10088</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(88)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>월</span>8,000/60				</p>
-                                <p class="desc">샤이닝 아파트</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1205-5</p>
-                            </div>
-                            <div class="kwd">
-                                <span>아파트</span>
-                                <span>공급면적91㎡</span>				<span>관리비3만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list87">
-                        <a href="javascript:void(0)" onclick="land_view(87)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_5iCVTwIE_a36e93411add4e2ca44042dcf24a262d4d003f8d_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                <span class="badge black">급매물</span>            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                        <span class="badge black">급매물</span>                </div>
-                                            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(87)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10087</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(87)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>전</span>8,000				</p>
-                                <p class="desc">중동아크로텔</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1131</p>
-                            </div>
-                            <div class="kwd">
-                                <span>원룸</span>
-                                <span>공급면적73㎡</span>				<span>관리비12만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list86">
-                        <a href="javascript:void(0)" onclick="land_view(86)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_3RUmwpj0_0d72cf4e1ed393a8479e6651678c769fdfcafc90_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                                                        </div>
-                                <span class="badge">역근처</span>            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(86)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10086</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(86)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>월</span>500/60				</p>
-                                <p class="desc">중동아크로텔</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 중동 1131</p>
-                            </div>
-                            <div class="kwd">
-                                <span>오피스텔</span>
-                                <span>공급면적73㎡</span>				<span>관리비12만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <li class="land_list85">
-                        <a href="javascript:void(0)" onclick="land_view(85)">
-                        <div class="img" style="background-image:url(http://land1007.shiningcorp.com/data/file/land/thumb-1935566034_tDMhX41U_722b12ab808e968b12ac0769c4b92e9b495a49ed_768x502.jpg"></div>
-                    </a>
-                    <div class="info">
-                        <div class="tip">
-                            <div class="badge_wrap_mo">
-                                <span class="badge black">추천</span>                            </div>
-                            <div class="badge_wrap">
-                                <div>
-                                    <span class="badge black">추천</span>                                    </div>
-                                <span class="badge">핫한매물</span>            </div>
-                            <button type="button" class="wish_btn" onclick="favorite(85)"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
-                            <p>매물번호 10085</p>
-                        </div>
-                        <a href="javascript:void(0)" onclick="land_view(85)">
-                            <div class="tit">
-                                <p class="price">
-                                    <span>월</span>500/40				</p>
-                                <p class="desc">상동대우마이빌</p>
-                                <p class="loca"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>경기 부천시 상동 442-1</p>
-                            </div>
-                            <div class="kwd">
-                                <span>오피스텔</span>
-                                <span>공급면적47㎡</span>				<span>관리비9만</span>				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                </ul></div>
                 </section>
             </div>
         </div>
