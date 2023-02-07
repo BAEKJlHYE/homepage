@@ -9,10 +9,10 @@
 
         });
 
-        function fn_sendBuldDetail(target) {
+        // 상세 팝업 호출
+        function fn_sendBuldDetail(buldNo) {
             var sendParam = {
-                // buldNo : buldNo
-                buldNo : '000005'
+                buldNo : buldNo
             };
             $.ajax({
                 url: "/main/selectMainBuldDetail.do",
@@ -21,19 +21,58 @@
             })
             .done(function (data) {
                 $("#exPop").replaceWith(data);
-
-                var $exPop = $("#exPop");
-                $exPop.addClass("on");
-
-                var $popClose = $(".btn_close");
-                $popClose.click(function (e) {
-                    e.preventDefault();
-                    $exPop.removeClass("on");
-                });
             })
             .always(function() {
-                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행됩니다.");
+                fn_callImport();
             })
+        }
+
+        // ajax 후 다시 세팅
+        function fn_callImport() {
+            var $exPop = $("#exPop");
+            $exPop.addClass("on");
+
+            var $popClose = $(".btn_close");
+            $popClose.click(function (e) {
+                e.preventDefault();
+                $exPop.removeClass("on");
+            });
+
+            var $exAlertBtn = $(".exAlertBtn");
+            var $alertBox = $("#alertBox");
+            var $exAlertClose = $(".alert .btn_cm");
+            var $popBtnCm = $('.pop_footer.full .btn_cm');
+
+            $popBtnCm.click(function (e) {
+                e.preventDefault();
+                $alertBox.addClass("on");
+            });
+
+            $exAlertBtn.click(function (e) {
+                e.preventDefault();
+                $alertBox.addClass("on");
+            });
+            $exAlertClose.click(function (e) {
+                e.preventDefault();
+                $alertBox.removeClass("on");
+            });
+
+            const swiper = new Swiper('.swiper-main', {
+                // Optional parameters
+                loop: true,
+
+                // If we need pagination
+                pagination: {
+                    el: '.swiper-pagination',
+                    type: "progressbar",
+                },
+
+                // Navigation arrows
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                }
+            });
         }
     </script>
     <style>
@@ -58,10 +97,8 @@
                             <li class="swiper-slide"><img src="../image/bg_main.png" alt="이미지2"></li>
                         </ul>
                         <div class="swiper-pagination"></div>
-
                         <div class="swiper-button-prev"></div>
                         <div class="swiper-button-next"></div>
-
                     </div>
                     <script>
                         const swiper2 = new Swiper('.swiper-mainb', {
@@ -170,9 +207,7 @@
                             <div class="inner">
                                 <ul class="item_list">
                                     <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count lt 5}">
-                                        <input type="hidden" id="hidden_buldNo" th:value="${buld.buldNo}">
-                                        <a href="javascript:void(0);" onclick="fn_sendBuldDetail()">
-<!--                                        <a href="#" th:onclick="|fn_sendBuldDetail(${buld.buldNo})|">-->
+                                        <a href="#" th:attr="onclick=|fn_sendBuldDetail('${buld.buldNo}')|">
                                             <div class="img" style='background-image: url(../image/temp_img2.jpg)'> <!--TODO 이미지 불러와서 세팅-->
                                                 <div class="state_wrap" th:switch="${buld.logoTy}">
                                                     <img th:case="1" src="../image/img_smallLogo1.png" alt="">
@@ -193,7 +228,7 @@
 
                                 <ul class="item_list">
                                     <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count ge 5} and ${buldListStat.count lt 9}">
-                                        <a href="#">
+                                        <a href="#" th:attr="onclick=|fn_sendBuldDetail('${buld.buldNo}')|">
                                             <div class="img" style='background-image: url(../image/temp_img2.jpg)'> <!--TODO 이미지 불러와서 세팅-->
                                                 <div class="state_wrap" th:switch="${buld.logoTy}">
                                                     <img th:case="1" src="../image/img_smallLogo1.png" alt="">
