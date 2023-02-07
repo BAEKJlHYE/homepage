@@ -1096,6 +1096,7 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
 #landView .info_list li:nth-child(n+2){margin-top:15px}
 #landView .info_list li.add{width:100%}
 #landView .info_list li span{width:100px;color:#222}
+#landView .info_list li span.dt_span{ width: 300px; }
 
 /* 옵션 */
 #landView .option_list{display:flex;flex-wrap:wrap}

@@ -37,7 +37,7 @@
         }
     </script>
     <style>
-        #landView .info_list li span.dt_span{ width: 300px; }
+        /*#landView .info_list li span.dt_span{ width: 300px; }*/
     </style>
 
     <div class="wrap">
@@ -335,7 +335,7 @@
                                                 <span class="dt_span" th:text="${buldDetail.cntrctSttusSeNm}"></span>
                                             </li>
                                             <li>
-                                                <span>해당층/총층</span>
+                                                <span>해당층/총</span>
                                                 <span class="dt_span" th:text="|${buldDetail.rlFloor} / ${buldDetail.totFloor}|"></span>
                                             </li>
                                             <li>
@@ -363,13 +363,12 @@
                 </div>
             </div>
             <div class="pop_footer full">
-                <button class="btn_cm mint">문의하기</button>
-                <button class="btn_cm">고객센터(1588-1588)</button>
+                <button class="btn_cm mint">문의(010-4455-2690)</button>
+                <button class="btn_cm">문의(010-5850-4864)</button>
             </div>
         </div>
         <div class="dim"></div>
         <script>
-
             const swiper = new Swiper('.swiper-main', {
                 // Optional parameters
                 loop: true,
