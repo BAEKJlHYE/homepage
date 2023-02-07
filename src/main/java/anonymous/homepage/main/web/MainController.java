@@ -1,6 +1,7 @@
 package anonymous.homepage.main.web;
 
 import anonymous.homepage.buld.service.BuldService;
+import anonymous.homepage.buld.vo.BuldVO;
 import anonymous.homepage.main.service.MainService;
 import anonymous.homepage.main.vo.MainVO;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class MainController {
         }
 
         model.addAttribute("buldList", buldService.selectBuldList());
+        model.addAttribute("buldDetail", new BuldVO());
         return "main/main";
     }
 
@@ -40,6 +42,6 @@ public class MainController {
     @RequestMapping(value = "/selectMainBuldDetail.do", method = { RequestMethod.POST })
     public String selectMainBuldDetail(@ModelAttribute("buldDetailForm") MainVO mainVO, Model model) {
         model.addAttribute("buldDetail", mainService.selectMainBuldDetail(mainVO));
-        return "/main/selectMainBuldDetail.do :: #exPop";
+        return "main/main :: #exPop";
     }
 }

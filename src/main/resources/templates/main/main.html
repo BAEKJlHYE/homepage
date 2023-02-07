@@ -6,16 +6,10 @@
 <th:block layout:fragment="content">
     <script>
         document.addEventListener("DOMContentLoaded", function(){
-            var $exPopBtn = $(".exPopBtn");
-            var $exPop = $("#exPop");
 
-            $exPopBtn.click(function (e) {
-                e.preventDefault();
-                $exPop.addClass("on");
-            });
         });
 
-        function fn_sendBuldDetail(buldNo) {
+        function fn_sendBuldDetail(target) {
             // var form = document.getElementById('buldDetailForm');
             // form.submit();
 debugger;
@@ -29,18 +23,25 @@ debugger;
                 data: sendParam
             })
             .done(function (data) {
-                debugger;
-                // $("#pop_buldNm").val(data.buldNm);
                 $("#exPop").replaceWith(data);
-            })
-            .fail(function(jqXHR) {
-                console.log(jqXHR);
+
+                var $exPop = $("#exPop");
+                $exPop.addClass("on");
+
+                var $popClose = $(".btn_close");
+                $popClose.click(function (e) {
+                    e.preventDefault();
+                    $exPop.removeClass("on");
+                });
             })
             .always(function() {
                 console.log("요청, 응답 결과에 상관없이, 이건 항상 실행됩니다.");
             })
         }
     </script>
+    <style>
+        #landView .info_list li span.dt_span{ width: 300px; }
+    </style>
 
     <div class="wrap">
         <div class="skip">
@@ -172,50 +173,45 @@ debugger;
                             <div class="inner">
                                 <ul class="item_list">
                                     <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count lt 5}">
-<!--                                        <form id="buldDetailForm" th:action="@{/main/selectMainBuldDetail.do}" th:object="${buldDetailForm}" method="post">-->
-                                            <input type="hidden" id="buldNo" name="buldNo" th:value="${buld.buldNo}">
-<!--                                            <a href="javascript:fn_sendBuldDetail()" class="exPopBtn">-->
-                                            <a href="javascript:fn_sendBuldDetail()">
-                                                <div class="img" style='background-image: url(../image/temp_img2.jpg)'> <!--TODO 이미지 불러와서 세팅-->
-                                                    <div class="state_wrap" th:switch="${buld.logoTy}">
-                                                        <img th:case="1" src="../image/img_smallLogo1.png" alt="">
-                                                        <img th:case="2" src="../image/img_smallLogo2.png" alt="">
-                                                        <img th:if="${buld.emrgncySaleYn == 'Y'}" src="../image/img_quick.png" alt="">
-                                                    </div>
-                                                    <div class="sold" th:text="|[${buld.cntrctSttusSeNm}] ${buld.buldNm}|"></div>
+                                        <input type="hidden" id="hidden_buldNo" th:value="${buld.buldNo}">
+                                        <a href="javascript:void(0);" onclick="fn_sendBuldDetail()">
+<!--                                        <a href="#" th:onclick="|fn_sendBuldDetail(${buld.buldNo})|">-->
+                                            <div class="img" style='background-image: url(../image/temp_img2.jpg)'> <!--TODO 이미지 불러와서 세팅-->
+                                                <div class="state_wrap" th:switch="${buld.logoTy}">
+                                                    <img th:case="1" src="../image/img_smallLogo1.png" alt="">
+                                                    <img th:case="2" src="../image/img_smallLogo2.png" alt="">
+                                                    <img th:if="${buld.emrgncySaleYn == 'Y'}" src="../image/img_quick.png" alt="">
                                                 </div>
-                                                <ul class="info2">
-                                                    <li><p>보증금</p><p th:text="${buld.gtn}">5천만원</p></li>
-                                                    <li><p>임대료</p><p th:text="${buld.rntchrg}">400</p></li>
-                                                    <li><p>관리비</p><p th:text="${buld.managect}">150</p></li>
-                                                    <li><p>권리금</p><p th:text="${buld.premum}">3억</p></li>
-                                                </ul>
-                                            </a>
-<!--                                        </form>-->
+                                                <div class="sold" th:text="|[${buld.cntrctSttusSeNm}] ${buld.buldNm}|"></div>
+                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p th:text="${buld.gtn}">5천만원</p></li>
+                                                <li><p>임대료</p><p th:text="${buld.rntchrg}">400</p></li>
+                                                <li><p>관리비</p><p th:text="${buld.managect}">150</p></li>
+                                                <li><p>권리금</p><p th:text="${buld.premum}">3억</p></li>
+                                            </ul>
+                                        </a>
                                     </li>
                                 </ul>
 
                                 <ul class="item_list">
                                     <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count ge 5} and ${buldListStat.count lt 9}">
-<!--                                        <form th:action="@{/main/selectMainBuldDetail.do}" th:object="${buldDetailForm}" method="post">-->
-                                            <input type="hidden" id="buldNo2" name="buldNo" th:text="${buld.buldNo}">
-                                            <a href="#" class="exPopBtn">
-                                                <div class="img" style='background-image: url(../image/temp_img2.jpg)'> <!--TODO 이미지 불러와서 세팅-->
-                                                    <div class="state_wrap" th:switch="${buld.logoTy}">
-                                                        <img th:case="1" src="../image/img_smallLogo1.png" alt="">
-                                                        <img th:case="2" src="../image/img_smallLogo2.png" alt="">
-                                                        <img th:if="${buld.emrgncySaleYn == 'Y'}" src="../image/img_quick.png" alt="">
-                                                    </div>
-                                                    <div class="sold" th:text="|[${buld.cntrctSttusSeNm}] ${buld.buldNm}|"></div>
+                                        <a href="#">
+                                            <div class="img" style='background-image: url(../image/temp_img2.jpg)'> <!--TODO 이미지 불러와서 세팅-->
+                                                <div class="state_wrap" th:switch="${buld.logoTy}">
+                                                    <img th:case="1" src="../image/img_smallLogo1.png" alt="">
+                                                    <img th:case="2" src="../image/img_smallLogo2.png" alt="">
+                                                    <img th:if="${buld.emrgncySaleYn == 'Y'}" src="../image/img_quick.png" alt="">
                                                 </div>
-                                                <ul class="info2">
-                                                    <li><p>보증금</p><p th:text="${buld.gtn}">5천만원</p></li>
-                                                    <li><p>임대료</p><p th:text="${buld.rntchrg}">400</p></li>
-                                                    <li><p>관리비</p><p th:text="${buld.managect}">150</p></li>
-                                                    <li><p>권리금</p><p th:text="${buld.premum}">3억</p></li>
-                                                </ul>
-                                            </a>
-<!--                                        </form>-->
+                                                <div class="sold" th:text="|[${buld.cntrctSttusSeNm}] ${buld.buldNm}|"></div>
+                                            </div>
+                                            <ul class="info2">
+                                                <li><p>보증금</p><p th:text="${buld.gtn}">5천만원</p></li>
+                                                <li><p>임대료</p><p th:text="${buld.rntchrg}">400</p></li>
+                                                <li><p>관리비</p><p th:text="${buld.managect}">150</p></li>
+                                                <li><p>권리금</p><p th:text="${buld.premum}">3억</p></li>
+                                            </ul>
+                                        </a>
                                     </li>
                                 </ul>
 
@@ -289,7 +285,7 @@ debugger;
         <!-- 2.상세팝업 -->
         <div class="popup" id="exPop">
             <div class="pop_header">
-                <h2>추천매물 - 매물01</h2>
+                <h2>매물 상세</h2>
                 <button class="btn_close">닫기</button>
             </div>
             <div class="pop_cont" id="landView">
@@ -300,8 +296,9 @@ debugger;
                         <div class="top_info">
                             <div class="landImg">
                                 <div class="badge_wrap">
-                                    <span class="badge black">추천</span> <span class="badge black">급매물</span> <span
-                                        class="badge">리모델링</span>
+<!--                                    <span class="badge black">추천</span>-->
+<!--                                    <span class="badge black">급매물</span>-->
+<!--                                    <span class="badge">리모델링</span>-->
                                 </div>
                                 <div class="swiper-main">
                                     <ul class="swiper-wrapper">
@@ -321,16 +318,33 @@ debugger;
                             </div>
                             <div class="titles">
                                 <dl class="dl_info">
-<!--                                    <dt class="open" id="buldNm" th:text="${buldDetail.buldNm}">수원 7 ROOM</dt>-->
-                                    <dt class="open" id="buldNm">수원 7 ROOM</dt>
+                                    <dt class="open" id="buldNm" th:text="${buldDetail.buldNm}">수원 7 ROOM</dt>
                                     <dd>
                                         <ul class="info_list">
-                                            <li class="add"><span>소재지</span>경기 부천시 송내동 303-5 2층</li>
-                                            <li><span>매물번호</span>10099</li>
-                                            <li><span>매물구분</span>상가</li>
-                                            <li><span>계약상태</span>계약가능</li>
-                                            <li><span>해당층/총층</span>7층/지하1층</li>
-                                            <li><span>공급면적</span>717㎡(217평)</li>
+                                            <li class="add">
+                                                <span>소재지</span>
+                                                <span class="dt_span" th:text="${buldDetail.addr}"></span>
+                                            </li>
+                                            <li>
+                                                <span>매물번호</span>
+                                                <span class="dt_span" th:text="${buldDetail.buldNo}"></span>
+                                            </li>
+                                            <li>
+                                                <span>매물구분</span>
+                                                <span class="dt_span" th:text="${buldDetail.saleSeNm}"></span>
+                                            </li>
+                                            <li>
+                                                <span>계약상태</span>
+                                                <span class="dt_span" th:text="${buldDetail.cntrctSttusSeNm}"></span>
+                                            </li>
+                                            <li>
+                                                <span>해당층/총층</span>
+                                                <span class="dt_span" th:text="|${buldDetail.rlFloor} / ${buldDetail.totFloor}|"></span>
+                                            </li>
+                                            <li>
+                                                <span>공급면적</span>
+                                                <span class="dt_span" th:text="|${buldDetail.suplyAr}㎡ (${buldDetail.dvrRlAea}평)|"></span>
+                                            </li>
                                         </ul>
                                     </dd>
                                 </dl>
@@ -342,7 +356,8 @@ debugger;
                             <dt class="open">매물정보</dt>
                             <dd>
                                 <ul class="info_list">
-                                    <li class="add">매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 매물정보 텍스트 </li>
+                                    <li class="add" th:text="|${buldDetail.buldDc}|">
+                                    </li>
                                 </ul>
                             </dd>
                         </dl>
