@@ -44,10 +44,8 @@
             var $popBtnCm = $('.pop_footer.full .btn_cm');
 
             $popBtnCm.click(function (e) {
-                e.preventDefault();
-                $alertBox.addClass("on");
+                openAlertModal("해당 매물번호에 대하여 아래 번호로 문의주시면 됩니다. \n\n 010-4455-2690 \n\n 010-5850-4864");
             });
-
             $exAlertBtn.click(function (e) {
                 e.preventDefault();
                 $alertBox.addClass("on");
@@ -75,9 +73,6 @@
             });
         }
     </script>
-    <style>
-        /*#landView .info_list li span.dt_span{ width: 300px; }*/
-    </style>
 
     <div class="wrap">
         <div class="skip">
@@ -214,13 +209,13 @@
                                                     <img th:case="2" src="../image/img_smallLogo2.png" alt="">
                                                     <img th:if="${buld.emrgncySaleYn == 'Y'}" src="../image/img_quick.png" alt="">
                                                 </div>
-                                                <div class="sold" th:text="|[${buld.cntrctSttusSeNm}] ${buld.buldNm}|"></div>
+                                                <div class="sold"> [[${buld.cntrctSttusSeNm}]] <br> [[${buld.buldNm}]] </div>
                                             </div>
                                             <ul class="info2">
-                                                <li><p>보증금</p><p th:text="${buld.gtn}">5천만원</p></li>
-                                                <li><p>임대료</p><p th:text="${buld.rntchrg}">400</p></li>
-                                                <li><p>관리비</p><p th:text="${buld.managect}">150</p></li>
-                                                <li><p>권리금</p><p th:text="${buld.premum}">3억</p></li>
+                                                <li><p>보증금</p><p>[[${#numbers.formatInteger(buld.gtn, 0, 'COMMA') + ''}]]</p></li>
+                                                <li><p>임대료</p><p th:text="${#numbers.formatInteger(buld.rntchrg, 0, 'COMMA') + ''}"></p></li>
+                                                <li><p>관리비</p><p th:text="${#numbers.formatInteger(buld.managect, 0, 'COMMA') + ''}"></p></li>
+                                                <li><p>권리금</p><p th:text="${#numbers.formatInteger(buld.premum, 0, 'COMMA') + ''}"></p></li>
                                             </ul>
                                         </a>
                                     </li>
@@ -235,13 +230,13 @@
                                                     <img th:case="2" src="../image/img_smallLogo2.png" alt="">
                                                     <img th:if="${buld.emrgncySaleYn == 'Y'}" src="../image/img_quick.png" alt="">
                                                 </div>
-                                                <div class="sold" th:text="|[${buld.cntrctSttusSeNm}] ${buld.buldNm}|"></div>
+                                                <div class="sold"> [[${buld.cntrctSttusSeNm}]] <br> [[${buld.buldNm}]] </div>
                                             </div>
                                             <ul class="info2">
-                                                <li><p>보증금</p><p th:text="${buld.gtn}">5천만원</p></li>
-                                                <li><p>임대료</p><p th:text="${buld.rntchrg}">400</p></li>
-                                                <li><p>관리비</p><p th:text="${buld.managect}">150</p></li>
-                                                <li><p>권리금</p><p th:text="${buld.premum}">3억</p></li>
+                                                <li><p>보증금</p><p>[[${#numbers.formatInteger(buld.gtn, 0, 'COMMA') + ''}]]</p></li>
+                                                <li><p>임대료</p><p th:text="${#numbers.formatInteger(buld.rntchrg, 0, 'COMMA') + ''}"></p></li>
+                                                <li><p>관리비</p><p th:text="${#numbers.formatInteger(buld.managect, 0, 'COMMA') + ''}"></p></li>
+                                                <li><p>권리금</p><p th:text="${#numbers.formatInteger(buld.premum, 0, 'COMMA') + ''}"></p></li>
                                             </ul>
                                         </a>
                                     </li>
