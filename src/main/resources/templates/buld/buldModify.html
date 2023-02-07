@@ -5,6 +5,37 @@
 
 <th:block layout:fragment="content">
     <script>
+        /* 페이지 로드 후 실행 */
+        var atchFileIdsForDelete = [];
+        document.addEventListener("DOMContentLoaded", function() {
+            // 연락처 세팅
+            setTelNo();
+            // 파일명 세팅
+            setFileName();
+        });
+
+        /* 연락처 세팅 */
+        function setTelNo() {
+            var telNo = document.getElementById('telNo').value;
+            if(!isEmpty(telNo)) {
+                var telNoSplit = telNo.split('-');
+                document.getElementById('telNoFront').value = telNoSplit[0];
+                document.getElementById('telNoMiddle').value = telNoSplit[1];
+                document.getElementById('telNoBack').value = telNoSplit[2];
+            }
+        }
+
+        /* 파일명 세팅 */
+        function setFileName() {
+            var atchFileLis = document.getElementById('uploadFileList').children;
+            for(atchFileLi of atchFileLis) {
+                var span = atchFileLi.children[0];
+                var fileName = span.dataset.filename;
+                var fileSize = byteFormatter(span.dataset.filesize);
+                span.innerHTML = fileName + ' (' + fileSize + ')';
+            }
+        }
+
         /* 우편번호 찾기 버튼 클릭 */
         function findPostcode() {
             new daum.Postcode({
@@ -50,24 +81,65 @@
 
         /* 파일 유효성 검사 */
         function checkFile() {
-            // 파일 최대 개수 검사
-            if (!validateFileCount('selectedFiles', 'uploadFiles', 3))
+            // 파일 개수 확인
+            if (!checkFileCount()) {
+                // 선택 파일 초기화
+                document.getElementById('selectedFiles').value = '';
                 return;
+            }
 
             // input 요소에 파일 추가
             saveFileForUpload('selectedFiles', 'uploadFiles', 10 * 1024, 'image');
 
             // 파일 목록 추가
             showFiles();
+
+            // 선택 파일 초기화
+            document.getElementById('selectedFiles').value = '';
+        }
+
+        /* 파일 개수 확인 */
+        function checkFileCount() {
+            var maximumCount = 3;
+            var selectedFileCount = document.getElementById('selectedFiles').files.length;
+            var uploadFileListLis = document.getElementById('uploadFileList').children;
+            var uploadFileCount = 0;
+            for(uploadFileListLi of uploadFileListLis) {
+                if(uploadFileListLi.style.display == 'none')
+                    continue;
+                uploadFileCount++;
+            }
+
+            if(selectedFileCount == 0) {
+                return false;
+            }
+
+            if(uploadFileCount == maximumCount) {
+                openAlertModal("첨부파일을 모두 선택하였습니다.");
+                return false;
+            }
+
+            if(selectedFileCount > maximumCount) {
+                openAlertModal("첨부파일을 " + maximumCount + "개 이하로 선택해주시기 바랍니다.");
+                return false;
+            }
+
+            if(selectedFileCount + uploadFileCount > maximumCount) {
+                openAlertModal("첨부파일을 " + (maximumCount - uploadFileCount)  + "개 이하로 선택해주시기 바랍니다.");
+                return false;
+            }
+
+            return true;
         }
 
         /* 파일 목록 표시 */
         function showFiles() {
-            // 기존 파일 목록 삭제
+            // 기존 파일 목록 삭제 (등록 시 저장된 파일은 유지)
             var ul = document.getElementById('uploadFileList');
             var lis = ul.getElementsByTagName('li');
             for (var i = lis.length; i > 0; i--) {
-                lis[i - 1].remove();
+                if(isEmpty(lis[i - 1].dataset.atchfileid))
+                    lis[i - 1].remove();
             }
 
             // 파일 목록 추가
@@ -95,17 +167,34 @@
             // 파일 목록에서 제거
             var ul = document.getElementById('uploadFileList');
             var lis = ul.getElementsByTagName('li');
-            var fileIndex = -1;
+            var li;
             for (var i = 0; i < lis.length; i++) {
                 if (lis[i] == clickedATag.parentElement) {
-                    fileIndex = i;
-                    lis[i].remove();
+                    li = lis[i];
                     break;
                 }
             }
 
-            // input 요소에서 파일 제거
-            deleteFileFromInput('uploadFiles', fileIndex);
+            var uploadFiles = document.getElementById('uploadFiles').files;
+            var atchFileId = li.dataset.atchfileid;
+            // 수정 시 추가한 파일인 경우
+            if(isEmpty(atchFileId)) {
+                var fileName = li.children[0].innerHTML.split(' ')[0];
+                var fileIndex = -1;
+                for(var i=0 ; i<uploadFiles.length ; i++) {
+                    if(uploadFiles[i].name == fileName)
+                        fileIndex = i;
+                }
+
+                // input 요소에서 파일 제거
+                deleteFileFromInput('uploadFiles', fileIndex);
+                li.remove();
+
+            // DB에 저장된 파일인 경우
+            } else {
+                li.style.display = 'none';
+                atchFileIdsForDelete.push(atchFileId);
+            }
         }
 
         /* 취소 버튼 클릭 */
@@ -113,12 +202,29 @@
             formSubmit('/buld/selectBuldList.do', 'get', 'application/x-www-form-urlencoded');
         }
 
-        /* 등록 버튼 클릭 */
-        function registerBuld() {
+        /* 수정 버튼 클릭 */
+        function modifyBuld() {
             if(!validateForm())
                 return;
 
-            formSubmit('/buld/insertBuld.do', 'post', 'multipart/form-data');
+            // 첨부파일 삭제
+            for(atchFileId of atchFileIdsForDelete) {
+                $.ajax({
+                    type: 'POST'
+                    , url: '/file/deleteAtchFile/' + atchFileId
+                    , contentType: 'application/json'
+                    , success: function(result) {
+                        // do nothing
+                    }
+                    , error: function() {
+                        openAlertModal('오류가 발생하였습니다. 관리자에게 문의해주시기 바랍니다.');
+                        return;
+                    }
+                });
+            }
+
+            // 수정
+            formSubmit('/buld/updateBuld.do', 'post', 'multipart/form-data');
         }
 
         /* 유효성 검사 */
@@ -198,12 +304,13 @@
 
     <div id="container" class="container">
         <form action="/buld/selectBuldList.do" id="buldPageInfo" method="get">
+            <input type="hidden" id="buldNo" name="buldNo" th:value="${buld.buldNo}">
             <div class="lnb">
                 <div class="lnb_inner">
                     <ul class="step">
                         <li>홈</li>
                         <li>매물</li>
-                        <li>매물등록</li>
+                        <li>매물수정</li>
                     </ul>
                 </div>
             </div>
@@ -229,7 +336,7 @@
                                         <tr>
                                             <th><span class="req">건물명</span></th>
                                             <td>
-                                                <input type="text" id="buldNm" name="buldNm" class="ipt" maxlength="10">
+                                                <input type="text" id="buldNm" name="buldNm" class="ipt" maxlength="10" th:value="${buld.buldNm}">
                                             </td>
                                             <th><span class="req">계약상태</span></th>
                                             <td>
@@ -237,7 +344,7 @@
                                                     <option th:each="cntrctSttusSeCd, cntrctSttusSeCdStat : ${cntrctSttusSeCds}"
                                                             th:text="${cntrctSttusSeCd.cdNm}"
                                                             th:value="${cntrctSttusSeCd.cd}"
-                                                            th:selected="${cntrctSttusSeCdStat.index} == 0">
+                                                            th:selected="${cntrctSttusSeCd.cd} == ${buld.cntrctSttusSeCd}">
                                                     </option>
                                                 </select>
                                             </td>
@@ -249,17 +356,17 @@
                                                     <div>
                                                         <input type="text" id="tempZipcd" class="ipt"
                                                                placeholder="우편번호" style="width:160px" maxlength="5"
-                                                               readonly="readonly" disabled="disabled">
-                                                        <input type="hidden" id="zipcd" name="zipcd">
+                                                               readonly="readonly" disabled="disabled" th:value="${buld.zipcd}">
+                                                        <input type="hidden" id="zipcd" name="zipcd" th:value="${buld.zipcd}">
                                                         <button class="btn_form" type="button" onclick="findPostcode()">우편번호 검색</button>
                                                     </div>
                                                     <div>
                                                         <input type="text" id="tempAddr" class="ipt"
                                                                placeholder="주소" style="width:398px" maxlength="100"
-                                                               readonly="readonly" disabled="disabled">
-                                                        <input type="hidden" id="addr" name="addr">
+                                                               readonly="readonly" disabled="disabled" th:value="${buld.addr}">
+                                                        <input type="hidden" id="addr" name="addr" th:value="${buld.addr}">
                                                         <input type="text" id="detailAddr" name="detailAddr" class="ipt"
-                                                               placeholder="상세주소 입력" style="width:582px" maxlength="100">
+                                                               placeholder="상세주소 입력" style="width:582px" maxlength="100" th:value="${buld.detailAddr}">
                                                     </div>
                                                 </div>
                                             </td>
@@ -267,21 +374,21 @@
                                         <tr>
                                             <th><span class="req">임대료</span></th>
                                             <td>
-                                                <input type="text" id="rntchrg" name="rntchrg" class="ipt" maxlength="10">
+                                                <input type="text" id="rntchrg" name="rntchrg" class="ipt" maxlength="10" th:value="${buld.rntchrg}">
                                             </td>
                                             <th><span class="">보증금</span></th>
                                             <td>
-                                                <input type="text" id="gtn" name="gtn" class="ipt" maxlength="10">
+                                                <input type="text" id="gtn" name="gtn" class="ipt" maxlength="10" th:value="${buld.gtn}">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><span class="">관리비</span></th>
                                             <td>
-                                                <input type="text" id="managect" name="managect" class="ipt" maxlength="10">
+                                                <input type="text" id="managect" name="managect" class="ipt" maxlength="10" th:value="${buld.managect}">
                                             </td>
                                             <th><span class="">권리금</span></th>
                                             <td>
-                                                <input type="text" id="premum" name="premum" class="ipt" maxlength="10">
+                                                <input type="text" id="premum" name="premum" class="ipt" maxlength="10" th:value="${buld.premum}">
                                             </td>
                                         </tr>
                                         <tr>
@@ -291,7 +398,7 @@
                                                     <option th:each="delngTySeCd, delngTySeCdStat : ${delngTySeCds}"
                                                             th:text="${delngTySeCd.cdNm}"
                                                             th:value="${delngTySeCd.cd}"
-                                                            th:selected="${delngTySeCdStat.index} == 0">
+                                                            th:selected="${delngTySeCd.cd} == ${buld.delngTySeCd}">
                                                     </option>
                                                 </select>
                                             </td>
@@ -301,7 +408,7 @@
                                                     <option th:each="saleSeCd, saleSeCdStat : ${saleSeCds}"
                                                             th:text="${saleSeCd.cdNm}"
                                                             th:value="${saleSeCd.cd}"
-                                                            th:selected="${saleSeCdStat.index} == 0">
+                                                            th:selected="${saleSeCd.cd} == ${buld.saleSeCd}">
                                                     </option>
                                                 </select>
                                             </td>
@@ -309,21 +416,21 @@
                                         <tr>
                                             <th><span class="">해당층</span></th>
                                             <td>
-                                                <input type="text" id="rlFloor" name="rlFloor" class="ipt" maxlength="3">
+                                                <input type="text" id="rlFloor" name="rlFloor" class="ipt" maxlength="3" th:value="${buld.rlFloor}">
                                             </td>
                                             <th><span class="">총층</span></th>
                                             <td>
-                                                <input type="text" id="totFloor" name="totFloor" class="ipt" maxlength="3">
+                                                <input type="text" id="totFloor" name="totFloor" class="ipt" maxlength="3" th:value="${buld.totFloor}">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><span class="">공급면적</span></th>
                                             <td>
-                                                <input type="text" id="suplyAr" name="suplyAr" class="ipt" maxlength="8">
+                                                <input type="text" id="suplyAr" name="suplyAr" class="ipt" maxlength="8" th:value="${buld.suplyAr}">
                                             </td>
                                             <th><span class="">공급평수</span></th>
                                             <td>
-                                                <input type="text" id="suplyRlAea" name="suplyRlAea" class="ipt" maxlength="5">
+                                                <input type="text" id="suplyRlAea" name="suplyRlAea" class="ipt" maxlength="5" th:value="${buld.suplyRlAea}">
                                             </td>
                                         </tr>
                                         <tr>
@@ -331,11 +438,11 @@
                                             <td>
                                                 <ul class="radio list">
                                                     <li>
-                                                        <input type="radio" id="logo1" value="1" name="logoTy" class="logoImgRadio" checked="checked">
+                                                        <input type="radio" id="logo1" value="1" name="logoTy" class="logoImgRadio" th:checked="${buld.logoTy eq '1'}">
                                                         <label for="logo1" class="logoImgLabel"><img src="../image/img_smallLogo1.png" style="width: 40px;"></label>
                                                     </li>
                                                     <li>
-                                                        <input type="radio" id="logo2" value="2" name="logoTy" class="logoImgRadio">
+                                                        <input type="radio" id="logo2" value="2" name="logoTy" class="logoImgRadio" th:checked="${buld.logoTy eq '2'}">
                                                         <label for="logo2" class="logoImgLabel"><img src="../image/img_smallLogo2.png" style="width: 40px;"></label>
                                                     </li>
                                                 </ul>
@@ -345,10 +452,10 @@
                                                 <ul class="chk list">
                                                     <li>
                                                         <input type="checkbox" id="emrgncySaleYn"
-                                                               value="N" onchange="changeCheckboxStatus(this)">
+                                                               onchange="changeCheckboxStatus(this)" th:value="${buld.emrgncySaleYn}" th:checked="${buld.emrgncySaleYn eq 'Y'}">
                                                         <label for="emrgncySaleYn">급매물</label>
                                                     </li>
-                                                    <input type="hidden" name="emrgncySaleYn" value="N">
+                                                    <input type="hidden" name="emrgncySaleYn" th:value="${buld.emrgncySaleYn}">
                                                 </ul>
                                             </td>
                                         </tr>
@@ -367,7 +474,7 @@
                                                             <input type="text" id="telNoBack" maxlength="4">
                                                         </li>
                                                     </ul>
-                                                    <input type="hidden" id="telNo" name="telNo">
+                                                    <input type="hidden" id="telNo" name="telNo" th:value="${buld.telNo}">
                                                 </div>
                                             </td>
                                         </tr>
@@ -375,19 +482,28 @@
                                             <th><span class="">건물설명</span></th>
                                             <td colspan="3">
                                                 <textarea class="txa" id="buldDc" name="buldDc" cols="30" rows="10" style="height: 290px;"
-                                                          placeholder="내용을 입력하세요." maxlength="1000"></textarea>
+                                                          placeholder="내용을 입력하세요." maxlength="1000" th:text="${buld.buldDc}"></textarea>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><span>첨부파일</span></th>
                                             <td colspan="3">
                                                 <div class="ly_grp">
+                                                    <!-- 파일 첨부 -->
                                                     <a href="#" class="btn_df" onclick="selectFile()">파일첨부</a>
-                                                    <input type="file" multiple="multiple" id="selectedFiles"
-                                                           onchange="checkFile()" style="display: none;">
-                                                    <input type="file" multiple="multiple" id="uploadFiles"
-                                                           name="uploadFiles" style="display: none;">
-                                                    <ul id="uploadFileList" class="ipt_file" style="width: 700px;"></ul>
+                                                    <input type="file" multiple="multiple" id="selectedFiles" onchange="checkFile()" style="display: none;">
+                                                    <input type="file" multiple="multiple" id="uploadFiles" name="uploadFiles" style="display: none;">
+                                                    <!-- 첨부파일 목록 -->
+                                                    <input type="hidden" id="atchDocId" name="atchDocId" th:value="${buld.atchDocId}">
+                                                    <ul id="uploadFileList" class="ipt_file" style="width: 700px;">
+                                                        <li th:each="atchFile : ${buld.atchFiles}" th:data-atchFileId="${atchFile.atchFileId}">
+                                                            <span th:data-fileName="${atchFile.orginlFileNm}"
+                                                                  th:data-fileSize="${atchFile.fileSize}">
+                                                            </span>
+                                                            <a href="#" class="btn_del" onclick="deleteFile(this)">
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </td>
                                         </tr>
@@ -396,7 +512,7 @@
                             </div>
                         </article>
                         <div class="btnbox cb">
-                            <a href="#" class="btn_cm mint" onclick="registerBuld()">등록</a>
+                            <a href="#" class="btn_cm mint" onclick="modifyBuld()">수정</a>
                             <a href="#" class="btn_cm" onclick="moveToBuldList()">취소</a>
                         </div>
                     </section>

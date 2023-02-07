@@ -9,5 +9,9 @@ import java.util.List;
 public interface BuldMapper {
     public List<BuldVO> selectBuldList();
 
+    public BuldVO selectBuld(BuldVO buldVO);
+
     public int insertBuld(BuldVO buldVO);
+
+    public int updateBuld(BuldVO buldVO);
 }

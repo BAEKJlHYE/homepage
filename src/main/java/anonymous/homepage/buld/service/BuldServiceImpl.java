@@ -18,7 +18,17 @@ public class BuldServiceImpl implements BuldService {
     }
 
     @Override
+    public BuldVO selectBuld(BuldVO buldVO) {
+        return buldMapper.selectBuld(buldVO);
+    }
+
+    @Override
     public int insertBuld(BuldVO buldVO) {
         return buldMapper.insertBuld(buldVO);
+    }
+
+    @Override
+    public int updateBuld(BuldVO buldVO) {
+        return buldMapper.updateBuld(buldVO);
     }
 }

@@ -51,14 +51,18 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void deleteAtchDoc(String atchDocId) {
-        List<AtchFileVO> atchFiles = fileMapper.selectAtchFileList(atchDocId);
-        for(AtchFileVO atchFile : atchFiles) {
-            fileStore.deleteFile(atchFile.getFileNm());
-            fileMapper.deleteAtchFile(atchFile.getAtchFileId());
+    public void addFiles(BaseVO baseVO) {
+        if(baseVO.getAtchFiles() == null || baseVO.getAtchFiles().size() == 0) {
+            return;
         }
 
-        fileMapper.deleteAtchDoc(atchDocId);
+        String userId = baseVO.getUserId();
+        for(AtchFileVO atchFileVO : baseVO.getAtchFiles()) {
+            atchFileVO.setAtchDocId(baseVO.getAtchDoc().getAtchDocId());
+            atchFileVO.setRegistId(userId);
+            atchFileVO.setUpdateId(userId);
+            fileMapper.insertAtchFile(atchFileVO);
+        }
     }
 
     @Override

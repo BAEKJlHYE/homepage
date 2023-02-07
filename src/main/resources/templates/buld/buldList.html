@@ -30,12 +30,12 @@
         <div class="content">
             <div class="content_inner">
                 <div id="landHd">
-                    <!------- 1. 검색 [s] -->
+                    <!-- 검색 -->
                     <div class="sch_wrap">
                         <input type="text" autocomplete="off" id="sch_kwd" class="sh_input"
-                            placeholder="지역, 지하철역, 매물번호 검색" title="지역, 지하철역, 매물번호 검색" onkeyup="text_search()"
+                            placeholder="건물명 검색" onkeyup="text_search()"
                             value="">
-                        <button type="submit" class="sch_btn" onclick="text_direct_pick()">
+                        <button type="submit" class="sch_btn" onclick="">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="feather feather-search">
@@ -44,8 +44,7 @@
                             </svg>
                         </button>
                     </div>
-                    <!------- 1. 검색 [e] -->
-                    <!------- 2. 필터 [s] -->
+                    <!-- 필터 -->
                     <div class="filter_wrap">
                         <!------- 매물종류 [s] -->
                         <div class="filter_area">
@@ -82,13 +81,15 @@
                                     </ul>
                                 </div>
                                 <button class="filter_close btm">적용</button>
-                                <button class="filter_close top"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                <button class="filter_close top">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                         height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                         class="feather feather-x">
                                         <line x1="18" y1="6" x2="6" y2="18"></line>
                                         <line x1="6" y1="6" x2="18" y2="18"></line>
-                                    </svg></button>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                         <!------- 매물종류 [e] -->
@@ -444,34 +445,11 @@
                         </div>
                         <!------- 면적 [e] -->
                     </div>
-                    <!------- 2. 필터 [e] -->
-                    <!------- 3. 전체필터/버튼 [s] -->
-                    <div class="right_btns">
-                        <button class="r_btn refresh_btn"> <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw">
-                                <polyline points="23 4 23 10 17 10"></polyline>
-                                <polyline points="1 20 1 14 7 14"></polyline>
-                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15">
-                                </path>
-                            </svg></button>
-                        <button class="r_btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="feather feather-list">
-                                <line x1="8" y1="6" x2="21" y2="6"></line>
-                                <line x1="8" y1="12" x2="21" y2="12"></line>
-                                <line x1="8" y1="18" x2="21" y2="18"></line>
-                                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                            </svg></button>
-                    </div>
-                    <!------- 3. 전체필터/버튼 [e] -->
                 </div>
                 <section id="sh_section" class="landList">
                     <div id="landList" style="display: block;">
                         <ul class="item_list">
+                            <!-- 매물 목록 (반복부) -->
                             <li class="land_list" th:each="buld : ${buldList}">
                                 <a href="#" onclick="test()">
                                     <div th:if="${#strings.isEmpty(buld.atchDocId)}" class="noImg">

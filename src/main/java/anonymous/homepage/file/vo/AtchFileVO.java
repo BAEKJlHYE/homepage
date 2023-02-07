@@ -13,4 +13,5 @@ public class AtchFileVO {
     private String registDt;
     private String updateId;
     private String updateDt;
+    private String useYn;
 }

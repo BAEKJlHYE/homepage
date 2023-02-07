@@ -43,13 +43,6 @@ public class FileController {
         return new UrlResource("file:" + fileStore.getFullPath(atchFileVO.getFileNm()));
     }
 
-    @PostMapping("/deleteAtchDoc/{atchDocId}")
-    @ResponseBody
-    public String deleteAtchDoc(@PathVariable String atchDocId) {
-        fileService.deleteAtchDoc(atchDocId);
-        return "okay";
-    }
-
     @PostMapping("/deleteAtchFile/{atchFileId}")
     @ResponseBody
     public String deleteAtchFile(@PathVariable String atchFileId) {

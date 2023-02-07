@@ -12,7 +12,7 @@ public interface FileService {
 
     public void saveFiles(BaseVO baseVO);
 
-    public void deleteAtchDoc(String atchDocId);
+    public void addFiles(BaseVO baseVO);
 
     public void deleteAtchFile(String atchFileId);
 }

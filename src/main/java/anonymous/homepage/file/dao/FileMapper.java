@@ -16,7 +16,5 @@ public interface FileMapper {
 
     public int insertAtchFile(AtchFileVO atchFileVO);
 
-    public int deleteAtchDoc(String atchDocId);
-
     public int deleteAtchFile(String atchFileId);
 }

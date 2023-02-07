@@ -46,7 +46,42 @@
 
      <!-- 건물 조회 -->
      <select id="selectBuld" parameterType="anonymous.homepage.buld.vo.BuldVO" resultType="anonymous.homepage.buld.vo.BuldVO">
-
+          SELECT BULD_NO
+               , BULD_NM
+               , ZIPCD
+               , ADDR
+               , DETAIL_ADDR
+               , DELNG_TY_SE_CD
+               , (SELECT CD_NM FROM CD WHERE CD = DELNG_TY_SE_CD) AS DELNG_TY_SE_NM
+               , GTN
+               , PRICE
+               , CNTRCT_STTUS_SE_CD
+               , (SELECT CD_NM FROM CD WHERE CD = CNTRCT_STTUS_SE_CD) AS CNTRCT_STTUS_SE_NM
+               , RL_FLOOR
+               , TOT_FLOOR
+               , DVR_AR
+               , DVR_RL_AEA
+               , SUPLY_AR
+               , SUPLY_RL_AEA
+               , COMPET_YEAR
+               , NVL(MVN_DE, '협의 후 가능') AS MVN_DE
+               , SALE_SE_CD
+               , (SELECT CD_NM FROM CD WHERE CD = SALE_SE_CD) AS SALE_SE_NM
+               , TEL_NO
+               , RECOMEND_SALE_YN
+               , EMRGNCY_SALE_YN
+               , REGIST_ID
+               , REGIST_DT
+               , UPDATE_ID
+               , UPDATE_DT
+               , ATCH_DOC_ID
+               , RNTCHRG
+               , MANAGECT
+               , PREMUM
+               , BULD_DC
+               , LOGO_TY
+          FROM BULD
+          WHERE BULD_NO = #{buldNo}
      </select>
 
      <!-- 건물 등록 -->
@@ -62,64 +97,30 @@
                , ADDR
                , DETAIL_ADDR
                , DELNG_TY_SE_CD
-               <if test="gtn != null and gtn != ''">
                , GTN
-               </if>
-               <if test="price != null and price != ''">
                , PRICE
-               </if>
                , CNTRCT_STTUS_SE_CD
-               <if test="rlFloor != null and rlFloor != ''">
                , RL_FLOOR
-               </if>
-               <if test="totFloor != null and totFloor != ''">
                , TOT_FLOOR
-               </if>
-               <if test="dvrAr != null and dvrAr != ''">
                , DVR_AR
-               </if>
-               <if test="dvrRlAea != null and dvrRlAea != ''">
                , DVR_RL_AEA
-               </if>
-               <if test="suplyAr != null and suplyAr != ''">
                , SUPLY_AR
-               </if>
-               <if test="suplyRlAea != null and suplyRlAea != ''">
                , SUPLY_RL_AEA
-               </if>
-               <if test="competYear != null and competYear != ''">
                , COMPET_YEAR
-               </if>
-               <if test="mvnDe != null and mvnDe != ''">
                , MVN_DE
-               </if>
                , SALE_SE_CD
                , TEL_NO
-               <if test="recomendSaleYn != null and recomendSaleYn != ''">
                , RECOMEND_SALE_YN
-               </if>
-               <if test="emrgncySaleYn != null and emrgncySaleYn != ''">
                , EMRGNCY_SALE_YN
-               </if>
                , REGIST_ID
                , REGIST_DT
                , UPDATE_ID
                , UPDATE_DT
-               <if test="atchDocId != null and atchDocId != ''">
                , ATCH_DOC_ID
-               </if>
-               <if test="rntchrg != null and rntchrg != ''">
                , RNTCHRG
-               </if>
-               <if test="managect != null and managect != ''">
                , MANAGECT
-               </if>
-               <if test="premum != null and premum != ''">
                , PREMUM
-               </if>
-               <if test="buldDc != null and buldDc != ''">
                , BULD_DC
-               </if>
                , LOGO_TY
           )
           VALUES (
@@ -129,65 +130,65 @@
                , #{addr}
                , #{detailAddr}
                , #{delngTySeCd}
-               <if test="gtn != null and gtn != ''">
-               , #{gtn}
-               </if>
-               <if test="price != null and price != ''">
-               , #{price}
-               </if>
+               , #{gtn, jdbcType=VARCHAR}
+               , #{price, jdbcType=VARCHAR}
                , #{cntrctSttusSeCd}
-               <if test="rlFloor != null and rlFloor != ''">
-               , #{rlFloor}
-               </if>
-               <if test="totFloor != null and totFloor != ''">
-               , #{totFloor}
-               </if>
-               <if test="dvrAr != null and dvrAr != ''">
-               , #{dvrAr}
-               </if>
-               <if test="dvrRlAea != null and dvrRlAea != ''">
-               , #{dvrRlAea}
-               </if>
-               <if test="suplyAr != null and suplyAr != ''">
-               , #{suplyAr}
-               </if>
-               <if test="suplyRlAea != null and suplyRlAea != ''">
-               , #{suplyRlAea}
-               </if>
-               <if test="competYear != null and competYear != ''">
-               , #{competYear}
-               </if>
-               <if test="mvnDe != null and mvnDe != ''">
-               , #{mvnDe}
-               </if>
+               , #{rlFloor, jdbcType=VARCHAR}
+               , #{totFloor, jdbcType=VARCHAR}
+               , #{dvrAr, jdbcType=VARCHAR}
+               , #{dvrRlAea, jdbcType=VARCHAR}
+               , #{suplyAr, jdbcType=VARCHAR}
+               , #{suplyRlAea, jdbcType=VARCHAR}
+               , #{competYear, jdbcType=VARCHAR}
+               , #{mvnDe, jdbcType=VARCHAR}
                , #{saleSeCd}
                , #{telNo}
-               <if test="recomendSaleYn != null and recomendSaleYn != ''">
-               , #{recomendSaleYn}
-               </if>
-               <if test="emrgncySaleYn != null and emrgncySaleYn != ''">
-               , #{emrgncySaleYn}
-               </if>
+               , #{recomendSaleYn, jdbcType=VARCHAR}
+               , #{emrgncySaleYn, jdbcType=VARCHAR}
                , #{userId}
                , SYSDATE
                , #{userId}
                , SYSDATE
-               <if test="atchDocId != null and atchDocId != ''">
-               , #{atchDocId}
-               </if>
-               <if test="rntchrg != null and rntchrg != ''">
-               , #{rntchrg}
-               </if>
-               <if test="managect != null and managect != ''">
-               , #{managect}
-               </if>
-               <if test="premum != null and premum != ''">
-               , #{premum}
-               </if>
-               <if test="buldDc != null and buldDc != ''">
-               , #{buldDc}
-               </if>
+               , #{atchDocId, jdbcType=VARCHAR}
+               , #{rntchrg, jdbcType=VARCHAR}
+               , #{managect, jdbcType=VARCHAR}
+               , #{premum, jdbcType=VARCHAR}
+               , #{buldDc, jdbcType=VARCHAR}
                , #{logoTy}
           )
      </insert>
+
+     <!-- 건물 수정 -->
+     <update id="updateBuld" parameterType="anonymous.homepage.buld.vo.BuldVO">
+          UPDATE BULD
+          SET BULD_NM               = #{buldNm, jdbcType=VARCHAR}
+            , ZIPCD                 = #{zipcd, jdbcType=VARCHAR}
+            , ADDR                  = #{addr, jdbcType=VARCHAR}
+            , DETAIL_ADDR           = #{detailAddr, jdbcType=VARCHAR}
+            , DELNG_TY_SE_CD        = #{delngTySeCd, jdbcType=VARCHAR}
+            , GTN                   = #{gtn, jdbcType=VARCHAR}
+            , PRICE                 = #{price, jdbcType=VARCHAR}
+            , CNTRCT_STTUS_SE_CD    = #{cntrctSttusSeCd, jdbcType=VARCHAR}
+            , RL_FLOOR              = #{rlFloor, jdbcType=VARCHAR}
+            , TOT_FLOOR             = #{totFloor, jdbcType=VARCHAR}
+            , DVR_AR                = #{dvrAr, jdbcType=VARCHAR}
+            , DVR_RL_AEA            = #{dvrRlAea, jdbcType=VARCHAR}
+            , SUPLY_AR              = #{suplyAr, jdbcType=VARCHAR}
+            , SUPLY_RL_AEA          = #{suplyRlAea, jdbcType=VARCHAR}
+            , COMPET_YEAR           = #{competYear, jdbcType=VARCHAR}
+            , MVN_DE                = #{mvnDe, jdbcType=VARCHAR}
+            , SALE_SE_CD            = #{saleSeCd, jdbcType=VARCHAR}
+            , TEL_NO                = #{telNo, jdbcType=VARCHAR}
+            , RECOMEND_SALE_YN      = #{recomendSaleYn, jdbcType=VARCHAR}
+            , EMRGNCY_SALE_YN       = #{emrgncySaleYn, jdbcType=VARCHAR}
+            , UPDATE_ID             = #{userId, jdbcType=VARCHAR}
+            , UPDATE_DT             = SYSDATE
+            , ATCH_DOC_ID           = #{atchDocId, jdbcType=VARCHAR}
+            , RNTCHRG               = #{rntchrg, jdbcType=VARCHAR}
+            , MANAGECT              = #{managect, jdbcType=VARCHAR}
+            , PREMUM                = #{premum, jdbcType=VARCHAR}
+            , BULD_DC               = #{buldDc, jdbcType=VARCHAR}
+            , LOGO_TY               = #{logoTy, jdbcType=VARCHAR}
+          WHERE BULD_NO = #{buldNo}
+     </update>
 </mapper>

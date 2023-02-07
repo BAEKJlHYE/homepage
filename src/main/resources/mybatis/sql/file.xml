@@ -13,6 +13,8 @@
              , FILE_SIZE
         FROM ATCH_FILE
         WHERE ATCH_DOC_ID = #{atchDocId}
+          AND USE_YN = 'Y'
+        ORDER BY ATCH_FILE_ID
     </select>
 
     <!-- 첨부파일 조회 -->
@@ -24,6 +26,7 @@
              , FILE_SIZE
         FROM ATCH_FILE
         WHERE ATCH_FILE_ID = #{atchFileId}
+          AND USE_YN = 'Y'
     </select>
 
     <!-- 첨부문서 등록 -->
@@ -66,6 +69,7 @@
             , REGIST_DT
             , UPDATE_ID
             , UPDATE_DT
+            , USE_YN
         )
         VALUES(
             #{atchFileId}
@@ -77,18 +81,14 @@
             , SYSDATE
             , #{updateId}
             , SYSDATE
-              )
+            , 'Y'
+        )
     </insert>
 
-    <!-- 첨부문서 삭제 -->
-    <delete id="deleteAtchDoc" parameterType="String">
-        DELETE FROM ATCH_DOC
-        WHERE ATCH_DOC_ID = #{atchDocId}
-    </delete>
-
     <!-- 첨부파일 삭제 -->
-    <delete id="deleteAtchFile" parameterType="String">
-        DELETE FROM ATCH_FILE
+    <delete id="deleteAtchFile" parameterType="anonymous.homepage.file.vo.AtchFileVO">
+        UPDATE ATCH_FILE
+        SET USE_YN = 'N'
         WHERE ATCH_FILE_ID = #{atchFileId}
     </delete>
 </mapper>
