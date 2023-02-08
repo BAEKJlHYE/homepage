@@ -124,8 +124,8 @@
         /* 유효성 검사 */
         function validateForm() {
             // 필수값
-            var mandatoryInputIds = [ 'buldNm', 'zipcd', 'addr', 'detailAddr', 'rntchrg', 'telNoFront', 'telNoMiddle', 'telNoBack' ];
-            var mandatoryInputNames = [ '건물명', '주소', '주소', '주소', '임대료', '연락처', '연락처', '연락처' ];
+            var mandatoryInputIds = [ 'buldNm', 'zipcd', 'addr', 'detailAddr', 'telNoFront', 'telNoMiddle', 'telNoBack' ];
+            var mandatoryInputNames = [ '건물명', '주소', '주소', '주소', '연락처', '연락처', '연락처' ];
             for(var i=0 ; i<mandatoryInputIds.length ; i++) {
                 var value = document.getElementById(mandatoryInputIds[i]).value;
                 if(isEmpty(value)) {
@@ -265,7 +265,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th><span class="req">임대료</span></th>
+                                            <th><span class="">임대료</span></th>
                                             <td>
                                                 <input type="text" id="rntchrg" name="rntchrg" class="ipt" maxlength="10">
                                             </td>

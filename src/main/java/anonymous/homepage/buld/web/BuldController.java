@@ -68,7 +68,7 @@ public class BuldController {
 
         // 매물 정보
         BuldVO buldVO = new BuldVO();
-        buldVO.setBuldNo("000006");
+        buldVO.setBuldNo("000002");
         BuldVO buld = buldService.selectBuld(buldVO);
         String atchDocId = buld.getAtchDocId();
         if(StringUtils.hasText(atchDocId)) {
@@ -87,8 +87,9 @@ public class BuldController {
         List<AtchFileVO> atchFiles = fileStore.saveFiles(buldVO.getUploadFiles());
         buldVO.setAtchFiles(atchFiles);
         fileService.saveFiles(buldVO);
+        if(buldVO.getAtchDoc() != null)
+            buldVO.setAtchDocId(buldVO.getAtchDoc().getAtchDocId());
 
-        buldVO.setAtchDocId(buldVO.getAtchDoc().getAtchDocId());
         buldService.insertBuld(buldVO);
 
         return "ok";
@@ -111,7 +112,8 @@ public class BuldController {
             fileService.addFiles(buldVO);
         } else {
             fileService.saveFiles(buldVO);
-            buldVO.setAtchDocId(buldVO.getAtchDoc().getAtchDocId());
+            if(buldVO.getAtchDoc() != null)
+                buldVO.setAtchDocId(buldVO.getAtchDoc().getAtchDocId());
         }
 
         buldService.updateBuld(buldVO);

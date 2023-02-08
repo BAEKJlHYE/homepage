@@ -130,65 +130,65 @@
                , #{addr}
                , #{detailAddr}
                , #{delngTySeCd}
-               , #{gtn, jdbcType=VARCHAR}
-               , #{price, jdbcType=VARCHAR}
+               , NVL(#{gtn}, 0)
+               , NVL(#{price}, 0)
                , #{cntrctSttusSeCd}
-               , #{rlFloor, jdbcType=VARCHAR}
-               , #{totFloor, jdbcType=VARCHAR}
-               , #{dvrAr, jdbcType=VARCHAR}
-               , #{dvrRlAea, jdbcType=VARCHAR}
-               , #{suplyAr, jdbcType=VARCHAR}
-               , #{suplyRlAea, jdbcType=VARCHAR}
-               , #{competYear, jdbcType=VARCHAR}
-               , #{mvnDe, jdbcType=VARCHAR}
+               , NVL(#{rlFloor}, 0)
+               , NVL(#{totFloor}, 0)
+               , NVL(#{dvrAr}, 0)
+               , NVL(#{dvrRlAea}, 0)
+               , NVL(#{suplyAr}, 0)
+               , NVL(#{suplyRlAea}, 0)
+               , #{competYear}
+               , #{mvnDe}
                , #{saleSeCd}
                , #{telNo}
-               , #{recomendSaleYn, jdbcType=VARCHAR}
-               , #{emrgncySaleYn, jdbcType=VARCHAR}
+               , NVL(#{recomendSaleYn}, 'N')
+               , NVL(#{emrgncySaleYn}, 'N')
                , #{userId}
                , SYSDATE
                , #{userId}
                , SYSDATE
-               , #{atchDocId, jdbcType=VARCHAR}
-               , #{rntchrg, jdbcType=VARCHAR}
-               , #{managect, jdbcType=VARCHAR}
-               , #{premum, jdbcType=VARCHAR}
-               , #{buldDc, jdbcType=VARCHAR}
-               , #{logoTy}
+               , #{atchDocId}
+               , NVL(#{rntchrg}, 0)
+               , NVL(#{managect}, 0)
+               , NVL(#{premum}, 0)
+               , #{buldDc}
+               , NVL(#{logoTy}, '1')
           )
      </insert>
 
      <!-- 건물 수정 -->
      <update id="updateBuld" parameterType="anonymous.homepage.buld.vo.BuldVO">
           UPDATE BULD
-          SET BULD_NM               = #{buldNm, jdbcType=VARCHAR}
-            , ZIPCD                 = #{zipcd, jdbcType=VARCHAR}
-            , ADDR                  = #{addr, jdbcType=VARCHAR}
-            , DETAIL_ADDR           = #{detailAddr, jdbcType=VARCHAR}
-            , DELNG_TY_SE_CD        = #{delngTySeCd, jdbcType=VARCHAR}
-            , GTN                   = #{gtn, jdbcType=VARCHAR}
-            , PRICE                 = #{price, jdbcType=VARCHAR}
-            , CNTRCT_STTUS_SE_CD    = #{cntrctSttusSeCd, jdbcType=VARCHAR}
-            , RL_FLOOR              = #{rlFloor, jdbcType=VARCHAR}
-            , TOT_FLOOR             = #{totFloor, jdbcType=VARCHAR}
-            , DVR_AR                = #{dvrAr, jdbcType=VARCHAR}
-            , DVR_RL_AEA            = #{dvrRlAea, jdbcType=VARCHAR}
-            , SUPLY_AR              = #{suplyAr, jdbcType=VARCHAR}
-            , SUPLY_RL_AEA          = #{suplyRlAea, jdbcType=VARCHAR}
-            , COMPET_YEAR           = #{competYear, jdbcType=VARCHAR}
-            , MVN_DE                = #{mvnDe, jdbcType=VARCHAR}
-            , SALE_SE_CD            = #{saleSeCd, jdbcType=VARCHAR}
-            , TEL_NO                = #{telNo, jdbcType=VARCHAR}
-            , RECOMEND_SALE_YN      = #{recomendSaleYn, jdbcType=VARCHAR}
-            , EMRGNCY_SALE_YN       = #{emrgncySaleYn, jdbcType=VARCHAR}
-            , UPDATE_ID             = #{userId, jdbcType=VARCHAR}
+          SET BULD_NM               = #{buldNm}
+            , ZIPCD                 = #{zipcd}
+            , ADDR                  = #{addr}
+            , DETAIL_ADDR           = #{detailAddr}
+            , DELNG_TY_SE_CD        = #{delngTySeCd}
+            , GTN                   = NVL(#{gtn}, 0)
+            , PRICE                 = NVL(#{price}, 0)
+            , CNTRCT_STTUS_SE_CD    = #{cntrctSttusSeCd}
+            , RL_FLOOR              = NVL(#{rlFloor}, 0)
+            , TOT_FLOOR             = NVL(#{totFloor}, 0)
+            , DVR_AR                = NVL(#{dvrAr}, 0)
+            , DVR_RL_AEA            = NVL(#{dvrRlAea}, 0)
+            , SUPLY_AR              = NVL(#{suplyAr}, 0)
+            , SUPLY_RL_AEA          = NVL(#{suplyRlAea}, 0)
+            , COMPET_YEAR           = #{competYear}
+            , MVN_DE                = #{mvnDe}
+            , SALE_SE_CD            = #{saleSeCd}
+            , TEL_NO                = #{telNo}
+            , RECOMEND_SALE_YN      = NVL(#{recomendSaleYn}, 'N')
+            , EMRGNCY_SALE_YN       = NVL(#{emrgncySaleYn}, 'N')
+            , UPDATE_ID             = #{userId}
             , UPDATE_DT             = SYSDATE
-            , ATCH_DOC_ID           = #{atchDocId, jdbcType=VARCHAR}
-            , RNTCHRG               = #{rntchrg, jdbcType=VARCHAR}
-            , MANAGECT              = #{managect, jdbcType=VARCHAR}
-            , PREMUM                = #{premum, jdbcType=VARCHAR}
-            , BULD_DC               = #{buldDc, jdbcType=VARCHAR}
-            , LOGO_TY               = #{logoTy, jdbcType=VARCHAR}
+            , ATCH_DOC_ID           = #{atchDocId}
+            , RNTCHRG               = NVL(#{rntchrg}, 0)
+            , MANAGECT              = NVL(#{managect}, 0)
+            , PREMUM                = NVL(#{premum}, 0)
+            , BULD_DC               = #{buldDc}
+            , LOGO_TY               = NVL(#{logoTy}, '1')
           WHERE BULD_NO = #{buldNo}
      </update>
 </mapper>

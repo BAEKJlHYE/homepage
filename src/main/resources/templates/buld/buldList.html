@@ -452,10 +452,10 @@
                             <!-- 매물 목록 (반복부) -->
                             <li class="land_list" th:each="buld : ${buldList}">
                                 <a href="#" onclick="test()">
-                                    <div th:if="${#strings.isEmpty(buld.atchDocId)}" class="noImg">
+                                    <div th:if="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0}" class="noImg">
                                         <p class="noImgTxt">이미지 준비 중입니다.</p>
                                     </div>
-                                    <div th:if="${not #strings.isEmpty(buld.atchDocId)}" class="img">
+                                    <div th:if="${buld.atchFiles != null and #lists.size(buld.atchFiles) != 0}" class="img">
                                         <img th:each="atchFile, atchFileStat : ${buld.atchFiles}"
                                              th:if="${atchFileStat.index} == 0"
                                              th:src="|/file/image/${atchFile.atchFileId}|"
