@@ -13,8 +13,8 @@ public class BuldServiceImpl implements BuldService {
     private final BuldMapper buldMapper;
 
     @Override
-    public List<BuldVO> selectBuldList() {
-        return buldMapper.selectBuldList();
+    public List<BuldVO> selectBuldList(BuldVO buldVO) {
+        return buldMapper.selectBuldList(buldVO);
     }
 
     @Override

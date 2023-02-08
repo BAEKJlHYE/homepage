@@ -29,18 +29,64 @@ public class BuldController {
     private final FileStore fileStore;
     private final FileService fileService;
 
+    // 매물 목록 조회
     @GetMapping("/selectBuldList.do")
-    public String selectBuldList(Model model) {
-        List<BuldVO> buldList = buldService.selectBuldList();
-        for(BuldVO buldVO : buldList) {
-            String atchDocId = buldVO.getAtchDocId();
+    public String selectBuldList(@ModelAttribute BuldVO buldVO, Model model) {
+        // 필터 처리
+        String originalSelectedSaleSeCds = buldVO.getSelectedSaleSeCds();
+        String selectedSaleSeCds = buldVO.getSelectedSaleSeCds();
+        if(StringUtils.hasText(selectedSaleSeCds)) {
+            selectedSaleSeCds = selectedSaleSeCds.replaceAll(",", "|");
+            buldVO.setSelectedSaleSeCds(selectedSaleSeCds);
+        }
+        
+        // 매물 목록 조회
+        List<BuldVO> buldList = buldService.selectBuldList(buldVO);
+
+        // 필터 원복
+        buldVO.setSelectedSaleSeCds(originalSelectedSaleSeCds);
+
+        // 첨부파일 조회
+        for(BuldVO buld : buldList) {
+            String atchDocId = buld.getAtchDocId();
             if(StringUtils.hasText(atchDocId)) {
-                buldVO.setAtchFiles(fileService.selectAtchFileList(atchDocId));
+                buld.setAtchFiles(fileService.selectAtchFileList(atchDocId));
             }
         }
 
         model.addAttribute("buldList", buldList);
+        model.addAttribute("buldInfo", buldVO);
+
+        // 매물구분코드
+        model.addAttribute("saleSeCds", cdService.selectCdList("A03"));
+        
         return "buld/buldList";
+    }
+
+    // 매물 목록 조회 - 필터 사용
+    @PostMapping("/selectBuldList.do")
+    public String selectBuldListWhenUsingFilter(@RequestBody BuldVO buldVO, Model model) {
+        // 필터 처리
+        String selectedSaleSeCds = buldVO.getSelectedSaleSeCds();
+        if(StringUtils.hasText(selectedSaleSeCds)) {
+            selectedSaleSeCds = selectedSaleSeCds.replaceAll(",", "|");
+            buldVO.setSelectedSaleSeCds(selectedSaleSeCds);
+        }
+        
+        // 매물 목록 조회
+        List<BuldVO> buldList = buldService.selectBuldList(buldVO);
+
+        // 첨부파일 조회
+        for(BuldVO buld : buldList) {
+            String atchDocId = buld.getAtchDocId();
+            if(StringUtils.hasText(atchDocId)) {
+                buld.setAtchFiles(fileService.selectAtchFileList(atchDocId));
+            }
+        }
+
+        model.addAttribute("buldList", buldList);
+
+        return "buld/buldList :: #landList";
     }
 
     // 매물 등록 화면 이동

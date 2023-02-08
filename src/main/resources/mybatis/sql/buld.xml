@@ -41,6 +41,13 @@
              , BULD_DC
              , LOGO_TY
         FROM BULD
+        WHERE 1 = 1
+          <if test="selectedSaleSeCds != null and selectedSaleSeCds != ''">
+          AND REGEXP_LIKE(SALE_SE_CD, #{selectedSaleSeCds})
+          </if>
+          <if test="searchKeyword != null and searchKeyword != ''">
+          AND REGEXP_LIKE(BULD_NM, #{searchKeyword})
+          </if>
         ORDER BY BULD_NO DESC
     </select>
 

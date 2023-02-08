@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface BuldMapper {
-    public List<BuldVO> selectBuldList();
+    public List<BuldVO> selectBuldList(BuldVO buldVO);
 
     public BuldVO selectBuld(BuldVO buldVO);
 

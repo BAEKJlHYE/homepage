@@ -35,7 +35,7 @@ public class MainController {
             model.addAttribute(redirectMap.get("loginVo"));
         }
 
-        List<BuldVO> buldList = buldService.selectBuldList();
+        List<BuldVO> buldList = buldService.selectBuldList(new BuldVO());
         for(BuldVO buldVO : buldList) {
             String atchDocId = buldVO.getAtchDocId();
             if(StringUtils.hasText(atchDocId)) {
