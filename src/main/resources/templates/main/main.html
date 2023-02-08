@@ -44,7 +44,7 @@
             var $popBtnCm = $('.pop_footer.full .btn_cm');
 
             $popBtnCm.click(function (e) {
-                openAlertModal("해당 매물번호에 대하여 아래 번호로 문의주시면 됩니다. \n\n 010-4455-2690 \n\n 010-5850-4864");
+                openAlertModal("해당 매물번호에 대하여 아래 번호로 문의주시면 감사하겠습니다. \n\n 010-4455-2690 \n\n 010-5850-4864");
             });
             $exAlertBtn.click(function (e) {
                 e.preventDefault();
@@ -89,7 +89,7 @@
                     <div class="swiper-mainb">
                         <ul class="swiper-wrapper">
                             <li class="swiper-slide"><img src="../image/img_mainBanner.jpg" alt="이미지1"></li>
-                            <li class="swiper-slide"><img src="../image/bg_main.png" alt="이미지2"></li>
+<!--                            <li class="swiper-slide"><img src="../image/bg_main.png" alt="이미지2"></li>-->
                         </ul>
                         <div class="swiper-pagination"></div>
                         <div class="swiper-button-prev"></div>
@@ -203,12 +203,11 @@
                                 <ul class="item_list">
                                     <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count lt 5}">
                                         <a href="#" th:attr="onclick=|fn_sendBuldDetail('${buld.buldNo}')|">
-
-<!--                                            <div th:if="${#strings.isEmpty(buld.atchDocId)}" th:class="|${#strings.isEmpty(buld.atchDocId)} ? noImg : img|"-->
-<!--                                                 th:style="|${#strings.isEmpty(buld.atchDocId)} ? '' : background-image: url(../file/image/${buld.atchFiles[0].atchFileId})|">-->
-                                            <div th:class="${#strings.isEmpty(buld.atchDocId)} == true ? 'noImg' : 'img'"
-                                                 th:style="${#strings.isEmpty(buld.atchDocId)} == true ? '' : background-image: url(../file/image/${buld.atchFiles[0].atchFileId})">
-                                                <p th:if="${#strings.isEmpty(buld.atchDocId)}" class="noImgTxt">이미지 준비 중입니다.</p>
+                                            <div th:class="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0} ? 'noImg' : 'img'"
+                                                 th:style="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0} ? '' : 'background-image: url(/file/image/'+${buld.atchFiles[0].atchFileId}+')'">
+                                                <p th:if="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0}" class="noImgTxt">
+                                                    이미지 준비 중입니다.
+                                                </p>
 
                                                 <div class="state_wrap" th:switch="${buld.logoTy}">
                                                     <img th:case="1" src="../image/img_smallLogo1.png" alt="">
@@ -231,7 +230,12 @@
                                 <ul class="item_list">
                                     <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count ge 5} and ${buldListStat.count lt 9}">
                                         <a href="#" th:attr="onclick=|fn_sendBuldDetail('${buld.buldNo}')|">
-                                            <div class="img" style='background-image: url(../image/temp_img2.jpg)'> <!--TODO 이미지 불러와서 세팅-->
+                                            <div th:class="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0} ? 'noImg' : 'img'"
+                                                 th:style="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0} ? '' : 'background-image: url(/file/image/'+${buld.atchFiles[0].atchFileId}+')'">
+                                                <p th:if="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0}" class="noImgTxt">
+                                                    이미지 준비 중입니다.
+                                                </p>
+
                                                 <div class="state_wrap" th:switch="${buld.logoTy}">
                                                     <img th:case="1" src="../image/img_smallLogo1.png" alt="">
                                                     <img th:case="2" src="../image/img_smallLogo2.png" alt="">
@@ -239,6 +243,7 @@
                                                 </div>
                                                 <div class="sold"> [[${buld.cntrctSttusSeNm}]] <br> [[${buld.buldNm}]] </div>
                                             </div>
+
                                             <ul class="info2">
                                                 <li><p>보증금</p><p>[[${#numbers.formatInteger(buld.gtn, 0, 'COMMA') + ''}]]</p></li>
                                                 <li><p>임대료</p><p th:text="${#numbers.formatInteger(buld.rntchrg, 0, 'COMMA') + ''}"></p></li>
@@ -336,12 +341,10 @@
                                 </div>
                                 <div class="swiper-main">
                                     <ul class="swiper-wrapper">
-                                        <li class="swiper-slide"><img src="../image/temp_img2.jpg"
-                                                                      alt="송내 로데오 상가 이미지1"></li>
-                                        <li class="swiper-slide"><img src="../image/temp_img3.jpg"
-                                                                      alt="송내 로데오 상가 이미지2"></li>
-                                        <li class="swiper-slide"><img src="../image/temp_img3.jpg"
-                                                                      alt="송내 로데오 상가 이미지2"></li>
+                                        <li class="swiper-slide" th:if="${buldDetail != null} and ${buldDetail.atchFiles != null and #lists.size(buldDetail.atchFiles) != 0}"
+                                            th:each="atchFile : ${buldDetail.atchFiles}">
+                                            <img th:src="|/file/image/${atchFile.atchFileId}|" height="325"/>
+                                        </li>
                                     </ul>
                                     <div class="swiper-pagination"></div>
                                     <div class="swiper-button-prev"></div>

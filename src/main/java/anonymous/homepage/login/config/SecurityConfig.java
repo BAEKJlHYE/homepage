@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
             .mvcMatchers("/", "/main/**", "/companyInfo/**", "/board/select**","/inquiry/**", "/buld/select**"
-                    , "/error/**", "/js/**", "/css/**", "/image/**", "/font/**").permitAll() // 해당 경로들은 접근을 허용
+                    , "/error/**", "/js/**", "/css/**", "/image/**", "/font/**", "/file/image/**").permitAll() // 해당 경로들은 접근을 허용
                 .antMatchers("/register**","/insert**","/modify**","/update**","/delete**").hasRole("ADMIN")
 //                .antMatchers("/admin").hasRole("ADMIN")
             .anyRequest().authenticated()
