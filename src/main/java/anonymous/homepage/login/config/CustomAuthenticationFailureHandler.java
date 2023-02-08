@@ -1,13 +1,12 @@
 package anonymous.homepage.login.config;
 
-import anonymous.homepage.login.vo.LoginVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,12 +20,11 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException
     {
-        logger.error("admin login Failed errMsg : "+exception.getMessage());
-
         String errMsg = exception.getMessage();
-        request.setAttribute("errorMsg", errMsg);
+        request.setAttribute("error","error");
+        request.setAttribute("exceptionMsg",errMsg);
 
-//        response.sendRedirect("/admin?auth=fail");
-        response.sendRedirect("/login/getLoginPage.do");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/login/getLoginPage.do");
+        dispatcher.forward(request, response);
     }
 }

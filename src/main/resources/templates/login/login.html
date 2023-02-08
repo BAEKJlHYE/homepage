@@ -8,6 +8,17 @@ layout:decorate="layout/default_layout">
             if (!isEmpty(resultMessage)) {
                 openAlertModal(resultMessage);
             }
+
+            // 정규식 특수문자 체크
+            $("input[name='userId']").on('focusout', function (){
+                var userId = document.getElementById('userId').value;
+                var strRegExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
+                if (strRegExp.test(userId)) {
+                    openAlertModal('특수문자는 입력이 불가능합니다.');
+                    $('#userId').val('');
+                    return;
+                }
+            });
         });
     </script>
 <!--    <div class="skip">-->
@@ -31,8 +42,9 @@ layout:decorate="layout/default_layout">
                 <section class="w600">
                     <input type="hidden" id="resultMessage" name="resultMessage" th:value="${loginVo.resultMessage}">
                     <form th:action="@{/login/loginCheck.do}" th:object="${loginForm}" method="post">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <div class="box_login">
-                            <input name="userId" type="text" th:value="${loginVo.userId}" placeholder="아이디를 입력해주세요" required autofocus>
+                            <input name="userId" id="userId" type="text" th:value="${loginVo.userId}" placeholder="아이디를 입력해주세요" required autofocus>
                             <input name="userPw" type="password" th:value="${loginVo.userPw}" placeholder="비밀번호를 입력해주세요" required>
                             <button class="btn_login mint" type="submit">로그인</button>
                             <ul>

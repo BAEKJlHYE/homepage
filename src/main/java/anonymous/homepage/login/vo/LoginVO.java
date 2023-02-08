@@ -1,6 +1,5 @@
 package anonymous.homepage.login.vo;
 
-import anonymous.homepage.vo.BaseVO;
 import lombok.Data;
 
 @Data

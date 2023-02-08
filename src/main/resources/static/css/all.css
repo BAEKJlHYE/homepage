@@ -1021,13 +1021,20 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
 .saleList ul li .wh{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .saleList ul li .price{margin-top:3px;font-size:20px;color:#222;font-family:'GmarketSansBold'}
 .saleList ul li .price span{display:inline-block;vertical-align:middle;width:32px;height:32px;margin-right:10px;border-radius:50%;border:1px solid var(--primary);font-size:16px;color:var(--primary);line-height:34px;text-align:center;font-family:'GmarketSansMedium'}
-.saleList ul li .img{overflow:hidden;position:absolute;left:0;top:0;width:100%;height:238px;background-size:cover;background-repeat:no-repeat;background-position:center;background-image:url(/sh_img/make24/main_map/no_img.jpg)}
+.saleList ul li .img{overflow:hidden;position:absolute;left:0;top:0;width:100%;height:238px;background-size:cover;background-repeat:no-repeat;background-position:center;}
+.saleList ul li .noImg{overflow:hidden;position:absolute;left:0;top:0;width:100%;height:238px;background-size:cover;background-repeat:no-repeat;background-position:center;background-color: black;}
 .saleList ul li .img img{transition:all .2s}
+.saleList ul li .noImg img{transition:all .2s}
 /* .saleList ul li .img .state_wrap{display:flex;position:absolute;top:15px;left:15px;width:max-content} */
 .saleList ul li .img .state_wrap{display:flex;position:absolute;top:15px;left:15px;width:40px;height: 40px;}
+.saleList ul li .noImg .state_wrap{display:flex;position:absolute;top:15px;left:15px;width:40px;height: 40px;}
 .saleList ul li .img .state{min-width:60px;height:30px;border-radius:30px;font-size:14px;color:#fff;text-align:center;line-height:28px;background:var(--primary);font-family:'SBAggroL'}
+.saleList ul li .noImg .state{min-width:60px;height:30px;border-radius:30px;font-size:14px;color:#fff;text-align:center;line-height:28px;background:var(--primary);font-family:'SBAggroL'}
 .saleList ul li .img .state+.state{margin-left:4px}
+.saleList ul li .noImg .state+.state{margin-left:4px}
 .saleList ul li .sold{position:absolute;left:0;top:0;z-index:2;width:100%;height:100%;background: rgba(255,255,255,.2);background-size:55%;color:#fff;text-shadow: 0px 0px 4px #000;display: flex;align-items: center;justify-content: center;font-size: 30px;text-align: center;}
+/*.saleList .item_list li .noImg { overflow: hidden; position: relative; height: 235px; display: flex; justify-content: center; align-content: center; background: #f4f4f4; flex-wrap: wrap;}*/
+.saleList .item_list li .noImgTxt { font-size: 16px; font-weight: bold; color: #b0b0b0; position: absolute; left: 127px; top: 30px;}
 /* .saleList ul li .sold{position:absolute;left:0;top:0;z-index:2;width:100%;height:100%;background: rgba(255,255,255,.6);background-size:55%}
 .saleList ul li .sold:before{content: '거래 완료';position: absolute;top:50%;left:50%;display: flex;align-items: center;justify-content: center;width: 100px;height: 100px;border-radius: 50%;border:4px dashed #f00;color:#f00;transform: translate(-50%,-50%);font-size: 18px;font-weight: 700;} */
 

@@ -203,7 +203,13 @@
                                 <ul class="item_list">
                                     <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count lt 5}">
                                         <a href="#" th:attr="onclick=|fn_sendBuldDetail('${buld.buldNo}')|">
-                                            <div class="img" style='background-image: url(../image/temp_img2.jpg)'> <!--TODO 이미지 불러와서 세팅-->
+
+<!--                                            <div th:if="${#strings.isEmpty(buld.atchDocId)}" th:class="|${#strings.isEmpty(buld.atchDocId)} ? noImg : img|"-->
+<!--                                                 th:style="|${#strings.isEmpty(buld.atchDocId)} ? '' : background-image: url(../file/image/${buld.atchFiles[0].atchFileId})|">-->
+                                            <div th:class="${#strings.isEmpty(buld.atchDocId)} == true ? 'noImg' : 'img'"
+                                                 th:style="${#strings.isEmpty(buld.atchDocId)} == true ? '' : background-image: url(../file/image/${buld.atchFiles[0].atchFileId})">
+                                                <p th:if="${#strings.isEmpty(buld.atchDocId)}" class="noImgTxt">이미지 준비 중입니다.</p>
+
                                                 <div class="state_wrap" th:switch="${buld.logoTy}">
                                                     <img th:case="1" src="../image/img_smallLogo1.png" alt="">
                                                     <img th:case="2" src="../image/img_smallLogo2.png" alt="">
@@ -211,6 +217,7 @@
                                                 </div>
                                                 <div class="sold"> [[${buld.cntrctSttusSeNm}]] <br> [[${buld.buldNm}]] </div>
                                             </div>
+
                                             <ul class="info2">
                                                 <li><p>보증금</p><p>[[${#numbers.formatInteger(buld.gtn, 0, 'COMMA') + ''}]]</p></li>
                                                 <li><p>임대료</p><p th:text="${#numbers.formatInteger(buld.rntchrg, 0, 'COMMA') + ''}"></p></li>
