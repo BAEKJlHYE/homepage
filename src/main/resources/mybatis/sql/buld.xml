@@ -40,6 +40,7 @@
              , PREMUM
              , BULD_DC
              , LOGO_TY
+             , REPRSNT_WORDS
         FROM BULD
         WHERE 1 = 1
           <if test="selectedSaleSeCds != null and selectedSaleSeCds != ''">
@@ -87,6 +88,7 @@
                , PREMUM
                , BULD_DC
                , LOGO_TY
+               , REPRSNT_WORDS
           FROM BULD
           WHERE BULD_NO = #{buldNo}
      </select>
@@ -129,6 +131,7 @@
                , PREMUM
                , BULD_DC
                , LOGO_TY
+               , REPRSNT_WORDS
           )
           VALUES (
                #{buldNo}
@@ -162,6 +165,7 @@
                , NVL(#{premum}, 0)
                , #{buldDc}
                , NVL(#{logoTy}, '1')
+               , #{reprsntWords}
           )
      </insert>
 
@@ -196,6 +200,7 @@
             , PREMUM                = NVL(#{premum}, 0)
             , BULD_DC               = #{buldDc}
             , LOGO_TY               = NVL(#{logoTy}, '1')
+            , REPRSNT_WORDS         = #{reprsntWords}
           WHERE BULD_NO = #{buldNo}
      </update>
 

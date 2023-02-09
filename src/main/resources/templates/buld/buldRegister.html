@@ -149,8 +149,8 @@
             }
 
             // 숫자만 입력
-            var numberOnlyInputIds = [ 'rntchrg', 'gtn', 'managect', 'premum', 'rlFloor', 'totFloor', 'suplyAr', 'suplyRlAea' ];
-            var numberOnlyInputNames = [ '임대료', '보증금', '관리비', '권리금', '해당층', '총층', '공급면적', '공급평수' ];
+            var numberOnlyInputIds = [ 'rntchrg', 'gtn', 'managect', 'premum', 'price', 'rlFloor', 'totFloor', 'suplyAr', 'suplyRlAea' ];
+            var numberOnlyInputNames = [ '임대료', '보증금', '관리비', '권리금', '월매출', '해당층', '총층', '공급면적', '공급평수' ];
             var numberRegExp = /^[0-9]+$/;
 
             for(var i=0 ; i<numberOnlyInputIds.length ; i++) {
@@ -281,6 +281,16 @@
                                             <th><span class="">권리금</span></th>
                                             <td>
                                                 <input type="text" id="premum" name="premum" class="ipt" maxlength="10">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="">월매출</span></th>
+                                            <td>
+                                                <input type="text" id="price" name="price" class="ipt" maxlength="10">
+                                            </td>
+                                            <th><span class="">대표문구</span></th>
+                                            <td>
+                                                <input type="text" id="reprsntWords" name="reprsntWords" class="ipt" maxlength="10">
                                             </td>
                                         </tr>
                                         <tr>
