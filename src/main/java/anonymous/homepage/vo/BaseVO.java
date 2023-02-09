@@ -3,8 +3,13 @@ package anonymous.homepage.vo;
 import anonymous.homepage.file.vo.AtchDocVO;
 import anonymous.homepage.file.vo.AtchFileVO;
 import lombok.Data;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.StringUtils;
 
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -13,11 +18,18 @@ public class BaseVO {
     private String userId = "admin";    // 사용자 ID (로그인 시 저장하는 것으로 수정 필요)
     private boolean isPermitted;        // 권한 존재 여부
 
+    public String getUserId() {
+        this.userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return this.userId;
+    }
+
     public boolean getIsPermitted() {
-        if(this.userId == "admin")
-            this.isPermitted = true;
-        else
-            this.isPermitted = false;
+        this.isPermitted = false;
+        List<GrantedAuthority> authorities = (List<GrantedAuthority>)SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        for(GrantedAuthority authority : authorities) {
+            if(StringUtils.equals(authority.getAuthority(), "ROLE_ADMIN"))
+                this.isPermitted = true;
+        }
 
         return this.isPermitted;
     }

@@ -8,8 +8,10 @@
         document.addEventListener("DOMContentLoaded", function(){
             // 처리 결과 알림
             var resultMessage = document.getElementById('resultMessage').value;
-            if(!isEmpty(resultMessage))
+            if(!isEmpty(resultMessage)) {
                 openAlertModal(resultMessage);
+                document.getElementById('resultMessage').value = '';
+            }
 
             // 금액 포매터 적용
             formatPrice();
@@ -428,7 +430,7 @@
                                         </li>
                                         <li>
                                             <span>공급면적</span>
-                                            <span class="dt_span" th:text="|${buldDetail.suplyAr}㎡ (${buldDetail.suplyRlAea}평)|"></span>
+                                            <span class="dt_span" th:text="|${#numbers.formatInteger(buldDetail.suplyAr, 1, 'COMMA')}㎡ (${buldDetail.suplyRlAea}평)|"></span>
                                         </li>
                                     </ul>
                                 </dd>
