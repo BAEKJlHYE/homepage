@@ -46,7 +46,7 @@
           AND REGEXP_LIKE(SALE_SE_CD, #{selectedSaleSeCds})
           </if>
           <if test="searchKeyword != null and searchKeyword != ''">
-          AND REGEXP_LIKE(BULD_NM, #{searchKeyword})
+          AND (REGEXP_LIKE(BULD_NM, #{searchKeyword}) OR BULD_NO = #{searchKeyword})
           </if>
         ORDER BY BULD_NO DESC
     </select>
