@@ -1022,7 +1022,7 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
 .saleList ul li .price{margin-top:3px;font-size:20px;color:#222;font-family:'Pretendard-Regular'}
 .saleList ul li .price span{display:inline-block;vertical-align:middle;width:32px;height:32px;margin-right:10px;border-radius:50%;border:1px solid var(--primary);font-size:16px;color:var(--primary);line-height:34px;text-align:center;font-family:'Pretendard-Regular'}
 .saleList ul li .img{overflow:hidden;position:absolute;left:0;top:0;width:100%;height:238px;background-size:cover;background-repeat:no-repeat;background-position:center;}
-.saleList ul li .noImg{overflow:hidden;position:absolute;left:0;top:0;width:100%;height:238px;background-size:cover;background-repeat:no-repeat;background-position:center;background-color: black;}
+.saleList ul li .noImg{overflow:hidden;position:absolute;left:0;top:0;width:100%;height:238px;background-size:cover;background-repeat:no-repeat;background-position:center;background-color: seagreen;}
 .saleList ul li .img img{transition:all .2s}
 .saleList ul li .noImg img{transition:all .2s}
 /* .saleList ul li .img .state_wrap{display:flex;position:absolute;top:15px;left:15px;width:max-content} */

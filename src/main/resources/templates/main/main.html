@@ -6,7 +6,8 @@
 <th:block layout:fragment="content">
     <script>
         document.addEventListener("DOMContentLoaded", function(){
-
+            // 금액 포매터 적용
+            formatPrice();
         });
 
         // 상세 팝업 호출
@@ -71,6 +72,20 @@
                     prevEl: '.swiper-button-prev',
                 }
             });
+        }
+
+        function formatPrice() {
+            var priceComponents = document.getElementsByClassName('info2');
+            for(var priceComponent of priceComponents) {
+                if(priceComponent.tagName.toUpperCase() != 'UL')
+                    break;
+
+                var lis = priceComponent.children;
+                for(var li of lis) {
+                    var price = li.children[1].innerHTML;
+                    li.children[1].innerHTML = priceWonShortenFormatter(price);
+                }
+            }
         }
     </script>
 
@@ -218,10 +233,29 @@
                                             </div>
 
                                             <ul class="info2">
-                                                <li><p>보증금</p><p>[[${#numbers.formatInteger(buld.gtn, 0, 'COMMA') + ''}]]</p></li>
-                                                <li><p>임대료</p><p th:text="${#numbers.formatInteger(buld.rntchrg, 0, 'COMMA') + ''}"></p></li>
-                                                <li><p>관리비</p><p th:text="${#numbers.formatInteger(buld.managect, 0, 'COMMA') + ''}"></p></li>
-                                                <li><p>권리금</p><p th:text="${#numbers.formatInteger(buld.premum, 0, 'COMMA') + ''}"></p></li>
+                                                <li>
+                                                    <p>보증금</p>
+<!--                                                    <p>[[${#numbers.formatInteger(buld.gtn, 0, 'COMMA') + ''}]]</p>-->
+                                                    <p th:if="${not #strings.isEmpty(buld.gtn)}" th:text="${buld.gtn}"></p>
+                                                    <p th:if="${#strings.isEmpty(buld.gtn)}">-</p>
+                                                </li>
+
+                                                <li>
+                                                    <p>임대료</p>
+<!--                                                    <p th:text="${#numbers.formatInteger(buld.rntchrg, 0, 'COMMA') + ''}"></p>-->
+                                                    <p th:if="${not #strings.isEmpty(buld.rntchrg)}" th:text="${buld.rntchrg}"></p>
+                                                    <p th:if="${#strings.isEmpty(buld.rntchrg)}">-</p>
+                                                </li>
+                                                <li>
+                                                    <p>관리비</p>
+                                                    <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>
+                                                    <p th:if="${#strings.isEmpty(buld.managect)}">-</p>
+                                                </li>
+                                                <li>
+                                                    <p>권리금</p>
+                                                    <p th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
+                                                    <p th:if="${#strings.isEmpty(buld.premum)}">-</p>
+                                                </li>
                                             </ul>
                                         </a>
                                     </li>
@@ -245,10 +279,27 @@
                                             </div>
 
                                             <ul class="info2">
-                                                <li><p>보증금</p><p>[[${#numbers.formatInteger(buld.gtn, 0, 'COMMA') + ''}]]</p></li>
-                                                <li><p>임대료</p><p th:text="${#numbers.formatInteger(buld.rntchrg, 0, 'COMMA') + ''}"></p></li>
-                                                <li><p>관리비</p><p th:text="${#numbers.formatInteger(buld.managect, 0, 'COMMA') + ''}"></p></li>
-                                                <li><p>권리금</p><p th:text="${#numbers.formatInteger(buld.premum, 0, 'COMMA') + ''}"></p></li>
+                                                <li>
+                                                    <p>보증금</p>
+                                                    <p th:if="${not #strings.isEmpty(buld.gtn)}" th:text="${buld.gtn}"></p>
+                                                    <p th:if="${#strings.isEmpty(buld.gtn)}">-</p>
+                                                </li>
+
+                                                <li>
+                                                    <p>임대료</p>
+                                                    <p th:if="${not #strings.isEmpty(buld.rntchrg)}" th:text="${buld.rntchrg}"></p>
+                                                    <p th:if="${#strings.isEmpty(buld.rntchrg)}">-</p>
+                                                </li>
+                                                <li>
+                                                    <p>관리비</p>
+                                                    <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>
+                                                    <p th:if="${#strings.isEmpty(buld.managect)}">-</p>
+                                                </li>
+                                                <li>
+                                                    <p>권리금</p>
+                                                    <p th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
+                                                    <p th:if="${#strings.isEmpty(buld.premum)}">-</p>
+                                                </li>
                                             </ul>
                                         </a>
                                     </li>
