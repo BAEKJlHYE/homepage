@@ -72,10 +72,13 @@
                     prevEl: '.swiper-button-prev',
                 }
             });
+
+            // 금액 포매터 적용
+            formatPrice();
         }
 
         function formatPrice() {
-            var priceComponents = document.getElementsByClassName('info2');
+            var priceComponents = document.getElementsByName('priceFormat');
             for(var priceComponent of priceComponents) {
                 if(priceComponent.tagName.toUpperCase() != 'UL')
                     break;
@@ -83,7 +86,7 @@
                 var lis = priceComponent.children;
                 for(var li of lis) {
                     var price = li.children[1].innerHTML;
-                    li.children[1].innerHTML = priceWonShortenFormatter(price);
+                    li.children[1].innerHTML = priceWonUnitFormatter(price);
                 }
             }
         }
@@ -232,7 +235,7 @@
                                                 <div class="sold"> [[${buld.cntrctSttusSeNm}]] <br> [[${buld.buldNm}]] </div>
                                             </div>
 
-                                            <ul class="info2">
+                                            <ul class="info2" name="priceFormat">
                                                 <li>
                                                     <p>보증금</p>
 <!--                                                    <p>[[${#numbers.formatInteger(buld.gtn, 0, 'COMMA') + ''}]]</p>-->
@@ -278,7 +281,7 @@
                                                 <div class="sold"> [[${buld.cntrctSttusSeNm}]] <br> [[${buld.buldNm}]] </div>
                                             </div>
 
-                                            <ul class="info2">
+                                            <ul class="info2" name="priceFormat">
                                                 <li>
                                                     <p>보증금</p>
                                                     <p th:if="${not #strings.isEmpty(buld.gtn)}" th:text="${buld.gtn}"></p>
@@ -406,32 +409,44 @@
                             </div>
                             <div class="titles">
                                 <dl class="dl_info">
-                                    <dt class="open" id="buldNm" th:text="${buldDetail.buldNm}">수원 7 ROOM</dt>
+                                    <dt class="open">
+                                        <li style="display: contents" th:switch="${buldDetail.logoTy}">
+                                            <img th:case="1" src="../image/img_smallLogo1.png" alt="" style="width: 40px; height: 40px;">
+                                            <img th:case="2" src="../image/img_smallLogo2.png" alt="" style="width: 40px; height: 40px;">
+                                        </li >
+                                        <li id="buldNm" th:text="${buldDetail.buldNm}" style="display: contents"></li>
+                                    </dt>
                                     <dd>
-                                        <ul class="info_list">
+                                        <ul class="info_list" name="priceFormat">
                                             <li class="add">
-                                                <span>소재지</span>
-                                                <span class="dt_span" th:text="${buldDetail.addr}"></span>
+                                                <span>총 창업비용</span>
+                                                <span class="dt_span" th:if="${not #strings.isEmpty(buldDetail.gtn) or not #strings.isEmpty(buldDetail.premum)}" th:text="${buldDetail.gtn}+${buldDetail.premum}"></span>
+                                                <span class="dt_span" th:if="${#strings.isEmpty(buldDetail.gtn) and #strings.isEmpty(buldDetail.premum)}">-</span>
                                             </li>
                                             <li>
-                                                <span>매물번호</span>
-                                                <span class="dt_span" th:text="${buldDetail.buldNo}"></span>
+                                                <span>보증금</span>
+                                                <span class="dt_span" th:if="${not #strings.isEmpty(buldDetail.gtn)}" th:text="${buldDetail.gtn}"></span>
+                                                <span class="dt_span" th:if="${#strings.isEmpty(buldDetail.gtn)}">-</span>
                                             </li>
                                             <li>
-                                                <span>매물구분</span>
-                                                <span class="dt_span" th:text="${buldDetail.saleSeNm}"></span>
+                                                <span>권리금</span>
+                                                <span class="dt_span" th:if="${not #strings.isEmpty(buldDetail.premum)}" th:text="${buldDetail.premum}"></span>
+                                                <span class="dt_span" th:if="${#strings.isEmpty(buldDetail.premum)}">-</span>
                                             </li>
                                             <li>
-                                                <span>계약상태</span>
-                                                <span class="dt_span" th:text="${buldDetail.cntrctSttusSeNm}"></span>
+                                                <span>임대료</span>
+                                                <span class="dt_span" th:if="${not #strings.isEmpty(buldDetail.rntchrg)}" th:text="${buldDetail.rntchrg}"></span>
+                                                <span class="dt_span" th:if="${#strings.isEmpty(buldDetail.rntchrg)}">-</span>
                                             </li>
                                             <li>
-                                                <span>해당층/총</span>
-                                                <span class="dt_span" th:text="|${buldDetail.rlFloor} / ${buldDetail.totFloor}|"></span>
+                                                <span>관리비</span>
+                                                <span class="dt_span" th:if="${not #strings.isEmpty(buldDetail.managect)}" th:text="${buldDetail.managect}"></span>
+                                                <span class="dt_span" th:if="${#strings.isEmpty(buldDetail.managect)}">-</span>
                                             </li>
                                             <li>
-                                                <span>공급면적</span>
-                                                <span class="dt_span" th:text="|${buldDetail.suplyAr}㎡ (${buldDetail.dvrRlAea}평)|"></span>
+                                                <span>월매출</span>
+                                                <span class="dt_span" th:if="${not #strings.isEmpty(buldDetail.price)}" th:text="${buldDetail.price}"></span>
+                                                <span class="dt_span" th:if="${#strings.isEmpty(buldDetail.price)}">-</span>
                                             </li>
                                         </ul>
                                     </dd>
