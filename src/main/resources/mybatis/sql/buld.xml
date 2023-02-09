@@ -198,4 +198,10 @@
             , LOGO_TY               = NVL(#{logoTy}, '1')
           WHERE BULD_NO = #{buldNo}
      </update>
+
+    <!-- 건물 삭제 -->
+    <delete id="deleteBuld" parameterType="anonymous.homepage.buld.vo.BuldVO">
+        DELETE FROM BULD
+        WHERE BULD_NO = #{buldNo}
+    </delete>
 </mapper>

@@ -199,7 +199,9 @@
 
         /* 취소 버튼 클릭 */
         function moveToBuldList() {
-            formSubmit('/buld/selectBuldList.do', 'get', 'application/x-www-form-urlencoded');
+            var buldForm = document.getElementById('buldPageInfo');
+            buldForm.submit();
+
         }
 
         /* 수정 버튼 클릭 */
@@ -224,7 +226,8 @@
             }
 
             // 수정
-            formSubmit('/buld/updateBuld.do', 'post', 'multipart/form-data');
+            var buldForm = document.getElementById('buldFormForModify');
+            buldForm.submit();
         }
 
         /* 유효성 검사 */
@@ -285,15 +288,6 @@
 
             return true;
         }
-
-        /* form submit */
-        function formSubmit(action, method, enctype) {
-            var buldForm = document.getElementById('buldPageInfo');
-            buldForm.action = action;
-            buldForm.method = method;
-            buldForm.encoding = enctype;
-            buldForm.submit();
-        }
     </script>
 
     <style>
@@ -304,7 +298,13 @@
 
     <div id="container" class="container">
         <form action="/buld/selectBuldList.do" id="buldPageInfo" method="get">
+            <input type="hidden" name="selectedSaleSeCds" th:value="${buldInfo.selectedSaleSeCds}">
+            <input type="hidden" name="searchKeyword" th:value="${buldInfo.searchKeyword}">
+        </form>
+        <form action="/buld/updateBuld.do" id="buldFormForModify" method="post" enctype="multipart/form-data">
             <input type="hidden" id="buldNo" name="buldNo" th:value="${buld.buldNo}">
+            <input type="hidden" name="selectedSaleSeCds" th:value="${buldInfo.selectedSaleSeCds}">
+            <input type="hidden" name="searchKeyword" th:value="${buldInfo.searchKeyword}">
             <div class="lnb">
                 <div class="lnb_inner">
                     <ul class="step">

@@ -6,6 +6,11 @@
 <th:block layout:fragment="content">
     <script>
         document.addEventListener("DOMContentLoaded", function(){
+            // 처리 결과 알림
+            var resultMessage = document.getElementById('resultMessage').value;
+            if(!isEmpty(resultMessage))
+                openAlertModal(resultMessage);
+
             // 금액 포매터 적용
             formatPrice();
 
@@ -61,7 +66,24 @@
         }
 
         /* 필터 선택 */
-        function onChangeFilter() {
+        function onChangeFilter(event) {
+            // 필터 선택 유효성 검사
+            var saleSeCdInputs = document.getElementsByName('saleSeCdFilter');
+            var notCheckedAll = true;
+            for(saleSeCdInput of saleSeCdInputs) {
+                if(saleSeCdInput.checked) {
+                    notCheckedAll = false;
+                    break;
+                }
+            }
+
+            if(notCheckedAll) {
+                openAlertModal("필터 항목을 1개 이상 선택해주시기 바랍니다.");
+                event.target.checked = true;
+                return;
+            }
+
+            // 매물 목록 재조회 - ajax
             selectBuldListByAjax();
         }
 
@@ -70,6 +92,7 @@
             selectBuldListByAjax();
         }
 
+        /* 매물 목록 재조회 - ajax */
         function selectBuldListByAjax() {
             // 필터값 세팅
             var saleSeCdInputs = document.getElementsByName('saleSeCdFilter');
@@ -82,16 +105,17 @@
                         selectedSaleSeCds = saleSeCdInputs[i].value;
                 }
             }
+            document.getElementById('selectedSaleSeCds').value = selectedSaleSeCds;
 
             // 검색어 세팅
             var searchKeyword = document.getElementById('searchKeyword').value;
 
+            // 매물 목록 재조회
             var data = {
                 selectedSaleSeCds: selectedSaleSeCds
                 , searchKeyword: searchKeyword
             }
 
-            // 매물 목록 재조회
             $.ajax({
                 url: '/buld/selectBuldList.do'
                 , type: 'POST'
@@ -103,6 +127,118 @@
                 formatPrice();
             });
         }
+
+        /* 매물 상세 팝업 open */
+        function openBuldDetailPopup(buldNo) {
+            // 매물 상세 조회
+            var data = {
+                buldNo: buldNo
+            }
+
+            $.ajax({
+                url: '/buld/selectBuld.do'
+                , type: 'POST'
+                , contentType: 'application/json'
+                , data: JSON.stringify(data)
+                , cache: false
+            }).done(function(fragment) {
+                $("#exPop").replaceWith(fragment);
+                document.getElementById('exPop').classList.add('on');
+            }).always(function() {
+                fn_callImport();
+            });
+        }
+
+        /* ajax 후 다시 세팅 */
+        function fn_callImport() {
+            var $exPop = $("#exPop");
+            $exPop.addClass("on");
+
+            var $popClose = $(".btn_close");
+            $popClose.click(function (e) {
+                e.preventDefault();
+                $exPop.removeClass("on");
+            });
+
+            var $exAlertBtn = $(".exAlertBtn");
+            var $alertBox = $("#alertBox");
+            var $exAlertClose = $(".alert .btn_cm");
+
+            $exAlertBtn.click(function (e) {
+                e.preventDefault();
+                $alertBox.addClass("on");
+            });
+            $exAlertClose.click(function (e) {
+                e.preventDefault();
+                $alertBox.removeClass("on");
+            });
+
+            const swiper = new Swiper('.swiper-main', {
+                // Optional parameters
+                loop: true,
+
+                // If we need pagination
+                pagination: {
+                    el: '.swiper-pagination',
+                    type: "progressbar",
+                },
+
+                // Navigation arrows
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                }
+            });
+        }
+
+        function openInquiryTelNoPopup() {
+            openAlertModal("해당 매물번호에 대하여 아래 번호로 문의주시면 감사하겠습니다. \n\n 010-4455-2690   /   010-5850-4864");
+        }
+
+        /* 매물 등록 */
+        function registerBuld() {
+            formSubmit('', '/buld/registerBuld.do');
+        }
+
+        /* 매물 수정 */
+        function updateBuld() {
+            var buldNo = document.getElementById('buldDetailBuldNo').value;
+            formSubmit(buldNo, '/buld/modifyBuld.do');
+        }
+
+        /* 매물 삭제 */
+        function deleteBuld() {
+            var buldNo = document.getElementById('buldDetailBuldNo').value;
+            var data = {
+                buldNo: buldNo
+            }
+
+            $.ajax({
+                url: '/buld/deleteBuld.do'
+                , type: 'POST'
+                , contentType: 'application/json'
+                , data: JSON.stringify(data)
+                , success: function (result) {
+                    if(result.resultCode != '999') {
+                        // 팝업창 닫기
+                        document.getElementById('exPop').classList.remove('on');
+                        // 목록 재조회
+                        selectBuldListByAjax();
+                    }
+
+                    openAlertModal(result.resultMessage);
+                }
+            });
+        }
+
+        /* form 전송 */
+        function formSubmit(buldNo, action) {
+            document.getElementById('buldNo').value = buldNo;
+
+            var form = document.getElementById('buldPageInfo');
+            form.action = action;
+            form.submit();
+        }
     </script>
 
     <style>
@@ -113,205 +249,213 @@
         .filter_box div:first-child { border-top: none; }
         .filter_box div p { font-weight: bold; padding-bottom: 5px; font-size: 17px; }
         .chk.list li { display: inline-block; margin-top: 6px; }
+        .btn_cm.mint.square {
+            height: 40px; line-height: 40px; width: 100px; min-width: 100px; margin-left: 10px; border-radius: 0;
+        }
     </style>
 
     <div id="container" class="container list">
-        <div class="content">
-            <div class="content_inner">
-                <div id="landHd">
-                    <!-- 버튼 -->
-                    <div class="right_btns">
-                        <button class="r_btn" onclick="filterBoxToggle()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                 stroke-linejoin="round" class="feather feather-list">
-                                <line x1="8" y1="6" x2="21" y2="6"></line>
-                                <line x1="8" y1="12" x2="21" y2="12"></line>
-                                <line x1="8" y1="18" x2="21" y2="18"></line>
-                                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                            </svg>
-                        </button>
-                        <!-- 필터 -->
-                        <div class="filter_box" id="filterBox">
-                            <div>
-                                <p>매물유형</p>
-                                <ul class="chk list" id="saleSeCdFilter">
-                                    <li th:each="saleSeCd, saleSeCdStat : ${saleSeCds}">
-                                        <input type="checkbox" th:id="${saleSeCd.cd}" th:value="${saleSeCd.cd}" name="saleSeCdFilter" onchange="onChangeFilter()">
-                                        <label th:for="${saleSeCd.cd}" th:text="${saleSeCd.cdNm}"></label>
-                                    </li>
-                                </ul>
-                                <input type="hidden" id="selectedSaleSeCds" th:value="${buldInfo.selectedSaleSeCds}">
+        <form action="/buld/selectBuldList.do" id="buldPageInfo" method="get">
+            <input type="hidden" id="resultMessage" name="resultMessage" th:value="${buldInfo.resultMessage}">
+            <input type="hidden" id="buldNo" name="buldNo">
+            <div class="content">
+                <div class="content_inner">
+                    <div id="landHd">
+                        <!-- 버튼 -->
+                        <div class="right_btns">
+                            <button type="button" class="r_btn" onclick="filterBoxToggle()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" class="feather feather-list">
+                                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                                </svg>
+                            </button>
+                            <!-- 필터 -->
+                            <div class="filter_box" id="filterBox">
+                                <div>
+                                    <p>매물유형</p>
+                                    <ul class="chk list" id="saleSeCdFilter">
+                                        <li th:each="saleSeCd, saleSeCdStat : ${saleSeCds}">
+                                            <input type="checkbox" th:id="${saleSeCd.cd}" th:value="${saleSeCd.cd}" name="saleSeCdFilter" onchange="onChangeFilter(event)">
+                                            <label th:for="${saleSeCd.cd}" th:text="${saleSeCd.cdNm}"></label>
+                                        </li>
+                                    </ul>
+                                    <input type="hidden" id="selectedSaleSeCds" name="selectedSaleSeCds" th:value="${buldInfo.selectedSaleSeCds}">
+                                </div>
                             </div>
                         </div>
+                        <!-- 필터 -->
+                        <div class="filter_wrap"></div>
+                        <!-- 검색 -->
+                        <div class="sch_wrap">
+                            <input type="text" autocomplete="off" id="searchKeyword" name="searchKeyword" class="sh_input"
+                                   placeholder="매물번호 및 건물명 검색" th:value="${buldInfo.searchKeyword}" onkeyup="keyUpEvent()">
+                            <button type="button" class="sch_btn" onclick="searchBuld()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" class="feather feather-search">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <a th:if="${buldInfo.isPermitted}" href="#" class="btn_cm mint square" onclick="registerBuld()">매물등록</a>
                     </div>
-                    <!-- 필터 -->
-                    <div class="filter_wrap"></div>
-                    <!-- 검색 -->
-                    <div class="sch_wrap">
-                        <input type="text" autocomplete="off" id="searchKeyword" name="searchKeyword" class="sh_input"
-                               placeholder="건물명 검색" th:value="${buldInfo.searchKeyword}" onkeyup="keyUpEvent()">
-                        <button type="submit" class="sch_btn" onclick="searchBuld()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                 stroke-linejoin="round" class="feather feather-search">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="seLine"></div>
-                <section id="sh_section" class="landList">
-                    <div id="landList" style="display: block;">
-                        <ul class="item_list">
-                            <!-- 매물 목록 (반복부) -->
-                            <li class="land_list" th:each="buld : ${buldList}">
-                                <a href="#" onclick="test()">
-                                    <div th:if="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0}" class="noImg">
-                                        <p class="noImgTxt">이미지 준비 중입니다.</p>
-                                    </div>
-                                    <div th:if="${buld.atchFiles != null and #lists.size(buld.atchFiles) != 0}" class="img">
-                                        <img th:each="atchFile, atchFileStat : ${buld.atchFiles}"
-                                             th:if="${atchFileStat.index} == 0"
-                                             th:src="|/file/image/${atchFile.atchFileId}|"
-                                             height="235"/>
-                                    </div>
-                                </a>
-                                <div class="info">
-                                    <div class="tip">
-                                        <div class="badge_wrap">
-                                            <img th:if="${buld.logoTy} == '1'" src="../image/img_smallLogo1.png" alt="">
-                                            <img th:if="${buld.logoTy} == '2'" src="../image/img_smallLogo2.png" alt="">
-                                            <img th:if="${buld.emrgncySaleYn} == 'Y'" src="../image/img_quick.png" alt="">
+                    <div class="seLine"></div>
+                    <section id="sh_section" class="landList">
+                        <div id="landList" style="display: block;">
+                            <ul class="item_list">
+                                <!-- 매물 목록 (반복부) -->
+                                <li class="land_list" th:each="buld : ${buldList}">
+                                    <a href="#" th:onclick="openBuldDetailPopup([[${buld.buldNo}]])">
+                                        <div th:if="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0}" class="noImg">
+                                            <p class="noImgTxt">이미지 준비 중입니다.</p>
                                         </div>
-                                        <p th:text="|매물번호 ${buld.buldNo}|"></p>
-                                    </div>
-                                    <a href="#" onclick="test()">
-                                        <div class="tit">
-                                            <p class="desc" th:text="${buld.buldNm}"></p>
-                                            <p class="loca">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                                <span th:text="|${buld.addr} ${buld.detailAddr}|" style="font-size: 15px; color: rgb(153, 153, 153);"></span>
-                                            </p>
+                                        <div th:if="${buld.atchFiles != null and #lists.size(buld.atchFiles) != 0}" class="img">
+                                            <img th:each="atchFile, atchFileStat : ${buld.atchFiles}"
+                                                 th:if="${atchFileStat.index} == 0"
+                                                 th:src="|/file/image/${atchFile.atchFileId}|"
+                                                 height="235"/>
                                         </div>
                                     </a>
-                                </div>
-                                <ul class="price">
-                                    <li>
-                                        <p>보증금</p>
-                                        <p th:if="${not #strings.isEmpty(buld.gtn)}" th:text="${buld.gtn}"></p>
-                                        <p th:if="${#strings.isEmpty(buld.gtn)}">-</p>
-                                    </li>
-                                    <li>
-                                        <p>임대료</p>
-                                        <p th:if="${not #strings.isEmpty(buld.rntchrg)}" th:text="${buld.rntchrg}"></p>
-                                        <p th:if="${#strings.isEmpty(buld.rntchrg)}">-</p>
-                                    </li>
-                                    <li>
-                                        <p>관리비</p>
-                                        <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>
-                                        <p th:if="${#strings.isEmpty(buld.managect)}">-</p>
-                                    </li>
-                                    <li>
-                                        <p>권리금</p>
-                                        <p th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
-                                        <p th:if="${#strings.isEmpty(buld.premum)}">-</p>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </section>
+                                    <div class="info">
+                                        <div class="tip">
+                                            <div class="badge_wrap">
+                                                <img th:if="${buld.logoTy} == '1'" src="../image/img_smallLogo1.png" alt="">
+                                                <img th:if="${buld.logoTy} == '2'" src="../image/img_smallLogo2.png" alt="">
+                                                <img th:if="${buld.emrgncySaleYn} == 'Y'" src="../image/img_quick.png" alt="">
+                                            </div>
+                                            <p th:text="|매물번호 ${buld.buldNo}|"></p>
+                                        </div>
+                                        <a href="#" th:onclick="openBuldDetailPopup([[${buld.buldNo}]])">
+                                            <div class="tit">
+                                                <p class="desc" th:text="${buld.buldNm}"></p>
+                                                <p class="loca">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                    <span th:text="|${buld.addr} ${buld.detailAddr}|" style="font-size: 15px; color: rgb(153, 153, 153);"></span>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <ul class="price">
+                                        <li>
+                                            <p>보증금</p>
+                                            <p th:if="${not #strings.isEmpty(buld.gtn)}" th:text="${buld.gtn}"></p>
+                                            <p th:if="${#strings.isEmpty(buld.gtn)}">-</p>
+                                        </li>
+                                        <li>
+                                            <p>임대료</p>
+                                            <p th:if="${not #strings.isEmpty(buld.rntchrg)}" th:text="${buld.rntchrg}"></p>
+                                            <p th:if="${#strings.isEmpty(buld.rntchrg)}">-</p>
+                                        </li>
+                                        <li>
+                                            <p>관리비</p>
+                                            <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>
+                                            <p th:if="${#strings.isEmpty(buld.managect)}">-</p>
+                                        </li>
+                                        <li>
+                                            <p>권리금</p>
+                                            <p th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
+                                            <p th:if="${#strings.isEmpty(buld.premum)}">-</p>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
             </div>
-        </div>
-        <a href="#" class="btn_top">TOP</a>
+            <a href="#" class="btn_top">TOP</a>
+        </form>
     </div>
 
     <!-- 매물 상세 -->
     <div class="popup" id="exPop">
         <div class="pop_header">
-            <h2>추천매물 - 매물01</h2>
-            <button class="btn_close">닫기</button>
+            <h2>매물 상세</h2>
+            <button type="button" class="btn_close">닫기</button>
         </div>
         <div class="pop_cont" id="landView">
             <div class="inner">
-                <!-- scr_area [s] -->
                 <div class="scr_area">
-                    <!-- 이미지/타이틀 [s] -->
                     <div class="top_info">
+                        <!-- 이미지 -->
                         <div class="landImg">
-                            <div class="badge_wrap">
-                                <span class="badge black">추천</span> <span class="badge black">급매물</span> <span
-                                    class="badge">리모델링</span>
-                            </div>
+                            <div class="badge_wrap"></div>
                             <div class="swiper-main">
                                 <ul class="swiper-wrapper">
-                                    <li class="swiper-slide"><img src="../image/temp_img2.jpg"
-                                            alt="송내 로데오 상가 이미지1"></li>
-                                    <li class="swiper-slide"><img src="../image/temp_img3.jpg"
-                                            alt="송내 로데오 상가 이미지2"></li>
-                                    <li class="swiper-slide"><img src="../image/temp_img3.jpg"
-                                            alt="송내 로데오 상가 이미지2"></li>
+                                    <li class="swiper-slide" th:if="${buldDetail != null} and ${buldDetail.atchFiles != null and #lists.size(buldDetail.atchFiles) != 0}"
+                                        th:each="atchFile : ${buldDetail.atchFiles}">
+                                        <img th:src="|/file/image/${atchFile.atchFileId}|" height="325"/>
+                                    </li>
                                 </ul>
                                 <div class="swiper-pagination"></div>
-
                                 <div class="swiper-button-prev"></div>
                                 <div class="swiper-button-next"></div>
-
-                                <!-- <div class="swiper-scrollbar"></div> -->
                             </div>
-
                         </div>
+                        <!-- 매물 정보 -->
                         <div class="titles">
-                            <div class="tip">
-                                <span>매물번호10099</span>
-                            </div>
-                            <div class="tit">
-                                <p class="price">
-                                    <span>매</span>9억8,000
-                                </p>
-                                <p class="desc">송내 로데오 상가</p>
-                                <p class="loca">경기 부천시 송내동 303-5 2층</p>
-                            </div>
-                            <div class="kwd">
-                                <span>상가</span>
-                                <span>공급면적717㎡</span>
-                            </div>
-                            <div class="ps">송내 로데오 상가 입니다.</div>
+                            <dl class="dl_info">
+                                <input type="hidden" id="buldDetailBuldNo" th:value="${buldDetail.buldNo}">
+                                <dt class="open" id="buldNm" th:text="${buldDetail.buldNm}"></dt>
+                                <dd>
+                                    <ul class="info_list">
+                                        <li class="add">
+                                            <span>소재지</span>
+                                            <span class="dt_span" th:text="|(${buldDetail.zipcd}) ${buldDetail.addr} ${buldDetail.detailAddr}|"></span>
+                                        </li>
+                                        <li>
+                                            <span>매물번호</span>
+                                            <span class="dt_span" th:text="${buldDetail.buldNo}"></span>
+                                        </li>
+                                        <li>
+                                            <span>매물구분</span>
+                                            <span class="dt_span" th:text="${buldDetail.saleSeNm}"></span>
+                                        </li>
+                                        <li>
+                                            <span>계약상태</span>
+                                            <span class="dt_span" th:text="${buldDetail.cntrctSttusSeNm}"></span>
+                                        </li>
+                                        <li>
+                                            <span>해당층/총</span>
+                                            <span class="dt_span" th:text="|${buldDetail.rlFloor} / ${buldDetail.totFloor}|"></span>
+                                        </li>
+                                        <li>
+                                            <span>공급면적</span>
+                                            <span class="dt_span" th:text="|${buldDetail.suplyAr}㎡ (${buldDetail.suplyRlAea}평)|"></span>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
                         </div>
                     </div>
-                    <!-- 이미지/타이틀 [e] -->
-                    <!-- 매물정보 [s] -->
                     <dl class="dl_info">
-                        <dt class="open">매물정보</dt>
+                        <!-- 매물 설명 -->
+                        <dt class="open">건물설명</dt>
                         <dd>
                             <ul class="info_list">
-                                <li class="add"><span>소재지</span>경기 부천시 송내동 303-5 2층</li>
-                                <li><span>매물번호</span>10099</li>
-                                <li><span>매물구분</span>상가</li>
-                                <li><span>계약상태</span>계약가능</li>
-                                <li>
-                                    <span>가격정보</span>
-                                    매매 9억8,000
+                                <li class="add">
+                                    <div th:text="|${buldDetail.buldDc}|" style="white-space: pre-wrap;"></div>
                                 </li>
-                                <li><span>해당층/총층</span>7층/지하1층</li>
-                                <li><span>공급면적</span>717㎡(217평)</li>
-                                <li><span>전용면적</span>717㎡(217평)</li>
-                                <li><span>준공년도</span>2006년</li>
-                                <li><span>입주일자</span>협의 후 가능</li>
                             </ul>
                         </dd>
                     </dl>
                 </div>
-                <!-- scr_area [e] -->
             </div>
         </div>
-        <div class="pop_footer full">
-            <button class="btn_cm mint">문의하기</button>
-            <button class="btn_cm">고객센터(1588-1588)</button>
+        <div class="pop_footer full" th:if="${buldDetail.isPermitted == true}">
+            <button type="button" class="btn_cm mint" onclick="updateBuld()">수정</button>
+            <button type="button" class="btn_cm" onclick="openConfirmModal('매물을 삭제하시겠습니까?', 'deleteBuld')">삭제</button>
+        </div>
+        <div class="pop_footer full" th:if="${buldDetail.isPermitted == false}">
+            <button type="button" class="btn_cm mint" onclick="openInquiryTelNoPopup()">문의(010-4455-2690)</button>
+            <button type="button" class="btn_cm" onclick="openInquiryTelNoPopup()">문의(010-5850-4864)</button>
         </div>
     </div>
     <div class="dim"></div>

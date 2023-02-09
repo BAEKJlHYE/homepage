@@ -14,4 +14,6 @@ public interface BuldMapper {
     public int insertBuld(BuldVO buldVO);
 
     public int updateBuld(BuldVO buldVO);
+
+    public int deleteBuld(BuldVO buldVO);
 }
