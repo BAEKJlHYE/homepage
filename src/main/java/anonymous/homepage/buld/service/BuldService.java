@@ -12,4 +12,6 @@ public interface BuldService {
     public int insertBuld(BuldVO buldVO);
 
     public int updateBuld(BuldVO buldVO);
+
+    public int deleteBuld(BuldVO buldVO);
 }

@@ -31,4 +31,9 @@ public class BuldServiceImpl implements BuldService {
     public int updateBuld(BuldVO buldVO) {
         return buldMapper.updateBuld(buldVO);
     }
+
+    @Override
+    public int deleteBuld(BuldVO buldVO) {
+        return buldMapper.deleteBuld(buldVO);
+    }
 }
