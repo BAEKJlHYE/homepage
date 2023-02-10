@@ -11,8 +11,8 @@ $(document).ready(function(){
 
         $dep1.on("mouseover", function(){
             if(!$dep1.hasClass("on")){
-                $dep1.addClass("on");
-                $(".dep2_box").stop().slideDown(); 
+                // $dep1.addClass("on");
+                // $(".dep2_box").stop().slideDown();
             }else{
                // $dep1.removeClass("on");
                // $(".dep2_box").stop().slideUp(); 
