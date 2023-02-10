@@ -63,6 +63,8 @@
                 , contentType: 'application/json'
                 , data: JSON.stringify(data)
                 , success: function(result) {
+                    document.getElementById('passwordForCheck').value = '';
+
                     if(result.count == 0) {
                         openAlertModal('비밀번호가 맞지 않습니다.');
                         return;
@@ -71,6 +73,7 @@
                     formSubmit(boardId, '', nowPage, '/inquiry/selectInquiry.do');
                 }
                 , error: function() {
+                    document.getElementById('passwordForCheck').value = '';
                     openAlertModal('오류가 발생하였습니다. 관리자에게 문의해주시기 바랍니다.');
                 }
             });
