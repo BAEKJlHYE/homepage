@@ -27,7 +27,7 @@
             var nowPage = document.getElementById('nowPage').value;
             var isPermitted = document.getElementById('isPermitted').value;
 
-            if(isPermitted) {
+            if(isPermitted == 'true') {
                 formSubmit(boardId, '', nowPage, '/inquiry/selectInquiry.do');
                 return;
             }
