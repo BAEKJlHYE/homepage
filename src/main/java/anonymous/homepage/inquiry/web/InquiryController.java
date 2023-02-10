@@ -43,7 +43,7 @@ public class InquiryController {
         List<InquiryVO> inquiryList = inquiryService.selectInquiryList(inquiryVO);
         if(!inquiryVO.getIsPermitted()) {
             for(InquiryVO inquiry : inquiryList)
-                inquiry.setWriterNm(masking.nameMasking(inquiry.getUpdateNm()));
+                inquiry.setUpdateNm(masking.nameMasking(inquiry.getUpdateNm()));
         }
 
         inquiryVO.setRecordCount(inquiryService.selectInquiryCount(inquiryVO));
@@ -86,7 +86,7 @@ public class InquiryController {
     public String selectInquiry(@ModelAttribute InquiryVO inquiryVO, Model model) {
         InquiryVO inquiry = inquiryService.selectInquiry(inquiryVO);
         if(!inquiryVO.getIsPermitted()) {
-            inquiry.setWriterNm(masking.nameMasking(inquiry.getUpdateNm()));
+            inquiry.setUpdateNm(masking.nameMasking(inquiry.getUpdateNm()));
             inquiry.setTelNo(masking.telNoMasking(inquiry.getTelNo()));
         }
 

@@ -39,7 +39,7 @@
             }
 
             var isPermitted = document.getElementById('isPermitted').value;
-            if(isPermitted) {
+            if(isPermitted == 'true') {
                 formSubmit(boardId, '', '/inquiry/selectInquiry.do', 'get');
                 return;
             }
@@ -78,6 +78,8 @@
                 , contentType: 'application/json'
                 , data: JSON.stringify(data)
                 , success: function(result) {
+                    document.getElementById('passwordForCheck').value = '';
+
                     if(result.count == 0) {
                         openAlertModal('비밀번호가 맞지 않습니다.');
                         return;
@@ -86,9 +88,12 @@
                     formSubmit(boardId, '', '/inquiry/selectInquiry.do', 'get');
                 }
                 , error: function() {
+                    document.getElementById('passwordForCheck').value = '';
                     openAlertModal('오류가 발생하였습니다. 관리자에게 문의해주시기 바랍니다.');
                 }
             });
+
+
         }
 
         function changeAnswerYn(answerYn) {
@@ -132,6 +137,25 @@
         }
     </script>
 
+    <style>
+        .writer_info {
+            height: 40px;
+            border-bottom: 1px solid #333;
+            padding: 0 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: end;
+        }
+        .writer_info .fr {
+            margin-left: 20px;
+        }
+        .writer_info .fr:first-child {
+            margin-left: 0;
+        }
+        .writer_info .fr span {
+        }
+    </style>
+
     <div id="container" class="container">
         <form id="inquiryPageInfo" action="/inquiry/selectInquiryList.do" method="get">
             <input type="hidden" id="boardId" name="boardId" th:value="${inquiryInfo.boardId}">
@@ -161,13 +185,21 @@
                     </div>
                     <section>
                         <div class="box_line">
-                            <div class="line_tit cb">
+                            <div class="line_tit cb" style="border-bottom: none;">
                                 <div class="fl">
                                     <span class="label_blue" th:text="'[' + ${inquiry.headerSeNm} + ']'"></span>
                                     <span th:text="${inquiry.title}"></span>
                                 </div>
                                 <div class="fr">
                                     <span th:text="${inquiry.displayRegistDt}"></span>
+                                </div>
+                            </div>
+                            <div class="writer_info">
+                                <div class="fr">
+                                    <span th:text="|작성자 : ${inquiry.updateNm}|"></span>
+                                </div>
+                                <div class="fr">
+                                    <span th:text="|연락처 : ${inquiry.telNo}|"></span>
                                 </div>
                             </div>
                             <div class="line_cont">
