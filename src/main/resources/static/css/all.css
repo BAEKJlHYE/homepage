@@ -81,7 +81,7 @@ nav .dep3 > li > a:hover{text-decoration: underline}
 
 /* footer */
 .footer{height:152px;background:#404040}
-.footer_inner{position:relative;width:1280px;height:100%;margin:0 auto;padding:33px 50px 0;box-sizing: border-box;background:#404040}
+.footer_inner{position:relative;width:1280px;height:100%;margin:0 auto;padding:22px 50px 0;box-sizing: border-box;background:#404040}
 .foot_logo,
 .foot_util{position:absolute}
 
@@ -1032,7 +1032,9 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
 .saleList ul li .noImg .state{min-width:60px;height:30px;border-radius:30px;font-size:14px;color:#fff;text-align:center;line-height:28px;background:var(--primary);font-family:'Pretendard-Regular'}
 .saleList ul li .img .state+.state{margin-left:4px}
 .saleList ul li .noImg .state+.state{margin-left:4px}
-.saleList ul li .sold{position:absolute;left:0;top:0;z-index:2;width:100%;height:100%;background: rgba(255,255,255,.2);background-size:55%;color:#fff;text-shadow: 0px 0px 4px #000;display: flex;align-items: center;justify-content: center;font-size: 30px;text-align: center;}
+/*.saleList ul li .sold{position:absolute;left:0;top:0;z-index:2;width:100%;height:100%;background: rgba(255,255,255,.2);background-size:55%;color:#fff;text-shadow: 0px 0px 4px #000;display: flex;align-items: center;justify-content: center;font-size: 30px;text-align: center;}*/
+.saleList ul li .sold{position:absolute;left:0;top:0px;z-index:2;width:100%;height:100%;background: rgb(165 161 161 / 75%);background-size:55%;color:red;text-shadow: 0px 0px 30px #000;display: flex;align-items: self-end;justify-content: right;font-size: 30px;text-align: center;}
+.saleList ul li .notSold{position:absolute;left:0;top:0;z-index:2;width:100%;height:100%;background-size:55%;color:#fff;text-shadow: 0px 0px 4px #000;display: flex;align-items: center;justify-content: center;font-size: 30px;text-align: center;}
 /*.saleList .item_list li .noImg { overflow: hidden; position: relative; height: 235px; display: flex; justify-content: center; align-content: center; background: #f4f4f4; flex-wrap: wrap;}*/
 .saleList .item_list li .noImgTxt { font-size: 16px; font-weight: bold; color: #b0b0b0; position: absolute; left: 127px; top: 30px;}
 /* .saleList ul li .sold{position:absolute;left:0;top:0;z-index:2;width:100%;height:100%;background: rgba(255,255,255,.6);background-size:55%}
@@ -1393,8 +1395,10 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
 .landList .item_list li:nth-child(n+5) { margin-top: 40px; }
 .landList .item_list li .noImg { overflow: hidden; position: relative; height: 235px; display: flex; justify-content: center; align-content: center; background: #f4f4f4; flex-wrap: wrap;}
 .landList .item_list li .noImgTxt { font-size: 16px; font-weight: bold; color: #b0b0b0; }
-.landList .item_list li .img { overflow: hidden; position: relative; height: 235px; background: url("/sh_img/make24/main_map/no_img.jpg") center center / cover no-repeat; }
-.landList .item_list li .sold { position: absolute; left: 0px; top: 0px; z-index: 5; width: 100%; height: 100%; background: url("/sh_img/make24/search/img/sold.png") center center / 55% no-repeat rgba(255, 255, 255, 0.6); }
+.landList .item_list li .img { overflow: hidden; position: relative; height: 235px; background: url("../image/img_white.png") center center / cover no-repeat; }
+.landList .item_list li .img .soldTxt { position: fixed; padding-left: 20px; font-size: 16px; font-weight: bold; color: red; }
+.landList .item_list li .sold { overflow: hidden; position: relative; height: 235px; left: 0px; top: 0px; z-index: 5; background: url("../image/img_white.png") center center / 55% no-repeat rgba(255, 255, 255, 0.6); }
+/*.landList .item_list li .sold { position: absolute; left: 0px; top: 0px; z-index: 5; width: 100%; height: 100%; background: url("../image/img_white.png") center center / 55% no-repeat rgba(255, 255, 255, 0.6); }*/
 .landList .item_list li .info { padding: 15px 20px 20px; }
 .landList .item_list li .tip { display: flex; align-items: center; }
 .landList .item_list li .tip .badge_wrap_mo { display: none; }

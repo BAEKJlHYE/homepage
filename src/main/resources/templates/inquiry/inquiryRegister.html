@@ -188,8 +188,8 @@
                                             <td>
                                                 <ul class="chk list">
                                                     <li>
-                                                        <input type="checkbox" id="secretYn"
-                                                               value="N" onchange="changeSecretYn(this)">
+                                                        <input type="checkbox" id="secretYn" disabled="disabled"
+                                                               value="Y" onchange="changeSecretYn(this)" checked>
                                                         <label for="secretYn">비밀글</label>
                                                     </li>
                                                     <input type="hidden" name="secretYn">
@@ -198,8 +198,8 @@
                                             <th><span>비밀번호</span></th>
                                             <td>
                                                 <div class="ipt_pwd">
-                                                    <input type="password" id="password" name="password" class="ipt" maxlength="6" disabled="disabled">
-                                                    <a href="#" class="btn_pwd show" id="passwordVisibilityButton">비밀번호 보기</a>
+                                                    <input type="password" id="password" name="password" class="ipt" maxlength="6">
+                                                    <a href="javascript:showPassword()" class="btn_pwd show" id="passwordVisibilityButton">비밀번호 보기</a>
                                                 </div>
                                             </td>
                                         </tr>

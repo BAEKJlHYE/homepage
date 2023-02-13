@@ -14,7 +14,8 @@
             }
 
             // 금액 포매터 적용
-            formatPrice();
+            // formatPrice();
+            formatPriceFull();
 
             // 필터 체크박스 처리
             unitFilter();
@@ -126,13 +127,14 @@
                 , cache: false
             }).done(function(fragment) {
                 $("#landList").replaceWith(fragment);
-                formatPrice();
+                // formatPrice();
+                formatPriceFull();
             });
         }
 
         /* 금액 포맷 적용 */
         function formatPriceFull() {
-            var priceComponents = document.getElementsByName('priceFormatFull');
+            var priceComponents = document.getElementsByClassName('price');
             for(var priceComponent of priceComponents) {
                 if(priceComponent.tagName.toUpperCase() != 'UL')
                     break;
@@ -339,6 +341,7 @@
                                                  th:if="${atchFileStat.index} == 0"
                                                  th:src="|/file/image/${atchFile.atchFileId}|"
                                                  height="235"/>
+                                            <p th:if="${buld.cntrctSttusSeCd == 'A00006'}" class="soldTxt">[[${buld.cntrctSttusSeNm}]]</p>
                                         </div>
                                     </a>
                                     <div class="info">
@@ -346,6 +349,7 @@
                                             <div class="badge_wrap">
                                                 <img th:if="${buld.logoTy} == '1'" src="../image/img_smallLogo1.png" alt="">
                                                 <img th:if="${buld.logoTy} == '2'" src="../image/img_smallLogo2.png" alt="">
+                                                <img th:if="${buld.logoTy} == '3'" src="../image/img_smallLogo3.png" alt="">
                                                 <img th:if="${buld.emrgncySaleYn} == 'Y'" src="../image/img_quick.png" alt="">
                                             </div>
                                             <p th:text="|매물번호 ${buld.buldNo}|"></p>
@@ -425,6 +429,7 @@
                                     <li style="display: contents" th:switch="${buldDetail.logoTy}">
                                         <img th:case="1" src="../image/img_smallLogo1.png" alt="" style="width: 30px; height: 30px; margin-right: 8px;">
                                         <img th:case="2" src="../image/img_smallLogo2.png" alt="" style="width: 30px; height: 30px; margin-right: 8px;">
+                                        <img th:case="3" src="../image/img_smallLogo3.png" alt="" style="width: 30px; height: 30px; margin-right: 8px;">
                                     </li >
                                     <li id="buldNm" th:text="${buldDetail.buldNm}" style="display: contents"></li>
                                 </dt>

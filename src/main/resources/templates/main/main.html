@@ -230,9 +230,12 @@
                                                 <div class="state_wrap" th:switch="${buld.logoTy}">
                                                     <img th:case="1" src="../image/img_smallLogo1.png" alt="">
                                                     <img th:case="2" src="../image/img_smallLogo2.png" alt="">
+                                                    <img th:case="3" src="../image/img_smallLogo3.png" alt="">
                                                     <img th:if="${buld.emrgncySaleYn == 'Y'}" src="../image/img_quick.png" alt="">
                                                 </div>
-                                                <div class="sold"> &#91;[[${buld.cntrctSttusSeNm}]]&#93; <br> [[${buld.reprsntWords}]] </div>
+                                                <div th:if="${buld.cntrctSttusSeCd == 'A00006'}" class="sold">[[${buld.cntrctSttusSeNm}]]</div>
+                                                <div th:if="${buld.cntrctSttusSeCd != 'A00006'}" class="notSold"></div>
+<!--                                                <div class="sold"> &#91;[[${buld.cntrctSttusSeNm}]]&#93; <br> [[${buld.reprsntWords}]] </div>-->
                                             </div>
 
                                             <ul class="info2" name="priceFormat">
@@ -276,9 +279,11 @@
                                                 <div class="state_wrap" th:switch="${buld.logoTy}">
                                                     <img th:case="1" src="../image/img_smallLogo1.png" alt="">
                                                     <img th:case="2" src="../image/img_smallLogo2.png" alt="">
+                                                    <img th:case="3" src="../image/img_smallLogo3.png" alt="">
                                                     <img th:if="${buld.emrgncySaleYn == 'Y'}" src="../image/img_quick.png" alt="">
                                                 </div>
-                                                <div class="sold"> 	&#91;[[${buld.cntrctSttusSeNm}]]&#93; <br> [[${buld.reprsntWords}]] </div>
+                                                <div th:if="${buld.cntrctSttusSeCd == 'A00006'}" class="sold">[[${buld.cntrctSttusSeNm}]]</div>
+                                                <div th:if="${buld.cntrctSttusSeCd != 'A00006'}" class="notSold"></div>
                                             </div>
 
                                             <ul class="info2" name="priceFormat">
@@ -413,6 +418,7 @@
                                         <li style="display: contents" th:switch="${buldDetail.logoTy}">
                                             <img th:case="1" src="../image/img_smallLogo1.png" alt="" style="width: 40px; height: 40px;">
                                             <img th:case="2" src="../image/img_smallLogo2.png" alt="" style="width: 40px; height: 40px;">
+                                            <img th:case="3" src="../image/img_smallLogo3.png" alt="" style="width: 40px; height: 40px;">
                                         </li >
                                         <li id="buldNm" th:text="${buldDetail.buldNm}" style="display: contents"></li>
                                     </dt>
@@ -459,7 +465,8 @@
                             <dt class="open">매물정보</dt>
                             <dd>
                                 <ul class="info_list">
-                                    <li class="add" th:text="|${buldDetail.buldDc}|">
+                                    <li class="add">
+                                        <div th:text="|${buldDetail.buldDc}|" style="white-space: pre-wrap;"></div>
                                     </li>
                                 </ul>
                             </dd>
