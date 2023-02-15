@@ -113,4 +113,18 @@ public class InquiryController {
 
         return "redirect:/inquiry/selectInquiry.do";
     }
+
+    // 문의사항 삭제
+    @PostMapping("/deleteInquiry.do")
+    public String deleteInquiry(@ModelAttribute InquiryVO inquiryVO, RedirectAttributes redirect) {
+        if (inquiryVO.getIsPermitted()) {
+            inquiryService.deleteInquiry(inquiryVO);
+            inquiryVO.setResultMessage("게시글이 삭제되었습니다.");
+        } else {
+            inquiryVO.setResultMessage("게시글 삭제에 실패하였습니다.");
+        }
+        redirect.addFlashAttribute("inquiryVO", inquiryVO);
+
+        return "redirect:/inquiry/selectInquiryList.do";
+    }
 }

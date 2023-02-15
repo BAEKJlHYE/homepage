@@ -148,4 +148,10 @@
         SET ANSWER_YN = #{answerYn}
         WHERE BOARD_ID = #{boardId}
     </update>
+
+    <!-- 문의사항 삭제 -->
+    <delete id="deleteInquiry" parameterType="anonymous.homepage.inquiry.vo.InquiryVO">
+        DELETE FROM INQUIRY
+        WHERE BOARD_ID = #{boardId}
+    </delete>
 </mapper>

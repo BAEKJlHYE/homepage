@@ -17,14 +17,16 @@
 
         function clickDeleteInquiry() {
             // TODO: 게시글 삭제 확인(모달 이용) -> 권한 존재 시 패스, 비밀글 아닐 경우 패스(작성자명으로 비교?), 비밀글일 경우 비밀번호 체크
+            processType = 'D';
+            onPasswordModal();
         }
 
         function updateInquiry() {
             // TODO: 게시글 수정
         }
 
-        function deleteInquiry() {
-            // TODO: 게시글 삭제
+        function deleteInquiry(boardId) {
+            formSubmit(boardId, '', '/inquiry/deleteInquiry.do', 'post');
         }
 
         function moveToInquiryList() {
@@ -58,7 +60,7 @@
         var passwordForCheck;   // 입력한 비밀번호
         var isCorrect;          // 비밀번호 일치여부
         function confirmPasswordModal() {
-            var boardId = document.getElementById('boardIdForMove').value;
+            var boardId = document.getElementById('boardId').value;
             var password = document.getElementById('passwordForCheck').value;
 
             if(isEmpty(password)) {
@@ -69,7 +71,7 @@
             cancelPasswordModal();
 
             data = {
-                boardId: boardId
+                  boardId: boardId
                 , password: password
             };
             $.ajax({
@@ -85,15 +87,15 @@
                         return;
                     }
 
-                    formSubmit(boardId, '', '/inquiry/selectInquiry.do', 'get');
+                    switch (processType) {
+                        case 'D' : deleteInquiry(boardId);
+                    }
                 }
                 , error: function() {
                     document.getElementById('passwordForCheck').value = '';
                     openAlertModal('오류가 발생하였습니다. 관리자에게 문의해주시기 바랍니다.');
                 }
             });
-
-
         }
 
         function changeAnswerYn(answerYn) {
@@ -173,7 +175,6 @@
                 <div class="lnb_inner">
                     <ul class="step">
                         <li>홈</li>
-                        <li>커뮤니티</li>
                         <li>매도·매수 문의</li>
                     </ul>
                 </div>
@@ -208,7 +209,10 @@
                             <div class="line_btn cb">
                                 <div class="fr">
 <!--                                    <a href="#" class="btn_cm" onclick="">글수정</a>-->
-<!--                                    <a href="#" class="btn_cm" onclick="">글삭제</a>-->
+                                    <a th:style="${inquiryInfo.isPermitted ? 'display: inline-block;' : 'display: none;'}"
+                                       id="deleteButton"
+                                       href="#" class="btn_cm mint"
+                                       onclick="clickDeleteInquiry()">글삭제</a>
                                     <a th:style="${inquiryInfo.isPermitted && #strings.equals(inquiry.answerYn, 'N') ? 'display: inline-block;' : 'display: none;'}"
                                        id="answerYButton"
                                        href="#" class="btn_cm mint"
@@ -225,7 +229,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="box_line">
+                        <div class="box_line" style="display: none">
                             <div class="line_grp">
                                 <span>이전글</span>
                                 <a href="#" class="link"

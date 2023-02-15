@@ -16,4 +16,6 @@ public interface InquiryService {
     public int insertInquiry(InquiryVO inquiryVO);
 
     public int changeAnswerYn(InquiryVO inquiryVO);
+
+    public int deleteInquiry(InquiryVO inquiryVO);
 }
