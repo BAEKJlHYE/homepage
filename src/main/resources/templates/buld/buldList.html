@@ -350,6 +350,7 @@
                                                 <img th:if="${buld.logoTy} == '1'" src="../image/img_smallLogo1.png" alt="">
                                                 <img th:if="${buld.logoTy} == '2'" src="../image/img_smallLogo2.png" alt="">
                                                 <img th:if="${buld.logoTy} == '3'" src="../image/img_smallLogo3.png" alt="">
+                                                <img th:if="${buld.logoTy} == '5'" src="../image/img_smallLogo5.png" alt="">
                                                 <img th:if="${buld.emrgncySaleYn} == 'Y'" src="../image/img_quick.png" alt="">
                                             </div>
                                             <p th:text="|매물번호 ${buld.buldNo}|"></p>
@@ -430,6 +431,7 @@
                                         <img th:case="1" src="../image/img_smallLogo1.png" alt="" style="width: 30px; height: 30px; margin-right: 8px;">
                                         <img th:case="2" src="../image/img_smallLogo2.png" alt="" style="width: 30px; height: 30px; margin-right: 8px;">
                                         <img th:case="3" src="../image/img_smallLogo3.png" alt="" style="width: 30px; height: 30px; margin-right: 8px;">
+                                        <img th:case="5" src="../image/img_smallLogo5.png" alt="" style="width: 30px; height: 30px; margin-right: 8px;">
                                     </li >
                                     <li id="buldNm" th:text="${buldDetail.buldNm}" style="display: contents"></li>
                                 </dt>
