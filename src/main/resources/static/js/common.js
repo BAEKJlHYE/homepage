@@ -36,6 +36,14 @@ $(document).ready(function(){
     }
     nav();
 
+    function menuActiveButton() {
+        $(".btn_menu").on("click", function(){
+            $(this).toggleClass("on");
+            $(".gnb_box").toggleClass("on");
+        });
+    }
+    menuActiveButton();
+
     function mainTab() {
         var $menu = $(".tab_main ul li a");
 
@@ -77,7 +85,6 @@ $(document).ready(function(){
             $(".tab_cont > div").eq(idx).addClass("on").siblings().removeClass("on");
         });
     }
-
     tab();
 
     function accordion(){
