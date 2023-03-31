@@ -133,19 +133,30 @@
                             // },
                         });
                     </script>
-                    <div class="box_main" style="display: none;">
-                        <ul class="quick_menu">
-                            <li><a href="#">스크린골프</a></li>
-                            <li><a href="#">골프연습장</a></li>
-                            <li><a href="#">매도.매수문의</a></li>
-                            <li><a href="#">골프장직거래</a></li>
+
+                    <!-- 20230331 잠시 주석 -->
+                    <div class="swiper-mainb" style="margin-top: 20px; display: none;">
+                        <ul class="swiper-wrapper">
+                            <li class="swiper-slide">
+                                <img src="../image/img_mainBanner.png"/>
+                            </li>
                         </ul>
+                    </div>
+                    <!-- 20230331 잠시 주석 -->
+
+<!--                    <div class="box_main" style="display: none;">-->
+<!--                        <ul class="quick_menu">-->
+<!--                            <li><a href="#">스크린골프</a></li>-->
+<!--                            <li><a href="#">골프연습장</a></li>-->
+<!--                            <li><a href="#">매도.매수문의</a></li>-->
+<!--                            <li><a href="#">골프장직거래</a></li>-->
+<!--                        </ul>-->
                         <!-- <ul class="quick_menu2">
                             <li><a href="#">최신 분양정보 바로가기</a></li>
                             <li><a href="#">HOT한 매물정보 보러가기</a></li>
                             <li><a href="#">My 즐겨찾기 바로가기</a></li>
                         </ul> -->
-                    </div>
+<!--                    </div>-->
 
                     <div class="box_noti" style="display:none;">
                         <div class="tab_main">
@@ -222,7 +233,7 @@
                                 <ul class="item_list">
                                     <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count lt 5}">
                                         <a href="#" th:attr="onclick=|fn_sendBuldDetail('${buld.buldNo}')|">
-                                            <div th:class="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0} ? 'noImg' : 'img'"
+                                            <div th:class="img"
                                                  th:style="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0} ? '' : 'background-image: url(/file/image/'+${buld.atchFiles[0].atchFileId}+')'">
                                                 <p th:if="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0}" class="noImgTxt">
                                                     이미지 준비 중입니다.
@@ -254,14 +265,14 @@
                                                     <p th:if="${not #strings.isEmpty(buld.rntchrg)}" th:text="${buld.rntchrg}"></p>
                                                     <p th:if="${#strings.isEmpty(buld.rntchrg)}">-</p>
                                                 </li>
+<!--                                                <li>-->
+<!--                                                    <p>관리비</p>-->
+<!--                                                    <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>-->
+<!--                                                    <p th:if="${#strings.isEmpty(buld.managect)}">-</p>-->
+<!--                                                </li>-->
                                                 <li>
-                                                    <p>관리비</p>
-                                                    <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>
-                                                    <p th:if="${#strings.isEmpty(buld.managect)}">-</p>
-                                                </li>
-                                                <li>
-                                                    <p>권리금</p>
-                                                    <p th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
+                                                    <p class="pRed">권리금</p>
+                                                    <p th:class="pRed" th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
                                                     <p th:if="${#strings.isEmpty(buld.premum)}">-</p>
                                                 </li>
                                             </ul>
@@ -272,7 +283,7 @@
                                 <ul class="item_list">
                                     <li th:each="buld, buldListStat : ${buldList}" th:if="${buldListStat.count ge 5} and ${buldListStat.count lt 9}">
                                         <a href="#" th:attr="onclick=|fn_sendBuldDetail('${buld.buldNo}')|">
-                                            <div th:class="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0} ? 'noImg' : 'img'"
+                                            <div class="img"
                                                  th:style="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0} ? '' : 'background-image: url(/file/image/'+${buld.atchFiles[0].atchFileId}+')'">
                                                 <p th:if="${buld.atchFiles == null or #lists.size(buld.atchFiles) == 0}" class="noImgTxt">
                                                     이미지 준비 중입니다.
@@ -301,14 +312,14 @@
                                                     <p th:if="${not #strings.isEmpty(buld.rntchrg)}" th:text="${buld.rntchrg}"></p>
                                                     <p th:if="${#strings.isEmpty(buld.rntchrg)}">-</p>
                                                 </li>
+<!--                                                <li>-->
+<!--                                                    <p>관리비</p>-->
+<!--                                                    <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>-->
+<!--                                                    <p th:if="${#strings.isEmpty(buld.managect)}">-</p>-->
+<!--                                                </li>-->
                                                 <li>
-                                                    <p>관리비</p>
-                                                    <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>
-                                                    <p th:if="${#strings.isEmpty(buld.managect)}">-</p>
-                                                </li>
-                                                <li>
-                                                    <p>권리금</p>
-                                                    <p th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
+                                                    <p class="pRed">권리금</p>
+                                                    <p th:class="pRed" th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
                                                     <p th:if="${#strings.isEmpty(buld.premum)}">-</p>
                                                 </li>
                                             </ul>

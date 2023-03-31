@@ -353,15 +353,16 @@
                                                 <img th:if="${buld.logoTy} == '5'" src="../image/img_smallLogo5.png" alt="">
                                                 <img th:if="${buld.emrgncySaleYn} == 'Y'" src="../image/img_quick.png" alt="">
                                             </div>
-                                            <p th:text="|매물번호 ${buld.buldNo}|"></p>
+<!--                                            <p th:text="|매물번호 ${buld.buldNo}|"></p>-->
                                         </div>
                                         <a href="#" th:onclick="openBuldDetailPopup([[${buld.buldNo}]])">
                                             <div class="tit">
                                                 <p class="desc" th:text="${buld.buldNm}"></p>
-                                                <p class="loca">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                                    <span th:text="|${buld.addr} ${buld.detailAddr == null ? '' : buld.detailAddr}|" style="font-size: 15px; color: rgb(153, 153, 153);"></span>
-                                                </p>
+                                                <p class="desc" th:text="${buld.reprsntWords}"></p>
+<!--                                                <p class="loca">-->
+<!--                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>-->
+<!--                                                    <span th:text="|${buld.addr} ${buld.detailAddr == null ? '' : buld.detailAddr}|" style="font-size: 15px; color: rgb(153, 153, 153);"></span>-->
+<!--                                                </p>-->
                                             </div>
                                         </a>
                                     </div>
@@ -376,14 +377,14 @@
                                             <p th:if="${not #strings.isEmpty(buld.rntchrg)}" th:text="${buld.rntchrg}"></p>
                                             <p th:if="${#strings.isEmpty(buld.rntchrg)}">-</p>
                                         </li>
+<!--                                        <li>-->
+<!--                                            <p>관리비</p>-->
+<!--                                            <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>-->
+<!--                                            <p th:if="${#strings.isEmpty(buld.managect)}">-</p>-->
+<!--                                        </li>-->
                                         <li>
-                                            <p>관리비</p>
-                                            <p th:if="${not #strings.isEmpty(buld.managect)}" th:text="${buld.managect}"></p>
-                                            <p th:if="${#strings.isEmpty(buld.managect)}">-</p>
-                                        </li>
-                                        <li>
-                                            <p>권리금</p>
-                                            <p th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
+                                            <p class="pRed">권리금</p>
+                                            <p th:class="pRed" th:if="${not #strings.isEmpty(buld.premum)}" th:text="${buld.premum}"></p>
                                             <p th:if="${#strings.isEmpty(buld.premum)}">-</p>
                                         </li>
                                     </ul>
