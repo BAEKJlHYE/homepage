@@ -215,11 +215,6 @@
             openAlertModal("해당 매물번호에 대하여 아래 번호로 문의주시면 감사하겠습니다. \n\n 010-4455-2690 \n\n 031-546-3535");
         }
 
-        function call(type) {
-            var elementId = "#call" + type;
-            $(elementId).trigger("click");
-        }
-
         /* 매물 등록 */
         function registerBuld() {
             formSubmit('', '/buld/registerBuld.do');
@@ -497,10 +492,8 @@
             <button type="button" class="btn_cm" onclick="openConfirmModal('매물을 삭제하시겠습니까?', 'deleteBuld')">삭제</button>
         </div>
         <div class="pop_footer full" th:if="${buldDetail.isPermitted == false}">
-            <button type="button" class="btn_cm mint" onclick="call('1')">문의(010-4455-2690)</button>
-            <button type="button" class="btn_cm" onclick="call('2')">문의(031-546-3535)</button>
-            <a id="call1" href="tel:010-4455-2690" style="display: none">010-4455-2690</a>
-            <a id="call2" href="tel:031-546-3535" style="display: none">031-546-3535</a>
+            <button type="button" class="btn_cm mint" onclick="document.location.href='tel:010-4455-2690'">문의(010-4455-2690)</button>
+            <button type="button" class="btn_cm" onclick="document.location.href='tel:031-546-3535'">문의(031-546-3535)</button>
         </div>
     </div>
     <div class="dim"></div>
