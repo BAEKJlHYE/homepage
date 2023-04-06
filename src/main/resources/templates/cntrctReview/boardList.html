@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default_layout">
+
+<th:block layout:fragment="content">
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            var resultMessage = document.getElementById('resultMessage').value;
+            if(!isEmpty(resultMessage))
+                openAlertModal(resultMessage);
+        });
+
+        function keyUpEvent() {
+            if(window.event.keyCode == 13) {
+                searchBoard();
+            }
+        }
+
+        function searchBoard() {
+            formSubmit(0, '', 1, '/cntrctReview/selectBoardList.do');
+        }
+
+        function moveToRegisterBoard() {
+            var nowPage = document.getElementById('nowPage').value;
+            formSubmit(0, '', nowPage, '/cntrctReview/registerBoard.do');
+        }
+
+        function moveBoard(boardId) {
+            var nowPage = document.getElementById('nowPage').value;
+            formSubmit(boardId, '', nowPage, '/cntrctReview/selectBoard.do');
+        }
+
+        function movePage(pageNumber) {
+            formSubmit(0, '', pageNumber, '/cntrctReview/selectBoardList.do');
+        }
+
+        function formSubmit(boardId, resultMessage, pageNumber, action) {
+            var searchKeyword = document.getElementById('searchKeyword').value;
+            if(!isEmpty(searchKeyword))
+                document.getElementById('searchKeyword').value = searchKeyword.trim();
+
+            document.getElementById('boardId').value = boardId;
+            document.getElementById('resultMessage').value = resultMessage;
+            document.getElementById('nowPage').value = pageNumber;
+
+            var form = document.getElementById('boardPageInfo');
+            form.action = action;
+            form.submit();
+        }
+    </script>
+
+    <div id="container" class="container">
+        <form id="boardPageInfo" action="/cntrctReview/selectBoardList.do" method="get">
+            <input type="hidden" id="boardId" name="boardId" value="">
+            <input type="hidden" id="resultMessage" name="resultMessage" th:value="${boardInfo.resultMessage}">
+            <input type="hidden" id="recordUnit" name="recordUnit" th:value="${boardInfo.recordUnit}">
+            <input type="hidden" id="nowPage" name="nowPage" th:value="${boardInfo.nowPage}">
+            <input type="hidden" id="pageUnit" name="pageUnit" th:value="${boardInfo.pageUnit}">
+
+            <div class="lnb">
+                <div class="lnb_inner">
+                    <ul class="step">
+                        <li>홈</li>
+                        <li>커뮤니티</li>
+                        <li>계약성공후기</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <div class="content_inner">
+                    <div class="titarea">
+                        <h2>계약성공후기</h2>
+                    </div>
+                    <section>
+                        <div class="tabbox">
+                            <div class="tab_cont">
+                                <div class="on">
+                                    <article>
+                                        <div class="box_sch">
+                                            <select name="searchSeCd" id="searchSeCd" class="select">
+                                                <option th:each="searchSe, searchSeStat : ${searchSeCds}"
+                                                        th:text="${searchSe.cdNm}"
+                                                        th:value="${searchSe.cd}"
+                                                        th:selected="${boardInfo.searchSeCd} == ${searchSe.cd}">
+                                                </option>
+                                            </select>
+                                            <div class="ipt_sch">
+                                                <input id="searchKeyword" name="searchKeyword" type="text" class="ipt"
+                                                       th:value="${boardInfo.searchKeyword}" placeholder="검색어를 입력해주세요."
+                                                       onkeyup="keyUpEvent()">
+                                                <input type="text" style="display: none;">
+                                                <a href="#" class="btn_sch" onclick="searchBoard()">검색</a>
+                                            </div>
+                                        </div>
+                                        <div class="tit_tb">
+                                            <div class="fl">
+                                                <span th:text="|총 ${boardInfo.recordCount}건|"></span>
+                                            </div>
+                                        </div>
+                                        <div class="tbbox" th:classappend="${boardInfo.recordCount == 0} ? 'no'">
+                                            <table class="tb ellipsis">
+                                                <colgroup>
+                                                    <col style="width:82px"/>
+                                                    <col/>
+                                                    <col style="width:163px"/>
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th><span>번호</span></th>
+                                                        <th><span>제목</span></th>
+                                                        <th><span>등록일</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="board : ${boardList}">
+                                                        <td><span th:text="${board.boardId}"></span></td>
+                                                        <td class="tal">
+                                                            <a class="link" href="#" th:onclick="|moveBoard(${board.boardId})|">
+                                                                <span th:text="${board.title}"></span>
+                                                            </a>
+                                                        </td>
+                                                        <td><span th:text="${board.displayRegistDt}"></span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="empty">
+                                            <p>게시글이 없습니다.</p>
+                                        </div>
+                                        <div class="paging_box">
+                                            <ul class="paging">
+                                                <li th:if="${boardInfo.prevAllPageExist}" class="prev_all">
+                                                    <a href="#" th:onclick="|movePage(${boardInfo.firstPage - 1})|">첫페이지</a>
+                                                </li>
+                                                <li th:if="${boardInfo.prevPageExist}" class="prev">
+                                                    <a href="#" th:onclick="|movePage(${boardInfo.nowPage - 1})|">이전</a>
+                                                </li>
+                                                <li th:each="i: ${#numbers.sequence(boardInfo.firstPage, boardInfo.lastPage)}"
+                                                    th:classappend="${boardInfo.nowPage == i} ? 'on'">
+                                                    <a href="#" th:onclick="|movePage(${i})|" th:text="${i}">1</a>
+                                                </li>
+                                                <li class="next" th:if="${boardInfo.nextPageExist}">
+                                                    <a href="#" th:onclick="|movePage(${boardInfo.nowPage + 1})|">다음</a>
+                                                </li>
+                                                <li th:if="${boardInfo.nextAllPageExist}" class="next_all">
+                                                    <a href="#" th:onclick="|movePage(${boardInfo.lastPage + 1})|">끝페이지</a>
+                                                </li>
+                                            </ul>
+                                            <div class="fr">
+                                                <a th:if="${boardInfo.isPermitted}" href="#" class="btn_cm mint" onclick="moveToRegisterBoard()">글쓰기</a>
+                                            </div>
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <a href="#" class="btn_top">TOP</a>
+        </form>
+    </div>
+</th:block>
+</html>

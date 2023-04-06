@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default_layout">
+
+<th:block layout:fragment="content">
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            var resultMessage = document.getElementById('resultMessage').value;
+            if(!isEmpty(resultMessage))
+                openAlertModal(resultMessage);
+        });
+
+        function updateBoard() {
+            var boardId = document.getElementById('boardId').value;
+            formSubmit(boardId, '', '/cntrctReview/modifyBoard.do', 'get');
+        }
+
+        function deleteBoard() {
+            var boardId = document.getElementById('boardId').value;
+            formSubmit(boardId, '', '/cntrctReview/deleteBoard.do', 'post');
+        }
+
+        function moveToBoardList() {
+            formSubmit(0, '', '/cntrctReview/selectBoardList.do', 'get');
+        }
+
+        function moveToOtherBoard(otherBoardId) {
+            if(otherBoardId <= 0)
+                return;
+
+            var boardId = document.getElementById('boardId').value;
+            formSubmit(otherBoardId, '', '/cntrctReview/selectBoard.do', 'get');
+        }
+
+        function formSubmit(boardId, resultMessage, action, method) {
+            document.getElementById('boardId').value = boardId;
+            document.getElementById('resultMessage').value = resultMessage;
+
+            var form = document.getElementById('boardPageInfo');
+            form.method = method;
+            form.action = action;
+            form.submit();
+        }
+    </script>
+
+    <div id="container" class="container">
+        <form id="boardPageInfo" action="/cntrctReview/selectBoardList.do" method="get">
+            <input type="hidden" id="boardId" name="boardId" th:value="${boardInfo.boardId}">
+            <input type="hidden" id="resultMessage" name="resultMessage" th:value="${boardInfo.resultMessage}">
+            <input type="hidden" id="recordUnit" name="recordUnit" th:value="${boardInfo.recordUnit}">
+            <input type="hidden" id="nowPage" name="nowPage" th:value="${boardInfo.nowPage}">
+            <input type="hidden" id="pageUnit" name="pageUnit" th:value="${boardInfo.pageUnit}">
+            <input type="hidden" id="searchSeCd" name="searchSeCd" th:value="${boardInfo.searchSeCd}">
+            <input type="hidden" id="searchKeyword" name="searchKeyword" th:value="${boardInfo.searchKeyword}">
+
+            <div class="lnb">
+                <div class="lnb_inner">
+                    <ul class="step">
+                        <li>홈</li>
+                        <li>커뮤니티</li>
+                        <li>계약성공후기</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <div class="content_inner">
+                    <div class="titarea">
+                        <h2>계약성공후기</h2>
+                    </div>
+                    <section>
+                        <div class="box_line">
+                            <div class="line_tit cb">
+                                <div class="fl">
+                                    <span th:text="${board.title}"></span>
+                                </div>
+                                <div class="fr">
+                                    <span th:text="${board.displayRegistDt}"></span>
+                                </div>
+                            </div>
+                            <div class="line_cont">
+                                <div th:text="${board.content}" style="white-space: pre-wrap;"></div>
+                            </div>
+                            <div class="line_btn cb">
+                                <div class="fr">
+                                    <a th:if="${boardInfo.isPermitted}" href="#" class="btn_cm" onclick="updateBoard()">글수정</a>
+                                    <a th:if="${boardInfo.isPermitted}" href="#" class="btn_cm" onclick="openConfirmModal('게시글을 삭제하시겠습니까?', 'deleteBoard')">글삭제</a>
+                                    <a href="#" class="btn_cm gray" onclick="moveToBoardList()">목록</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box_line">
+                            <div class="line_grp">
+                                <span>이전글</span>
+                                <a href="#" class="link"
+                                   th:onclick="|moveToOtherBoard(${board.prevBoardId})|"
+                                   th:classappend="${board.prevBoardId <= 0} ? 'no'"
+                                   th:text="${board.prevBoardTitle}"></a>
+                            </div>
+                            <div class="line_grp">
+                                <span>다음글</span>
+                                <a href="#" class="link"
+                                   th:onclick="|moveToOtherBoard(${board.nextBoardId})|"
+                                   th:classappend="${board.nextBoardId <= 0} ? 'no'"
+                                   th:text="${board.nextBoardTitle}"></a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <a href="#" class="btn_top">TOP</a>
+        </form>
+    </div>
+</th:block>
+</html>

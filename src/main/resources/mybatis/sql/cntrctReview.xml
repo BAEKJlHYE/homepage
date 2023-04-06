@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="anonymous.homepage.cntrctReview.dao.CntrctReviewMapper">
+    <!-- 게시글 목록 조회 -->
+    <select id="selectBoardList" parameterType="anonymous.homepage.cntrctReview.vo.CntrctReviewVO" resultType="anonymous.homepage.cntrctReview.vo.CntrctReviewVO">
+        SELECT A.BOARD_ID
+             , A.TITLE
+             , A.DISPLAY_REGIST_DT
+             , A.VIEW_COUNT
+        FROM (
+                 SELECT ROWNUM AS RNUM
+                      , A.*
+                 FROM (
+                          SELECT BOARD_ID
+                               , TITLE
+                               , TO_CHAR(REGIST_DT, 'YYYY-MM-DD') AS DISPLAY_REGIST_DT
+                               , VIEW_COUNT
+                          FROM CNTRCT_REVIEW
+                          WHERE 1 = 1
+                          <if test="searchSeCd != null and searchSeCd != ''">
+                            <if test="'A00018'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+                            AND REGEXP_LIKE(TITLE, #{searchKeyword})
+                            </if>
+                            <if test="'A00019'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+                            AND REGEXP_LIKE(CONTENT, #{searchKeyword})
+                            </if>
+                            <if test="'A00020'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+                            AND (REGEXP_LIKE(TITLE, #{searchKeyword}) OR REGEXP_LIKE(CONTENT, #{searchKeyword}))
+                            </if>
+                          </if>
+                          ORDER BY REGIST_DT DESC, BOARD_ID DESC
+                      ) A
+             ) A
+        WHERE A.RNUM BETWEEN #{firstRecordNumber} AND #{lastRecordNumber}
+    </select>
+
+    <!-- 게시글 상세 조회 -->
+    <select id="selectBoard" resultType="anonymous.homepage.cntrctReview.vo.CntrctReviewVO">
+        SELECT A.*
+        FROM (
+                 SELECT BOARD_ID
+                      , TITLE
+                      , CONTENT
+                      , WRITER
+                      , BOARD_ORDER
+                      , REGIST_DT
+                      , TO_CHAR(REGIST_DT, 'YYYY-MM-DD') AS DISPLAY_REGIST_DT
+                      , SUGGESTION_COUNT
+                      , VIEW_COUNT
+                      , LAG(BOARD_ID, 1, 0) OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS NEXT_BOARD_ID
+                      , LAG(TITLE, 1, '다음 글이 없습니다.') OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS NEXT_BOARD_TITLE
+                      , LEAD(BOARD_ID, 1, 0) OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS PREV_BOARD_ID
+                      , LEAD(TITLE, 1, '이전 글이 없습니다.') OVER(ORDER BY REGIST_DT DESC, BOARD_ID DESC) AS PREV_BOARD_TITLE
+                 FROM CNTRCT_REVIEW
+             ) A
+        WHERE A.BOARD_ID = #{boardId}
+    </select>
+
+    <!-- 게시글 건수 조회 -->
+    <select id="selectBoardCount" parameterType="anonymous.homepage.cntrctReview.vo.CntrctReviewVO" resultType="int">
+        SELECT COUNT(1) AS RECORD_COUNT
+        FROM CNTRCT_REVIEW
+        WHERE 1 = 1
+        <if test="searchSeCd != null and searchSeCd != ''">
+          <if test="'A00018'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+          AND REGEXP_LIKE(TITLE, #{searchKeyword})
+          </if>
+          <if test="'A00019'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+          AND REGEXP_LIKE(CONTENT, #{searchKeyword})
+          </if>
+          <if test="'A00020'.equals(searchSeCd) and searchKeyword != null and searchKeyword != ''">
+          AND (REGEXP_LIKE(TITLE, #{searchKeyword}) OR REGEXP_LIKE(CONTENT, #{searchKeyword}))
+          </if>
+        </if>
+    </select>
+
+    <!-- 게시글 추가 -->
+    <insert id="insertBoard" parameterType="anonymous.homepage.cntrctReview.vo.CntrctReviewVO">
+        <selectKey keyProperty="boardId" resultType="int" order="BEFORE">
+            SELECT NVL(MAX(BOARD_ID), 0) + 1 FROM CNTRCT_REVIEW
+        </selectKey>
+        INSERT INTO CNTRCT_REVIEW (
+            BOARD_ID
+            , TITLE
+            , CONTENT
+            , WRITER
+            , BOARD_ORDER
+            , REGIST_DT
+            , UPDATE_ID
+            , UPDATE_DT
+            , SUGGESTION_COUNT
+            , VIEW_COUNT
+        )
+        VALUES (
+            #{boardId}
+            , #{title}
+            , #{content}
+            , #{userId}
+            , 1
+            , SYSDATE
+            , #{userId}
+            , SYSDATE
+            , 0
+            , 0
+        )
+    </insert>
+
+    <!-- 게시글 수정 -->
+    <update id="updateBoard" parameterType="anonymous.homepage.cntrctReview.vo.CntrctReviewVO">
+        UPDATE CNTRCT_REVIEW
+        SET TITLE = #{title}
+            , CONTENT = #{content}
+            , UPDATE_ID = #{userId}
+            , UPDATE_DT = SYSDATE
+        WHERE BOARD_ID = #{boardId}
+    </update>
+
+    <!-- 게시글 삭제 -->
+    <delete id="deleteBoard" parameterType="anonymous.homepage.cntrctReview.vo.CntrctReviewVO">
+        DELETE FROM CNTRCT_REVIEW
+        WHERE BOARD_ID = #{boardId}
+    </delete>
+
+    <!-- 조회수 추가 -->
+    <update id="updateBoardViewCount" parameterType="anonymous.homepage.cntrctReview.vo.CntrctReviewVO">
+        UPDATE CNTRCT_REVIEW
+        SET VIEW_COUNT = (
+            SELECT VIEW_COUNT + 1
+            FROM CNTRCT_REVIEW
+            WHERE BOARD_ID = #{boardId}
+        )
+        WHERE BOARD_ID = #{boardId}
+    </update>
+
+    <!-- 추천수 추가 -->
+    <update id="updateBoardSuggestionCount" parameterType="anonymous.homepage.cntrctReview.vo.CntrctReviewVO">
+        UPDATE CNTRCT_REVIEW
+        SET SUGGESTION_COUNT = (
+            SELECT SUGGESTION_COUNT + 1
+            FROM CNTRCT_REVIEW
+            WHERE BOARD_ID = #{boardId}
+        )
+        WHERE BOARD_ID = #{boardId}
+    </update>
+</mapper>

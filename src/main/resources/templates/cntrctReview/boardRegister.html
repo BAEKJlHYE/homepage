@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default_layout">
+
+<th:block layout:fragment="content">
+    <script>
+        function moveToBoardList() {
+            formSubmit('/cntrctReview/selectBoardList.do', 'get');
+        }
+
+        function registerBoard() {
+            if(!validateForm())
+                return;
+
+            formSubmit('/cntrctReview/insertBoard.do', 'post');
+        }
+
+        function validateForm() {
+            if(isEmpty(document.getElementById('title').value)) {
+                openAlertModal("제목을 입력해주시기 바랍니다.");
+                return false;
+            }
+
+            if(isEmpty(document.getElementById('content').value)) {
+                openAlertModal("내용을 입력해주시기 바랍니다.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function formSubmit(action, method) {
+            var boardForm = document.getElementById('boardPageInfo');
+            boardForm.action = action;
+            boardForm.method = method;
+            boardForm.submit();
+        }
+    </script>
+
+    <div id="container" class="container">
+        <form id="boardPageInfo" action="/cntrctReview/selectBoardList.do" method="get">
+            <input type="hidden" id="recordUnit" name="recordUnit" th:value="${boardInfo.recordUnit}">
+            <input type="hidden" id="nowPage" name="nowPage" th:value="${boardInfo.nowPage}">
+            <input type="hidden" id="pageUnit" name="pageUnit" th:value="${boardInfo.pageUnit}">
+            <input type="hidden" id="searchSeCd" name="searchSeCd" th:value="${boardInfo.searchSeCd}">
+            <input type="hidden" id="searchKeyword" name="searchKeyword" th:value="${boardInfo.searchKeyword}">
+
+            <div class="lnb">
+                <div class="lnb_inner">
+                    <ul class="step">
+                        <li>홈</li>
+                        <li>커뮤니티</li>
+                        <li>계약성공후기</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <div class="content_inner">
+                    <div class="titarea">
+                        <h2>계약성공후기</h2>
+                    </div>
+                    <section>
+                        <article>
+                            <div class="tit_tb">
+                                <div class="fr"><span><span class="cl_orange">*</span> 표시가 있는 항목은 필수로 입력하셔야 합니다.</span></div>
+                            </div>
+                            <div class="tbbox">
+                                <table class="tb type2">
+                                    <colgroup>
+                                        <col style="width:260px"/>
+                                        <col />
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th><span class="req">제목</span></th>
+                                            <td>
+                                                <input type="text" id="title" name="title" class="ipt" placeholder="제목을 입력하세요." maxlength="30">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="req">내용</span></th>
+                                            <td>
+                                                <textarea class="txa" id="content" name="content" cols="30" rows="10" style="height: 290px;"
+                                                          placeholder="내용을 입력하세요." maxlength="300"></textarea>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                        <div class="btnbox cb">
+                            <a th:if="${boardInfo.isPermitted}" href="#" class="btn_cm mint" onclick="registerBoard()">등록</a>
+                            <a href="#" class="btn_cm" onclick="moveToBoardList()">취소</a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <a href="#" class="btn_top">TOP</a>
+        </form>
+    </div>
+</th:block>
+</html>
