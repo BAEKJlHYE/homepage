@@ -257,6 +257,11 @@
 <!--                                                <div class="sold"> &#91;[[${buld.cntrctSttusSeNm}]]&#93; <br> [[${buld.reprsntWords}]] </div>-->
                                             </div>
 
+                                            <div class="tit">
+                                                <p class="desc" th:text="${buld.buldNm}"></p>
+                                                <p class="desc" th:text="${buld.reprsntWords}"></p>
+                                            </div>
+
                                             <ul class="info2" name="priceFormat">
                                                 <li>
                                                     <p>보증금</p>
@@ -304,6 +309,11 @@
                                                 </div>
                                                 <div th:if="${buld.cntrctSttusSeCd == 'A00006'}" class="sold">[[${buld.cntrctSttusSeNm}]]</div>
                                                 <div th:if="${buld.cntrctSttusSeCd != 'A00006'}" class="notSold"></div>
+                                            </div>
+
+                                            <div class="tit">
+                                                <p class="desc" th:text="${buld.buldNm}"></p>
+                                                <p class="desc" th:text="${buld.reprsntWords}"></p>
                                             </div>
 
                                             <ul class="info2" name="priceFormat">
