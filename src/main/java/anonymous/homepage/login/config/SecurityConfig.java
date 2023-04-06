@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http
             .authorizeRequests()
-            .mvcMatchers("/", "/main/**", "/companyInfo/**", "/board/select**","/inquiry/**", "/buld/select**"
+            .mvcMatchers("/", "/main/**", "/companyInfo/**", "/board/select**","/inquiry/**", "/buld/select**", "/cntrctReview/select**"
                     , "/error/**", "/js/**", "/css/**", "/image/**", "/font/**", "/file/image/**").permitAll() // 해당 경로들은 접근을 허용
                 .antMatchers("/register**","/insert**","/modify**","/update**","/delete**").hasRole("ADMIN")
 //                .antMatchers("/admin").hasRole("ADMIN")

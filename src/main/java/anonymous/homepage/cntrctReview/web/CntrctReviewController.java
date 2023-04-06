@@ -53,11 +53,6 @@ public class CntrctReviewController {
     public String selectBoard(@ModelAttribute CntrctReviewVO cntrctReviewVO, Model model) {
         // 게시글 조회
         CntrctReviewVO board = cntrctReviewService.selectBoard(cntrctReviewVO);
-        
-        // 조회수 증가
-        if(!board.getWriter().equals(cntrctReviewVO.getUserId())) {
-            cntrctReviewService.updateBoardViewCount(cntrctReviewVO);
-        }
 
         // 데이터 전달
         model.addAttribute("boardInfo", cntrctReviewVO);
@@ -102,7 +97,7 @@ public class CntrctReviewController {
         }
 
         cntrctReviewVO.setResultMessage(resultMessage);
-        redirect.addFlashAttribute("boardVO", cntrctReviewVO);
+        redirect.addFlashAttribute("cntrctReviewVO", cntrctReviewVO);
         return "redirect:" + redirectUrl;
     }
 
@@ -123,7 +118,7 @@ public class CntrctReviewController {
         }
 
         cntrctReviewVO.setResultMessage(resultMessage);
-        redirect.addFlashAttribute("boardVO", cntrctReviewVO);
+        redirect.addFlashAttribute("cntrctReviewVO", cntrctReviewVO);
         return "redirect:" + redirectUrl;
     }
 
@@ -141,7 +136,7 @@ public class CntrctReviewController {
         }
 
         cntrctReviewVO.setResultMessage(resultMessage);
-        redirect.addFlashAttribute("boardVO", cntrctReviewVO);
+        redirect.addFlashAttribute("cntrctReviewVO", cntrctReviewVO);
         return "redirect:/cntrctReview/selectBoardList.do";
     }
 }

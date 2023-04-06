@@ -687,7 +687,7 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
 .lock {position: absolute; width: 20px; height: 24px; margin-left: 5px; background: url("../image/ico_lock.png") no-repeat center / 18px;}
 
 .box_line + .box_line{margin-top: 60px}
-.box_line .line_tit{border-top: 1px solid #333;border-bottom: 1px solid #333;padding:0 20px;height: 80px;line-height: 78px;box-sizing: border-box;}
+.box_line .line_tit{border-top: 1px solid #333;border-bottom: 1px solid #333;padding:0 20px;line-height: 78px;box-sizing: border-box;}
 .box_line .line_tit span{font-size: 18px;color:#111;font-family:'Pretendard-Regular';}
 .box_line .line_tit .label_blue{color: #445fb7;}
 .box_line .line_tit .fl{float: left;}
@@ -696,7 +696,7 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
 .box_line .line_tit .fr span + span{margin-left: 13px;padding-left:13px;}
 .box_line .line_tit .fr span + span::before{content:'';position: absolute;top:50%;left:0;margin-top: -6px;border-right: 1px solid #ddd;height: 12px;}
 .box_line .line_cont{padding:24px 20px;border-bottom:1px solid #ddd;color:#333;line-height: 24px;}
-.box_line .line_grp{border-bottom:1px solid #ddd;height: 60px;padding:0 20px;box-sizing: border-box;}
+.box_line .line_grp{border-bottom:1px solid #ddd;line-height: 60px;padding:0 20px;box-sizing: border-box;}
 .box_line .line_grp span{display: inline-block;line-height: 58px;color:#888888}
 .box_line .line_grp span:first-child{min-width: 80px;}
 .box_line .line_grp .tit{color:#111}
