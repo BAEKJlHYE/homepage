@@ -130,6 +130,32 @@ $(document).ready(function(){
     }
     btnTop();
 
+    function btnCall(){
+        var $btnCall = $(".btn_call");
+
+        $(window).scroll(function () {
+            var nowScroll = parseInt($(document).scrollTop());
+            var winHeight = $(window).height();
+            var docHeight = $(document).height();
+            var floatPos = parseInt(docHeight) - parseInt(winHeight) - 152;
+
+            if(nowScroll > floatPos){
+                $btnCall.addClass('fix')
+            }else{
+                $btnCall.removeClass('fix')
+            }
+
+            if ($(this).scrollTop() > 200) {
+                $btnCall.fadeIn(300);
+            }
+        });
+        $btnCall.click(function (e) {
+            e.preventDefault();
+            document.location.href = 'tel:010-4455-2690';
+        });
+    }
+    btnCall();
+
     // 팝업 임시 스크립트
     function exPop(){
         var $exPopBtn = $(".exPopBtn");

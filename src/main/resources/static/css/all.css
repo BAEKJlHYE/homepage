@@ -99,6 +99,9 @@ nav .dep3 > li > a:hover{text-decoration: underline}
 .btn_top{position: fixed;left:50%;bottom:50px;display: none;width:46px;height:46px;margin-left:590px;border-radius: 50%;box-shadow:0 5px 15px rgba(0, 0, 0, 0.2);text-indent: -9999px;background:#fff url(../image/ico_btntop.png) center no-repeat;z-index: 10;}
 .btn_top.fix{position: absolute;}
 
+.btn_call{position: fixed;left:50%;bottom:100px;display: inline;width:46px;height:46px;margin-left:590px;border-radius: 50%;box-shadow:0 5px 15px rgba(0, 0, 0, 0.2);text-indent: -9999px;background:#fff url(../image/ico_btnCall.png) center no-repeat;z-index: 10;}
+.btn_call.fix{position: absolute;}
+
 /* section */
 section{margin: auto}
 section.w600{width:600px;}
@@ -1464,6 +1467,7 @@ h3 > span[id*='focus']{display: block;margin-top: -150px;padding-bottom: 150px;}
     .footer_inner{width:100%;padding:15px 10px}
     .foot_info{margin-left: 0;}
     .btn_top{left:auto;right: 10px;}
+    .btn_call{left:auto;right: 10px;}
 
     .swiper-mainb{height: auto;min-height: 100px;}
     .swiper-mainb img{object-fit: contain;vertical-align: top;min-height: 100px;object-fit: cover;}
